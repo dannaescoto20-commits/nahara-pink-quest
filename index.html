@@ -1,36 +1,711 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Aventura de Nahara</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>La Mansión Encantada de Nahara</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Quicksand:wght@500;600;700&display=swap');
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#090611;
+  color:white;
+  font-family:'Quicksand',sans-serif;
+}
+
+/* ESCENA */
+
+.scene{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at 50% 18%,
+    #d979b5 0%,
+    #62335f 20%,
+    #211329 48%,
+    #090611 80%);
+}
+
+/* ESTRELLAS */
+
+.stars{
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(#ffd4eb 1px,transparent 1px),
+    radial-gradient(#ffffff 1px,transparent 1px);
+
+  background-size:70px 70px,110px 110px;
+  background-position:0 0,30px 25px;
+
+  opacity:.55;
+  animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+  from{opacity:.3}
+  to{opacity:.75}
+}
+
+/* LUNA */
+
+.moon{
+  position:absolute;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+
+  background:#ffd6eb;
+
+  left:50%;
+  top:7%;
+  transform:translateX(-50%);
+
+  box-shadow:
+    0 0 30px #ff9dce,
+    0 0 80px #d866a8,
+    0 0 140px rgba(255,105,180,.4);
+}
+
+/* MURCIÉLAGOS */
+
+.bat{
+  position:absolute;
+  font-size:25px;
+  animation:fly 7s linear infinite;
+}
+
+.b1{top:18%;left:-10%}
+.b2{top:28%;left:-20%;animation-delay:2s}
+.b3{top:12%;left:-30%;animation-delay:4s}
+
+@keyframes fly{
+  to{
+    left:110%;
+    transform:translateY(-40px);
+  }
+}
+
+/* MANSIÓN */
+
+.house{
+  position:absolute;
+
+  width:430px;
+  height:370px;
+
+  left:50%;
+  bottom:3%;
+
+  transform:translateX(-50%);
+}
+
+/* CUERPO */
+
+.main-house{
+  position:absolute;
+
+  width:310px;
+  height:260px;
+
+  left:60px;
+  bottom:0;
+
+  background:#8d4777;
+
+  border:6px solid #21121f;
+
+  box-shadow:
+    inset 0 0 40px #4c2343,
+    0 20px 40px rgba(0,0,0,.8);
+}
+
+/* TECHO */
+
+.roof{
+  position:absolute;
+
+  left:25px;
+  bottom:250px;
+
+  width:380px;
+  height:0;
+
+  border-left:75px solid transparent;
+  border-right:75px solid transparent;
+  border-bottom:120px solid #1c1321;
+}
+
+/* TORRE */
+
+.tower{
+  position:absolute;
+
+  width:105px;
+  height:310px;
+
+  left:25px;
+  bottom:0;
+
+  background:#9f507f;
+
+  border:6px solid #21121f;
+}
+
+.towerRoof{
+  position:absolute;
+
+  left:5px;
+  bottom:300px;
+
+  border-left:62px solid transparent;
+  border-right:62px solid transparent;
+  border-bottom:110px solid #17101c;
+}
+
+/* VENTANAS */
+
+.window{
+  position:absolute;
+
+  width:48px;
+  height:65px;
+
+  background:#ff9cca;
+
+  border:5px solid #21121f;
+  border-radius:25px 25px 4px 4px;
+
+  box-shadow:
+    0 0 15px #ff80bd,
+    0 0 30px rgba(255,128,189,.7);
+
+  animation:flicker 4s infinite;
+}
+
+.w1{left:95px;top:70px}
+.w2{right:95px;top:70px}
+.w3{left:95px;top:155px}
+.w4{right:95px;top:155px}
+
+.tw{
+  left:27px;
+  top:85px;
+}
+
+@keyframes flicker{
+  0%,90%,100%{opacity:1}
+  92%{opacity:.3}
+  94%{opacity:1}
+  96%{opacity:.5}
+}
+
+/* PUERTA */
+
+.door{
+  position:absolute;
+
+  width:72px;
+  height:105px;
+
+  left:50%;
+  bottom:0;
+
+  transform:translateX(-50%);
+
+  background:#251525;
+
+  border:5px solid #120a13;
+  border-radius:35px 35px 0 0;
+
+  cursor:pointer;
+
+  box-shadow:0 0 20px rgba(255,105,180,.2);
+
+  transition:.5s;
+}
+
+.door:hover{
+  background:#ff8fc5;
+
+  box-shadow:
+    0 0 25px #ff70b7,
+    0 0 60px #ff70b7;
+}
+
+/* SUELO */
+
+.ground{
+  position:absolute;
+  bottom:-80px;
+  left:-10%;
+
+  width:120%;
+  height:200px;
+
+  border-radius:50% 50% 0 0;
+
+  background:#100b14;
+}
+
+/* FANTASMITOS */
+
+.ghost{
+  position:absolute;
+
+  font-size:55px;
+
+  filter:drop-shadow(0 0 12px #ffb8db);
+
+  animation:float 3s ease-in-out infinite;
+}
+
+.g1{
+  left:15%;
+  top:45%;
+}
+
+.g2{
+  right:14%;
+  top:36%;
+  animation-delay:1s;
+}
+
+@keyframes float{
+  50%{
+    transform:translateY(-18px) rotate(5deg);
+  }
+}
+
+/* GATITO */
+
+.cat{
+  position:absolute;
+
+  bottom:4%;
+  left:63%;
+
+  font-size:50px;
+
+  animation:catmove 2.5s ease-in-out infinite;
+}
+
+@keyframes catmove{
+  50%{transform:translateY(-5px)}
+}
+
+/* TITULO */
+
+.intro{
+  position:absolute;
+
+  width:100%;
+  top:7%;
+
+  text-align:center;
+
+  z-index:20;
+
+  pointer-events:none;
+}
+
+.small{
+  letter-spacing:6px;
+  font-size:13px;
+  color:#ffc4df;
+}
+
+h1{
+  font-family:'Creepster',cursive;
+
+  font-size:clamp(48px,7vw,90px);
+
+  line-height:.9;
+
+  margin:12px 0;
+
+  font-weight:400;
+
+  color:#ff9dca;
+
+  text-shadow:
+    3px 3px #3a1831,
+    0 0 20px rgba(255,111,181,.4);
+}
+
+h1 span{
+  color:#ffe2ef;
+}
+
+.subtitle{
+  font-size:16px;
+  color:#ffe0ee;
+}
+
+/* BOTÓN */
+
+.start{
+  position:absolute;
+
+  z-index:30;
+
+  left:50%;
+  bottom:5%;
+
+  transform:translateX(-50%);
+
+  border:2px solid #ff9cca;
+
+  background:#170e18;
+
+  color:#ffc1df;
+
+  padding:15px 30px;
+
+  border-radius:30px;
+
+  font-family:'Quicksand';
+  font-weight:700;
+
+  font-size:15px;
+
+  letter-spacing:2px;
+
+  cursor:pointer;
+
+  box-shadow:0 0 20px rgba(255,105,180,.25);
+
+  transition:.3s;
+}
+
+.start:hover{
+  background:#ff8fc5;
+  color:#1b101a;
+
+  box-shadow:
+    0 0 25px #ff78b8,
+    0 0 60px rgba(255,120,184,.6);
+
+  transform:translateX(-50%) scale(1.05);
+}
+
+/* MENSAJE */
+
+.message{
+  position:fixed;
+
+  inset:0;
+
+  background:#08050b;
+
+  z-index:100;
+
+  display:flex;
+
+  justify-content:center;
+  align-items:center;
+
+  flex-direction:column;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:1.2s;
+}
+
+.message.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.guide{
+  font-size:90px;
+  animation:float 3s infinite;
+}
+
+.dialogue{
+  width:min(90%,550px);
+
+  margin-top:25px;
+
+  background:#211321;
+
+  border:2px solid #ff91c6;
+
+  border-radius:20px;
+
+  padding:25px;
+
+  text-align:center;
+
+  box-shadow:0 0 35px rgba(255,105,180,.2);
+}
+
+.dialogue strong{
+  color:#ff91c6;
+}
+
+.continue{
+  margin-top:15px;
+
+  border:none;
+
+  border-radius:20px;
+
+  padding:12px 20px;
+
+  background:#ff91c6;
+
+  color:#1c111b;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+/* CELULAR */
+
+@media(max-width:600px){
+
+  .house{
+    transform:translateX(-50%) scale(.72);
+    transform-origin:bottom center;
+  }
+
+  .intro{
+    top:5%;
+  }
+
+  h1{
+    font-size:55px;
+  }
+
+  .subtitle{
+    font-size:13px;
+  }
+
+  .moon{
+    width:150px;
+    height:150px;
+  }
+
+  .ghost{
+    font-size:42px;
+  }
+
+  .start{
+    bottom:4%;
+    white-space:nowrap;
+  }
+}
+
+</style>
 </head>
 
-<body style="
-  background:#ffb6d9;
-  color:#2b1725;
-  text-align:center;
-  font-family:Arial, sans-serif;
-  padding-top:100px;
-">
+<body>
 
-  <h1>👻🎀 La Aventura de Nahara 🎀👻</h1>
+<div class="scene" id="scene">
 
-  <h2>¡Nuestra casita encantada funciona!</h2>
+<div class="stars"></div>
 
-  <p>🐈‍⬛ Una aventura de cumpleaños está por comenzar...</p>
+<div class="moon"></div>
 
-  <button style="
-    background:#1d1420;
-    color:#ffb6d9;
-    border:none;
-    padding:18px 30px;
-    border-radius:20px;
-    font-size:18px;
-    cursor:pointer;
-  ">
-    ♡ COMENZAR ♡
-  </button>
+<div class="bat b1">🦇</div>
+<div class="bat b2">🦇</div>
+<div class="bat b3">🦇</div>
+
+<div class="intro">
+
+<div class="small">
+UNA AVENTURA DE CUMPLEAÑOS
+</div>
+
+<h1>
+LA MANSIÓN<br>
+<span>DE NAHARA</span>
+</h1>
+
+<div class="subtitle">
+Algo te está esperando dentro...
+</div>
+
+</div>
+
+<div class="ground"></div>
+
+<div class="ghost g1">👻</div>
+<div class="ghost g2">👻</div>
+
+<div class="house">
+
+<div class="tower"></div>
+<div class="towerRoof"></div>
+
+<div class="main-house">
+
+<div class="window w1"></div>
+<div class="window w2"></div>
+<div class="window w3"></div>
+<div class="window w4"></div>
+
+<div class="door" onclick="enterHouse()"></div>
+
+</div>
+
+<div class="window tw"></div>
+
+<div class="roof"></div>
+
+</div>
+
+<div class="cat">🐈‍⬛</div>
+
+<button class="start" onclick="enterHouse()">
+♡ ENTRAR A LA MANSIÓN ♡
+</button>
+
+</div>
+
+
+<!-- SEGUNDA ESCENA -->
+
+<div class="message" id="message">
+
+<div class="guide">👻</div>
+
+<div class="dialogue">
+
+<strong>???</strong>
+
+<p>
+¡Nahara! Por fin llegaste...
+</p>
+
+<p>
+Llevo toda la noche esperándote.
+</p>
+
+<button class="continue" onclick="nextDialogue()">
+CONTINUAR ♡
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+let dialogue = 0;
+
+function enterHouse(){
+
+document.getElementById("scene").style.transition="1.3s";
+
+document.getElementById("scene").style.transform="scale(1.35)";
+
+document.getElementById("scene").style.opacity="0";
+
+setTimeout(function(){
+
+document.getElementById("message").classList.add("show");
+
+},900);
+
+}
+
+function nextDialogue(){
+
+const box=document.querySelector(".dialogue");
+
+dialogue++;
+
+if(dialogue===1){
+
+box.innerHTML=`
+
+<strong>???</strong>
+
+<p>
+Tenemos un pequeño problema...
+</p>
+
+<p>
+Los habitantes de la mansión escondieron
+<strong>cuatro llaves</strong> antes de tu fiesta.
+</p>
+
+<button class="continue" onclick="nextDialogue()">
+¿CUATRO LLAVES? 👀
+</button>
+
+`;
+
+}
+
+else if(dialogue===2){
+
+box.innerHTML=`
+
+<strong>???</strong>
+
+<p>
+Sip. 🔑
+</p>
+
+<p>
+Vampiros, criaturas, fantasmas...
+</p>
+
+<p>
+Ya sabes cómo son.
+</p>
+
+<button class="continue" onclick="nextDialogue()">
+¿Y AHORA QUÉ? ♡
+</button>
+
+`;
+
+}
+
+else{
+
+box.innerHTML=`
+
+<strong>???</strong>
+
+<p>
+Encuentra las cuatro llaves antes de medianoche.
+</p>
+
+<p>
+Y quizá descubras qué están preparando
+para ti...
+</p>
+
+<button class="continue">
+COMENZAR AVENTURA 👻
+</button>
+
+`;
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
