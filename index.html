@@ -942,6 +942,574 @@ h1 span{
 }
 
 
+/* ========================================
+   NUEVO VESTÍBULO - ESCENA GÓTICA
+======================================== */
+
+.hall{
+  width:100%;
+  height:100vh;
+  min-height:760px;
+  overflow:hidden;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(95,65,56,.18), transparent 24%),
+    linear-gradient(to bottom,#160c0f 0%,#0c0709 54%,#040304 100%);
+}
+
+
+/* pared de fondo */
+
+.hall::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 145px,
+      rgba(98,74,65,.06) 147px,
+      rgba(0,0,0,.25) 150px
+    );
+  pointer-events:none;
+}
+
+
+/* sombra cinematográfica */
+
+.hall::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgba(0,0,0,.77) 100%
+    );
+  pointer-events:none;
+  z-index:15;
+}
+
+
+/* HUD */
+
+.hud{
+  z-index:60;
+}
+
+
+/* título */
+
+.hallTitle{
+  position:absolute;
+  top:72px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:30;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.hallSubtitle{
+  position:absolute;
+  top:135px;
+  width:100%;
+  z-index:30;
+  margin:0;
+}
+
+
+/* ========================================
+   CANDELABRO
+======================================== */
+
+.chandelier{
+  position:absolute;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  font-size:35px;
+  filter:sepia(.7);
+  animation:chandelierMove 5s ease-in-out infinite;
+  opacity:.8;
+}
+
+.chandelier span{
+  margin:0 6px;
+}
+
+@keyframes chandelierMove{
+  0%,100%{
+    transform:translateX(-50%) rotate(-1deg);
+  }
+
+  50%{
+    transform:translateX(-50%) rotate(1deg);
+  }
+}
+
+
+/* ========================================
+   PISO SUPERIOR
+======================================== */
+
+.upperFloor{
+  position:absolute;
+  top:180px;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  display:flex;
+  justify-content:center;
+  z-index:10;
+}
+
+.midnightDoor{
+  width:250px;
+  height:190px;
+  border:4px solid #382527;
+  border-radius:110px 110px 8px 8px;
+  background:
+    linear-gradient(90deg,#120b0d,#27161a,#120b0d);
+  color:#8b7b70;
+  box-shadow:
+    inset 0 0 35px #040304,
+    0 10px 30px rgba(0,0,0,.7);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-family:'Quicksand',sans-serif;
+}
+
+.midnightDoor strong{
+  font-family:'Creepster',cursive;
+  font-size:24px;
+  letter-spacing:2px;
+}
+
+.midnightDoor small{
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.doorLocks{
+  font-size:15px;
+  filter:grayscale(1);
+  opacity:.7;
+}
+
+
+/* ========================================
+   ESCALERA CENTRAL
+======================================== */
+
+.stairs{
+  position:absolute;
+  left:50%;
+  top:340px;
+  transform:translateX(-50%);
+  width:520px;
+  height:250px;
+  z-index:8;
+}
+
+.stairsCenter{
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:340px;
+}
+
+.step{
+  height:22px;
+  margin:auto;
+  background:
+    linear-gradient(to bottom,#3a2423,#170f11);
+  border-top:1px solid #5b4039;
+  box-shadow:0 8px 15px rgba(0,0,0,.5);
+}
+
+.step1{width:165px;}
+.step2{width:195px;}
+.step3{width:225px;}
+.step4{width:255px;}
+.step5{width:290px;}
+.step6{width:330px;}
+
+.stairRail{
+  position:absolute;
+  bottom:28px;
+  width:160px;
+  height:180px;
+  border-top:4px solid #5c423a;
+  opacity:.55;
+}
+
+.leftRail{
+  left:30px;
+  transform:skewY(-35deg);
+  border-left:4px solid #5c423a;
+}
+
+.rightRail{
+  right:30px;
+  transform:skewY(35deg);
+  border-right:4px solid #5c423a;
+}
+
+
+/* ========================================
+   PLANTA BAJA
+======================================== */
+
+.hallFloor{
+  position:absolute;
+  bottom:35px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:330px;
+  z-index:12;
+}
+
+.mansionDoor{
+  width:185px;
+  height:260px;
+  border:4px solid #493031;
+  border-radius:100px 100px 5px 5px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #140c0e 0px,
+      #29171a 32px,
+      #140c0e 64px
+    );
+  position:relative;
+  box-shadow:
+    inset 0 0 35px #030203,
+    0 20px 30px rgba(0,0,0,.6);
+  transition:.3s;
+}
+
+.mansionDoor.available{
+  cursor:pointer;
+}
+
+.mansionDoor.available:hover{
+  transform:scale(1.03);
+  border-color:#8b5d57;
+  box-shadow:
+    inset 0 0 35px #030203,
+    0 0 25px rgba(129,78,69,.25);
+}
+
+.mansionDoor.locked{
+  opacity:.4;
+  filter:grayscale(.7);
+}
+
+.doorIcon{
+  font-size:38px;
+  position:absolute;
+  top:90px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.lockMark{
+  position:absolute;
+  top:140px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:14px;
+}
+
+.doorHandle{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#94724e;
+  position:absolute;
+  right:18px;
+  bottom:95px;
+  box-shadow:0 0 7px rgba(200,160,100,.3);
+}
+
+.centerRug{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:-20px;
+  width:280px;
+  height:130px;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse,#491d24,#230e13 60%,transparent 70%);
+  opacity:.55;
+}
+
+
+/* ========================================
+   OBJETOS DEL VESTÍBULO
+======================================== */
+
+.sideObjects{
+  position:absolute;
+  inset:0;
+  z-index:18;
+  pointer-events:none;
+}
+
+.portrait,
+.grandClock{
+  pointer-events:auto;
+  position:absolute;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  filter:grayscale(.8) sepia(.3);
+  opacity:.6;
+  transition:.3s;
+}
+
+.portrait:hover,
+.grandClock:hover{
+  opacity:1;
+  transform:scale(1.08);
+}
+
+.portrait{
+  left:8%;
+  top:255px;
+  font-size:44px;
+}
+
+.grandClock{
+  right:8%;
+  top:250px;
+  font-size:55px;
+}
+
+
+/* ========================================
+   GATO
+======================================== */
+
+.hallCat{
+  position:absolute;
+  bottom:20px;
+  left:-80px;
+  z-index:35;
+  font-size:35px;
+  animation:catWalk 18s linear infinite;
+  filter:brightness(.45);
+}
+
+@keyframes catWalk{
+  0%{
+    left:-80px;
+  }
+
+  35%{
+    left:40%;
+  }
+
+  42%{
+    left:40%;
+  }
+
+  100%{
+    left:110%;
+  }
+}
+
+
+/* ========================================
+   FANTASMA
+======================================== */
+
+.ghostHall{
+  z-index:50;
+  cursor:pointer;
+}
+
+
+/* ========================================
+   RELÁMPAGOS
+======================================== */
+
+.lightning{
+  position:absolute;
+  inset:0;
+  background:rgba(220,220,255,.22);
+  opacity:0;
+  pointer-events:none;
+  z-index:40;
+}
+
+.lightningOne{
+  animation:lightFlash 14s infinite;
+}
+
+.lightningTwo{
+  animation:lightFlash 21s 7s infinite;
+}
+
+@keyframes lightFlash{
+
+  0%,92%,100%{
+    opacity:0;
+  }
+
+  93%{
+    opacity:.9;
+  }
+
+  94%{
+    opacity:.05;
+  }
+
+  95%{
+    opacity:.55;
+  }
+
+  96%{
+    opacity:0;
+  }
+}
+
+
+/* ========================================
+   POPUP DE PUERTA
+======================================== */
+
+.doorPopup{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(2,1,2,.82);
+  backdrop-filter:blur(4px);
+}
+
+.popupCard{
+  width:min(420px,88vw);
+  padding:38px 30px;
+  text-align:center;
+  border:1px solid #694849;
+  background:
+    radial-gradient(circle at top,#382023,#120b0e 70%);
+  box-shadow:0 20px 60px rgba(0,0,0,.8);
+}
+
+.popupIcon{
+  font-size:45px;
+}
+
+.popupCard h2{
+  font-family:'Creepster',cursive;
+  font-size:35px;
+  letter-spacing:2px;
+  color:#cdb7a0;
+}
+
+.popupCard p{
+  color:#8e7c71;
+  font-size:13px;
+  line-height:1.7;
+}
+
+
+/* ========================================
+   CELULAR
+======================================== */
+
+@media(max-width:700px){
+
+  .hall{
+    min-height:720px;
+  }
+
+  .hallTitle{
+    font-size:38px;
+    top:75px;
+  }
+
+  .hallSubtitle{
+    top:125px;
+    font-size:9px;
+  }
+
+  .upperFloor{
+    top:170px;
+  }
+
+  .midnightDoor{
+    width:190px;
+    height:145px;
+  }
+
+  .stairs{
+    width:360px;
+    top:295px;
+  }
+
+  .stairsCenter{
+    width:260px;
+  }
+
+  .step1{width:120px;}
+  .step2{width:145px;}
+  .step3{width:170px;}
+  .step4{width:195px;}
+  .step5{width:220px;}
+  .step6{width:250px;}
+
+  .hallFloor{
+    gap:85px;
+    bottom:35px;
+  }
+
+  .mansionDoor{
+    width:110px;
+    height:175px;
+  }
+
+  .doorIcon{
+    top:60px;
+    font-size:27px;
+  }
+
+  .doorHandle{
+    bottom:65px;
+  }
+
+  .centerRug{
+    width:170px;
+  }
+
+  .portrait{
+    left:4%;
+    top:260px;
+    font-size:30px;
+  }
+
+  .grandClock{
+    right:4%;
+    top:250px;
+    font-size:38px;
+  }
+
+}
 </style>
   
 </head>
@@ -1236,54 +1804,215 @@ function enterHall(){
   const message = document.getElementById("message");
 
   message.innerHTML = `
-    <div class="hall">
+   <div class="hall">
 
-      <div class="hud">
-        <span>🔑 0/4</span>
-        <span>🐈‍⬛ 0/9</span>
-        <span>🕰️ 11:00 P.M.</span>
-      </div>
+  <div class="hud">
+    <span>🔑 0/4</span>
+    <span>🐈‍⬛ 0/9</span>
+    <span>🕰️ 11:00 P.M.</span>
+  </div>
 
-      <div class="hallTitle">
-        VESTÍBULO PRINCIPAL
-      </div>
+  <div class="lightning lightningOne"></div>
+  <div class="lightning lightningTwo"></div>
 
-      <div class="hallSubtitle">
-        Algunas puertas no deberían abrirse.
-      </div>
+  <div class="chandelier">
+    🕯️ <span>🕯️</span> <span>🕯️</span>
+  </div>
 
-      <div class="doors">
+  <div class="hallTitle">
+    VESTÍBULO PRINCIPAL
+  </div>
 
-        <button class="doorGame available">
-          🎬
-          <span>CINE MALDITO</span>
-          <small>ENTRAR</small>
+  <div class="hallSubtitle">
+    La mansión guarda silencio.
+  </div>
+
+  <div class="upperFloor">
+
+    <button class="midnightDoor lockedDoor">
+
+      <span class="doorLocks">
+        🔒 🔒 🔒 🔒
+      </span>
+
+      <strong>
+        SALÓN DE MEDIANOCHE
+      </strong>
+
+      <small>
+        La puerta no responde.
+      </small>
+
+    </button>
+
+  </div>
+
+
+  <div class="stairs">
+
+    <div class="stairRail leftRail"></div>
+    <div class="stairRail rightRail"></div>
+
+    <div class="stairsCenter">
+      <div class="step step1"></div>
+      <div class="step step2"></div>
+      <div class="step step3"></div>
+      <div class="step step4"></div>
+      <div class="step step5"></div>
+      <div class="step step6"></div>
+    </div>
+
+  </div>
+
+
+  <div class="hallFloor">
+
+    <button
+      class="mansionDoor available"
+      onclick="showCinemaDoor()"
+    >
+
+      <div class="doorArch"></div>
+      <div class="doorHandle"></div>
+
+      <span class="doorIcon">
+        🎬
+      </span>
+
+    </button>
+
+
+    <div class="centerRug"></div>
+
+
+    <button class="mansionDoor locked">
+
+      <div class="doorArch"></div>
+      <div class="doorHandle"></div>
+
+      <span class="doorIcon">
+        🧛
+      </span>
+
+      <span class="lockMark">
+        🔒
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <div class="sideObjects">
+
+    <button
+      class="portrait"
+      onclick="portraitClick()"
+    >
+      👁️
+    </button>
+
+    <button
+      class="grandClock"
+      onclick="clockClick()"
+    >
+      🕰️
+    </button>
+
+  </div>
+
+
+  <div
+    class="ghostHall"
+    onclick="ghostHint()"
+  >
+    👻
+  </div>
+
+
+  <div
+    class="hallCat"
+    id="hallCat"
+  >
+    🐈‍⬛
+  </div>
+
+</div>
+  `;
+}
+
+  function showCinemaDoor(){
+
+  const message = document.getElementById("message");
+
+  message.innerHTML += `
+    <div class="doorPopup" id="doorPopup">
+
+      <div class="popupCard">
+
+        <div class="popupIcon">🎬</div>
+
+        <h2>CINE MALDITO</h2>
+
+        <p>
+          Se escucha un proyector funcionando
+          al otro lado.
+        </p>
+
+        <button class="continue" onclick="closeDoorPopup()">
+          TODAVÍA NO ENTRAR
         </button>
 
-        <button class="doorGame locked">
-          🧛
-          <span>ALA DEL VAMPIRO</span>
-          <small>🔒 CERRADO</small>
-        </button>
-
-        <button class="doorGame locked">
-          ⚡
-          <span>LABORATORIO</span>
-          <small>🔒 CERRADO</small>
-        </button>
-
-        <button class="doorGame locked">
-          🕯️
-          <span>PASILLO PARANORMAL</span>
-          <small>🔒 CERRADO</small>
-        </button>
-
       </div>
-
-      <div class="ghostHall">👻</div>
 
     </div>
   `;
+}
+
+
+function closeDoorPopup(){
+
+  const popup = document.getElementById("doorPopup");
+
+  if(popup){
+    popup.remove();
+  }
+
+}
+
+
+function ghostHint(){
+
+  alert("👻 ???: La puerta de la izquierda parece menos peligrosa. Eso no significa que sea segura.");
+
+}
+
+
+function portraitClick(){
+
+  const messages = [
+    "El retrato parece normal.",
+    "¿Los ojos siempre estaban mirando hacia aquí?",
+    "Algo se movió detrás del marco.",
+    "No pasa nada... creo."
+  ];
+
+  alert(messages[Math.floor(Math.random() * messages.length)]);
+
+}
+
+
+function clockClick(){
+
+  const messages = [
+    "DONG...",
+    "El reloj está detenido.",
+    "11:00 P.M.",
+    "No parece buena idea tocarlo."
+  ];
+
+  alert(messages[Math.floor(Math.random() * messages.length)]);
+
 }
 </script>
 
