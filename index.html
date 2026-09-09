@@ -1842,80 +1842,206 @@ body {
 /* CABELLO */
 /* ===================================== */
 
-.naharaHair {
+/* ================================= */
+/* CABELLO DE NAHARA                 */
+/* ================================= */
 
+.naharaHair {
     position: absolute;
 
-    width: 55px;
-    height: 38px;
+    width: 57px;
+    height: 43px;
 
-    left: 4px;
-    top: 0;
+    left: 3px;
+    top: -3px;
 
     background:
         linear-gradient(
             145deg,
-            #24151d,
-            #130c11
+            #2b1b24 0%,
+            #1b1119 45%,
+            #100b10 100%
         );
 
     border-radius:
-        55% 52% 38% 45%;
+        52% 58% 40% 44% /
+        58% 58% 38% 42%;
 
     z-index: 5;
 
+    transform: rotate(-2deg);
+
+    box-shadow:
+        inset -5px -3px 8px rgba(0,0,0,.28),
+        inset 5px 2px 5px rgba(95,50,70,.10);
 }
 
 
-/* FLEQUILLO */
+/* MECHÓN IZQUIERDO — LARGO Y SUAVE */
 
 .naharaHair::before {
-
     content: "";
 
     position: absolute;
 
-    width: 34px;
-    height: 17px;
+    width: 17px;
+    height: 48px;
 
-    left: 7px;
-    top: 23px;
+    left: 1px;
+    top: 22px;
 
-    background: #171016;
+    background:
+        linear-gradient(
+            170deg,
+            #21141d,
+            #110b10 75%
+        );
 
     border-radius:
-        0 0 70% 25%;
+        65% 20% 65% 45% /
+        25% 30% 70% 75%;
 
     transform:
-        rotate(-5deg);
+        rotate(5deg);
 
+    transform-origin:
+        top center;
+
+    z-index: -1;
 }
 
 
-/* MECHÓN TRASERO */
+/* MECHÓN DERECHO — MÁS LARGO */
 
 .naharaHair::after {
-
     content: "";
 
     position: absolute;
 
-    width: 16px;
-    height: 42px;
+    width: 18px;
+    height: 55px;
 
-    right: 2px;
-    top: 24px;
+    right: 0px;
+    top: 19px;
 
-    background: #171016;
+    background:
+        linear-gradient(
+            165deg,
+            #24151f,
+            #100a0f 75%
+        );
 
     border-radius:
-        0 0 70% 70%;
+        20% 65% 50% 75% /
+        25% 25% 75% 70%;
 
     transform:
         rotate(-5deg);
 
-    z-index: -1;
+    transform-origin:
+        top center;
 
+    z-index: -1;
+}/* ================================= */
+/* CABELLO DE NAHARA                 */
+/* ================================= */
+
+.naharaHair {
+    position: absolute;
+
+    width: 57px;
+    height: 43px;
+
+    left: 3px;
+    top: -3px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b1b24 0%,
+            #1b1119 45%,
+            #100b10 100%
+        );
+
+    border-radius:
+        52% 58% 40% 44% /
+        58% 58% 38% 42%;
+
+    z-index: 5;
+
+    transform: rotate(-2deg);
+
+    box-shadow:
+        inset -5px -3px 8px rgba(0,0,0,.28),
+        inset 5px 2px 5px rgba(95,50,70,.10);
+}
+
+
+/* MECHÓN IZQUIERDO — LARGO Y SUAVE */
+
+.naharaHair::before {
+    content: "";
+
+    position: absolute;
+
+    width: 17px;
+    height: 48px;
+
+    left: 1px;
+    top: 22px;
+
+    background:
+        linear-gradient(
+            170deg,
+            #21141d,
+            #110b10 75%
+        );
+
+    border-radius:
+        65% 20% 65% 45% /
+        25% 30% 70% 75%;
+
+    transform:
+        rotate(5deg);
+
+    transform-origin:
+        top center;
+
+    z-index: -1;
+}
+
+
+/* MECHÓN DERECHO — MÁS LARGO */
+
+.naharaHair::after {
+    content: "";
+
+    position: absolute;
+
+    width: 18px;
+    height: 55px;
+
+    right: 0px;
+    top: 19px;
+
+    background:
+        linear-gradient(
+            165deg,
+            #24151f,
+            #100a0f 75%
+        );
+
+    border-radius:
+        20% 65% 50% 75% /
+        25% 25% 75% 70%;
+
+    transform:
+        rotate(-5deg);
+
+    transform-origin:
+        top center;
+
+    z-index: -1;
 }
 
 
