@@ -969,6 +969,690 @@ body {
     opacity: 1;
 
 }
+
+    /* ===================================== */
+/* CAPÍTULO I - BOSQUE DE LOS SUSURROS */
+/* ===================================== */
+
+#chapterScreen {
+    position: absolute;
+    inset: 0;
+    background: #030203;
+    z-index: 150;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#chapterScreen.show {
+    display: flex;
+}
+
+.chapterContent {
+    opacity: 0;
+    animation: chapterAppear 1.5s forwards;
+}
+
+.chapterNumber {
+    color: #a66b79;
+    font-size: 17px;
+    letter-spacing: 8px;
+    margin-bottom: 18px;
+}
+
+.chapterTitle {
+    color: #e0d1c6;
+    font-size: 45px;
+    letter-spacing: 5px;
+}
+
+.chapterLine {
+    width: 120px;
+    height: 1px;
+    background: #713746;
+    margin: 25px auto;
+}
+
+.chapterSubtitle {
+    color: #857278;
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+@keyframes chapterAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ===================================== */
+/* NIVEL JUGABLE */
+/* ===================================== */
+
+#forestLevel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    display: none;
+    background:
+        linear-gradient(
+            to bottom,
+            #10121a 0%,
+            #15121a 42%,
+            #08070a 100%
+        );
+}
+
+#forestLevel.active {
+    display: block;
+}
+
+
+/* ===================================== */
+/* LUNA DEL BOSQUE */
+/* ===================================== */
+
+.forestMoon {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: #cbc9c3;
+    top: 8%;
+    right: 12%;
+    opacity: .55;
+
+    box-shadow:
+        0 0 50px rgba(220,220,220,.12);
+}
+
+
+/* ===================================== */
+/* MANSIÓN AL FONDO */
+/* ===================================== */
+
+.backgroundMansion {
+    position: absolute;
+    width: 340px;
+    height: 230px;
+    right: 8%;
+    bottom: 27%;
+    background: #09090c;
+    opacity: .55;
+}
+
+.backgroundMansion::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    left: 45px;
+    top: -120px;
+    background: #09090c;
+    transform: rotate(45deg);
+    z-index: -1;
+}
+
+
+/* ===================================== */
+/* BOSQUE EN CAPAS */
+/* ===================================== */
+
+.forestBack,
+.forestFront {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.tree {
+    position: absolute;
+    bottom: 18%;
+    width: 45px;
+    height: 380px;
+    background: #0a090d;
+    border-radius: 50% 50% 0 0;
+}
+
+.tree::before,
+.tree::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 20px;
+    background: #0a090d;
+    top: 80px;
+}
+
+.tree::before {
+    left: -100px;
+    transform: rotate(-35deg);
+}
+
+.tree::after {
+    right: -100px;
+    transform: rotate(35deg);
+}
+
+.tree.one {
+    left: 8%;
+    transform: scale(.75);
+    opacity: .55;
+}
+
+.tree.two {
+    left: 31%;
+    transform: scale(.95);
+    opacity: .7;
+}
+
+.tree.three {
+    left: 67%;
+    transform: scale(.8);
+    opacity: .6;
+}
+
+.tree.four {
+    left: 89%;
+    transform: scale(1.1);
+}
+
+
+/* ===================================== */
+/* NIEBLA */
+/* ===================================== */
+
+.fogLayer {
+    position: absolute;
+    width: 160%;
+    height: 180px;
+    left: -30%;
+    bottom: 12%;
+    opacity: .17;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #d4cbd0 0%,
+            transparent 65%
+        );
+
+    animation: fogMove 16s linear infinite alternate;
+}
+
+.fogLayer.second {
+    bottom: 24%;
+    opacity: .08;
+    animation-duration: 23s;
+}
+
+@keyframes fogMove {
+    from {
+        transform: translateX(-5%);
+    }
+
+    to {
+        transform: translateX(8%);
+    }
+}
+
+
+/* ===================================== */
+/* SUELO */
+/* ===================================== */
+
+.forestGround {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3000px;
+    height: 145px;
+
+    background:
+        linear-gradient(
+            #21171c 0 8px,
+            #0c090d 8px 100%
+        );
+
+    border-top: 2px solid #49303a;
+}
+
+
+/* ===================================== */
+/* PLATAFORMAS */
+/* ===================================== */
+
+.platform {
+    position: absolute;
+    height: 24px;
+
+    background:
+        linear-gradient(
+            #4b3238 0 5px,
+            #171116 5px
+        );
+
+    border-radius: 4px 4px 0 0;
+
+    box-shadow:
+        0 10px 15px rgba(0,0,0,.4);
+}
+
+.platform.p1 {
+    width: 180px;
+    left: 580px;
+    bottom: 220px;
+}
+
+.platform.p2 {
+    width: 150px;
+    left: 850px;
+    bottom: 300px;
+}
+
+.platform.p3 {
+    width: 190px;
+    left: 1120px;
+    bottom: 230px;
+}
+
+
+/* ===================================== */
+/* LÁPIDAS */
+/* ===================================== */
+
+.grave {
+    position: absolute;
+    width: 55px;
+    height: 75px;
+    bottom: 142px;
+    background: #25232a;
+
+    border-radius:
+        25px 25px 4px 4px;
+
+    border: 2px solid #17151b;
+}
+
+.grave::after {
+    content: "";
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background: #131116;
+    left: 13px;
+    top: 28px;
+}
+
+.grave.g1 {
+    left: 380px;
+    transform: rotate(-5deg);
+}
+
+.grave.g2 {
+    left: 1450px;
+    transform: rotate(7deg);
+}
+
+
+/* ===================================== */
+/* FAROL */
+/* ===================================== */
+
+.lampPost {
+    position: absolute;
+    width: 7px;
+    height: 170px;
+    left: 1700px;
+    bottom: 140px;
+    background: #17131a;
+}
+
+.lampPost::before {
+    content: "";
+    position: absolute;
+    width: 42px;
+    height: 50px;
+    left: -18px;
+    top: -35px;
+
+    background:
+        radial-gradient(
+            circle,
+            #b77a55,
+            #4d261f 65%,
+            #161015
+        );
+
+    border: 4px solid #151016;
+
+    box-shadow:
+        0 0 35px rgba(190,100,65,.22);
+}
+
+
+/* ===================================== */
+/* NAHARA */
+/* ===================================== */
+
+#naharaPlayer {
+    position: absolute;
+    width: 48px;
+    height: 80px;
+    left: 180px;
+    bottom: 145px;
+    z-index: 20;
+}
+
+
+/* CABEZA */
+
+.naharaHead {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    left: 3px;
+    top: 0;
+
+    border-radius: 50%;
+
+    background: #ddbdac;
+}
+
+
+/* CABELLO */
+
+.naharaHair {
+    position: absolute;
+    width: 46px;
+    height: 30px;
+    left: 1px;
+    top: -2px;
+
+    border-radius:
+        50% 50% 30% 30%;
+
+    background: #1a1117;
+}
+
+
+/* CUERPO */
+
+.naharaBody {
+    position: absolute;
+    width: 38px;
+    height: 43px;
+    left: 5px;
+    top: 36px;
+
+    background: #713047;
+
+    border-radius: 8px 8px 3px 3px;
+}
+
+
+/* PIERNAS */
+
+.naharaLeg {
+    position: absolute;
+    width: 11px;
+    height: 25px;
+    top: 70px;
+    background: #181219;
+}
+
+.naharaLeg.left {
+    left: 9px;
+}
+
+.naharaLeg.right {
+    right: 9px;
+}
+
+
+/* BOTAS */
+
+.naharaBoot {
+    position: absolute;
+    width: 16px;
+    height: 9px;
+    top: 91px;
+    background: #050506;
+}
+
+.naharaBoot.left {
+    left: 5px;
+}
+
+.naharaBoot.right {
+    right: 5px;
+}
+
+
+/* ===================================== */
+/* FANTASMA COMPAÑERO */
+/* ===================================== */
+
+#gameGhost {
+    position: absolute;
+    width: 55px;
+    height: 65px;
+    left: 110px;
+    bottom: 205px;
+    z-index: 18;
+
+    animation:
+        ghostFloat 2s ease-in-out infinite;
+}
+
+.gameGhostHead {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+
+    background: #d8d0c7;
+
+    border-radius:
+        50% 50% 42% 42%;
+}
+
+.gameGhostHead::before,
+.gameGhostHead::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 13px;
+    top: 20px;
+    border-radius: 50%;
+    background: #151117;
+}
+
+.gameGhostHead::before {
+    left: 14px;
+}
+
+.gameGhostHead::after {
+    right: 14px;
+}
+
+.gameGhostBody {
+    position: absolute;
+    width: 52px;
+    height: 35px;
+    top: 32px;
+
+    background: #d8d0c7;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% 65%,
+            80% 100%,
+            60% 68%,
+            40% 100%,
+            20% 68%,
+            0 100%
+        );
+}
+
+@keyframes ghostFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* ===================================== */
+/* MUÑECA SOSPECHOSA */
+/* ===================================== */
+
+#creepyDoll {
+    position: absolute;
+    width: 38px;
+    height: 65px;
+    left: 760px;
+    bottom: 145px;
+    z-index: 10;
+}
+
+.dollHead {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    left: 3px;
+
+    border-radius: 50%;
+
+    background: #bca89c;
+}
+
+.dollHead::before,
+.dollHead::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 6px;
+    top: 12px;
+    background: #141116;
+}
+
+.dollHead::before {
+    left: 8px;
+}
+
+.dollHead::after {
+    right: 8px;
+}
+
+.dollBody {
+    position: absolute;
+    width: 35px;
+    height: 37px;
+    left: 1px;
+    top: 28px;
+
+    background: #512332;
+}
+
+
+/* ===================================== */
+/* PRIMER GATO */
+/* ===================================== */
+
+#firstCat {
+    position: absolute;
+    width: 35px;
+    height: 40px;
+    left: 1220px;
+    bottom: 255px;
+    z-index: 12;
+}
+
+.catHead {
+    position: absolute;
+    width: 25px;
+    height: 23px;
+    left: 5px;
+
+    border-radius: 50%;
+
+    background: #050506;
+}
+
+.catHead::before,
+.catHead::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: -5px;
+    background: #050506;
+    transform: rotate(45deg);
+}
+
+.catHead::before {
+    left: 1px;
+}
+
+.catHead::after {
+    right: 1px;
+}
+
+.catBody {
+    position: absolute;
+    width: 22px;
+    height: 26px;
+    left: 7px;
+    top: 18px;
+
+    border-radius: 10px 10px 4px 4px;
+
+    background: #050506;
+}
+
+
+/* ===================================== */
+/* CONTROLES */
+/* ===================================== */
+
+#controlsHint {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+
+    transform: translateX(-50%);
+
+    padding: 10px 18px;
+
+    color: #a99499;
+
+    background: rgba(0,0,0,.55);
+
+    border:
+        1px solid rgba(180,140,150,.2);
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    z-index: 40;
+
+    transition: opacity 1s;
+}
 /* ============================= */
 /* RESPONSIVE */
 /* ============================= */
@@ -1164,6 +1848,183 @@ class="ghostEye right">
 ???: Pensé que no vendrías.
 
 </div>
+
+
+</div>
+
+    <!-- ===================================== -->
+<!-- PANTALLA DEL CAPÍTULO I -->
+<!-- ===================================== -->
+
+<div id="chapterScreen">
+
+    <div class="chapterContent">
+
+        <div class="chapterNumber">
+            CAPÍTULO I
+        </div>
+
+        <div class="chapterTitle">
+            EL BOSQUE DE LOS SUSURROS
+        </div>
+
+        <div class="chapterLine"></div>
+
+        <div class="chapterSubtitle">
+            EL CAMINO A LA MANSIÓN
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================== -->
+<!-- PRIMER NIVEL JUGABLE -->
+<!-- ===================================== -->
+
+<div id="forestLevel">
+
+
+    <!-- LUNA -->
+
+    <div class="forestMoon"></div>
+
+
+    <!-- MANSIÓN LEJANA -->
+
+    <div class="backgroundMansion"></div>
+
+
+    <!-- BOSQUE DEL FONDO -->
+
+    <div class="forestBack">
+
+        <div class="tree one"></div>
+
+        <div class="tree two"></div>
+
+        <div class="tree three"></div>
+
+        <div class="tree four"></div>
+
+    </div>
+
+
+    <!-- NIEBLA -->
+
+    <div class="fogLayer"></div>
+
+    <div class="fogLayer second"></div>
+
+
+    <!-- ================================= -->
+    <!-- MUNDO QUE SE MOVERÁ CON NAHARA -->
+    <!-- ================================= -->
+
+    <div id="forestWorld">
+
+
+        <!-- SUELO -->
+
+        <div class="forestGround"></div>
+
+
+        <!-- LÁPIDAS -->
+
+        <div class="grave g1"></div>
+
+        <div class="grave g2"></div>
+
+
+        <!-- PLATAFORMAS -->
+
+        <div class="platform p1"></div>
+
+        <div class="platform p2"></div>
+
+        <div class="platform p3"></div>
+
+
+        <!-- FAROL -->
+
+        <div class="lampPost"></div>
+
+
+        <!-- MUÑECA -->
+
+        <div id="creepyDoll">
+
+            <div class="dollHead"></div>
+
+            <div class="dollBody"></div>
+
+        </div>
+
+
+        <!-- PRIMER GATO OCULTO -->
+
+        <div id="firstCat">
+
+            <div class="catHead"></div>
+
+            <div class="catBody"></div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- NAHARA -->
+    <!-- ================================= -->
+
+    <div id="naharaPlayer">
+
+
+        <div class="naharaHead"></div>
+
+        <div class="naharaHair"></div>
+
+        <div class="naharaBody"></div>
+
+
+        <div class="naharaLeg left"></div>
+
+        <div class="naharaLeg right"></div>
+
+
+        <div class="naharaBoot left"></div>
+
+        <div class="naharaBoot right"></div>
+
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- ??? -->
+    <!-- ================================= -->
+
+    <div id="gameGhost">
+
+        <div class="gameGhostBody"></div>
+
+        <div class="gameGhostHead"></div>
+
+    </div>
+
+
+    <!-- CONTROLES -->
+
+    <div id="controlsHint">
+
+        A / D PARA CAMINAR
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        ESPACIO PARA SALTAR
+
+    </div>
 
 
 </div>
@@ -1534,7 +2395,629 @@ ghostDialogue.innerText =
 
 
 });
+/* ===================================== */
+/* CAPÍTULO I - BOSQUE DE LOS SUSURROS */
+/* ===================================== */
 
+const chapterScreen =
+document.getElementById("chapterScreen");
+
+const forestLevel =
+document.getElementById("forestLevel");
+
+const forestWorld =
+document.getElementById("forestWorld");
+
+const naharaPlayer =
+document.getElementById("naharaPlayer");
+
+const gameGhost =
+document.getElementById("gameGhost");
+
+const creepyDoll =
+document.getElementById("creepyDoll");
+
+const firstCat =
+document.getElementById("firstCat");
+
+const controlsHint =
+document.getElementById("controlsHint");
+
+
+/* ===================================== */
+/* ESTADO DEL JUEGO */
+/* ===================================== */
+
+let forestStarted = false;
+
+let playerX = 180;
+
+let playerY = 145;
+
+let velocityY = 0;
+
+let jumping = false;
+
+let cameraX = 0;
+
+let dollPassed = false;
+
+let dollGone = false;
+
+let catCollected = false;
+
+let keysPressed = {};
+
+const groundHeight = 145;
+
+const gravity = 0.75;
+
+const jumpPower = 14;
+
+const moveSpeed = 5;
+
+
+/* ===================================== */
+/* COMENZAR CAPÍTULO */
+/* ===================================== */
+
+/*
+Después del último diálogo de ???,
+esperamos unos segundos y comenzamos.
+*/
+
+setTimeout(() => {
+
+    if (!introScene.classList.contains("active")) {
+        return;
+    }
+
+    ghostDialogue.classList.remove("show");
+
+    introGhost.classList.remove("show");
+
+    chapterScreen.classList.add("show");
+
+}, 25500);
+
+
+
+setTimeout(() => {
+
+    if (!introScene.classList.contains("active")) {
+        return;
+    }
+
+    introScene.classList.remove("active");
+
+}, 26000);
+
+
+
+setTimeout(() => {
+
+    if (!chapterScreen.classList.contains("show")) {
+        return;
+    }
+
+    chapterScreen.classList.remove("show");
+
+    forestLevel.classList.add("active");
+
+    forestStarted = true;
+
+    startForest();
+
+}, 29500);
+
+
+/* ===================================== */
+/* INICIAR BOSQUE */
+/* ===================================== */
+
+function startForest() {
+
+    playerX = 180;
+
+    playerY = groundHeight;
+
+    velocityY = 0;
+
+    jumping = false;
+
+    cameraX = 0;
+
+    updatePlayer();
+
+    updateCamera();
+
+    /*
+    Los controles desaparecen solos
+    después de unos segundos.
+    */
+
+    setTimeout(() => {
+
+        controlsHint.style.opacity = "0";
+
+    }, 6500);
+
+}
+
+
+/* ===================================== */
+/* TECLADO */
+/* ===================================== */
+
+document.addEventListener(
+"keydown",
+function(event) {
+
+    if (!forestStarted) {
+        return;
+    }
+
+    const key =
+    event.key.toLowerCase();
+
+    keysPressed[key] = true;
+
+
+    /*
+    Evita que espacio y flechas
+    muevan la página.
+    */
+
+    if (
+        key === " " ||
+        key === "arrowup" ||
+        key === "arrowdown" ||
+        key === "arrowleft" ||
+        key === "arrowright"
+    ) {
+
+        event.preventDefault();
+
+    }
+
+
+    /*
+    SALTO
+    */
+
+    if (
+        (
+            key === " " ||
+            key === "w" ||
+            key === "arrowup"
+        )
+        &&
+        !jumping
+    ) {
+
+        velocityY = jumpPower;
+
+        jumping = true;
+
+    }
+
+});
+
+
+document.addEventListener(
+"keyup",
+function(event) {
+
+    keysPressed[
+        event.key.toLowerCase()
+    ] = false;
+
+});
+
+
+/* ===================================== */
+/* MOVIMIENTO */
+/* ===================================== */
+
+function movePlayer() {
+
+    if (!forestStarted) {
+        return;
+    }
+
+
+    /*
+    IZQUIERDA
+    */
+
+    if (
+        keysPressed["a"] ||
+        keysPressed["arrowleft"]
+    ) {
+
+        playerX -= moveSpeed;
+
+        /*
+        Nahara mira hacia la izquierda.
+        */
+
+        naharaPlayer.style.transform =
+        "scaleX(-1)";
+
+    }
+
+
+    /*
+    DERECHA
+    */
+
+    if (
+        keysPressed["d"] ||
+        keysPressed["arrowright"]
+    ) {
+
+        playerX += moveSpeed;
+
+        naharaPlayer.style.transform =
+        "scaleX(1)";
+
+    }
+
+
+    /*
+    LÍMITES DEL NIVEL
+    */
+
+    if (playerX < 40) {
+        playerX = 40;
+    }
+
+    if (playerX > 2700) {
+        playerX = 2700;
+    }
+
+
+    /* ================================= */
+    /* GRAVEDAD */
+    /* ================================= */
+
+    if (jumping) {
+
+        playerY += velocityY;
+
+        velocityY -= gravity;
+
+
+        if (playerY <= groundHeight) {
+
+            playerY = groundHeight;
+
+            velocityY = 0;
+
+            jumping = false;
+
+        }
+
+    }
+
+
+    updatePlayer();
+
+    updateCamera();
+
+    checkForestEvents();
+
+}
+
+
+/* ===================================== */
+/* ACTUALIZAR NAHARA */
+/* ===================================== */
+
+function updatePlayer() {
+
+    naharaPlayer.style.left =
+    (playerX - cameraX) + "px";
+
+    naharaPlayer.style.bottom =
+    playerY + "px";
+
+}
+
+
+/* ===================================== */
+/* CÁMARA LATERAL */
+/* ===================================== */
+
+function updateCamera() {
+
+    const screenWidth =
+    window.innerWidth;
+
+
+    /*
+    La cámara empieza a seguir a Nahara
+    cuando se acerca al centro.
+    */
+
+    cameraX =
+    playerX - screenWidth * 0.35;
+
+
+    if (cameraX < 0) {
+        cameraX = 0;
+    }
+
+
+    const maxCamera =
+    3000 - screenWidth;
+
+
+    if (cameraX > maxCamera) {
+        cameraX = Math.max(0, maxCamera);
+    }
+
+
+    forestWorld.style.transform =
+    "translateX(" + (-cameraX) + "px)";
+
+
+    /*
+    El fantasma sigue a Nahara,
+    pero ligeramente detrás.
+    */
+
+    let ghostScreenX =
+    playerX - cameraX - 75;
+
+
+    if (ghostScreenX < 25) {
+        ghostScreenX = 25;
+    }
+
+
+    gameGhost.style.left =
+    ghostScreenX + "px";
+
+
+    gameGhost.style.bottom =
+    (playerY + 65) + "px";
+
+}
+
+
+/* ===================================== */
+/* EVENTOS DEL BOSQUE */
+/* ===================================== */
+
+function checkForestEvents() {
+
+
+    /* ================================= */
+    /* NAHARA PASA LA MUÑECA */
+    /* ================================= */
+
+    if (
+        playerX > 900 &&
+        !dollPassed
+    ) {
+
+        dollPassed = true;
+
+    }
+
+
+    /*
+    Si ya pasó la muñeca
+    y decide regresar...
+    desapareció.
+    */
+
+    if (
+        dollPassed &&
+        playerX < 720 &&
+        !dollGone
+    ) {
+
+        dollGone = true;
+
+        creepyDoll.style.opacity = "0";
+
+        creepyDoll.style.transition =
+        "opacity .15s";
+
+
+        showGhostMessage(
+            "???: ..."
+        );
+
+
+        setTimeout(() => {
+
+            showGhostMessage(
+                "???: Esa cosa estaba sentada ahí."
+            );
+
+        }, 1700);
+
+
+        setTimeout(() => {
+
+            showGhostMessage(
+                "???: Sigue caminando."
+            );
+
+        }, 4200);
+
+    }
+
+
+    /* ================================= */
+    /* PRIMER GATO */
+    /* ================================= */
+
+    if (
+        playerX > 1160 &&
+        playerX < 1300 &&
+        playerY > 200 &&
+        !catCollected
+    ) {
+
+        catCollected = true;
+
+        firstCat.style.display =
+        "none";
+
+
+        showGhostMessage(
+            "???: Encontraste un gato."
+        );
+
+
+        setTimeout(() => {
+
+            showGhostMessage(
+                "???: ...¿Por qué hay tantos gatos en esta casa?"
+            );
+
+        }, 2200);
+
+    }
+
+}
+
+
+/* ===================================== */
+/* MENSAJES DE ??? DURANTE EL JUEGO */
+/* ===================================== */
+
+let forestMessage = null;
+
+
+function createForestMessage() {
+
+    forestMessage =
+    document.createElement("div");
+
+    forestMessage.id =
+    "forestGhostMessage";
+
+
+    forestMessage.style.position =
+    "absolute";
+
+    forestMessage.style.left =
+    "50%";
+
+    forestMessage.style.bottom =
+    "12%";
+
+    forestMessage.style.transform =
+    "translateX(-50%)";
+
+    forestMessage.style.padding =
+    "13px 25px";
+
+    forestMessage.style.background =
+    "rgba(4,3,5,.82)";
+
+    forestMessage.style.border =
+    "1px solid rgba(150,90,110,.35)";
+
+    forestMessage.style.color =
+    "#d8cbc3";
+
+    forestMessage.style.fontSize =
+    "17px";
+
+    forestMessage.style.letterSpacing =
+    "1px";
+
+    forestMessage.style.zIndex =
+    "80";
+
+    forestMessage.style.opacity =
+    "0";
+
+    forestMessage.style.transition =
+    "opacity .4s";
+
+    forestMessage.style.pointerEvents =
+    "none";
+
+
+    forestLevel.appendChild(
+        forestMessage
+    );
+
+}
+
+
+function showGhostMessage(text) {
+
+    if (!forestMessage) {
+
+        createForestMessage();
+
+    }
+
+
+    forestMessage.innerText =
+    text;
+
+    forestMessage.style.opacity =
+    "1";
+
+
+    clearTimeout(
+        forestMessage.hideTimer
+    );
+
+
+    forestMessage.hideTimer =
+    setTimeout(() => {
+
+        forestMessage.style.opacity =
+        "0";
+
+    }, 3500);
+
+}
+
+
+/* ===================================== */
+/* ANIMACIÓN PRINCIPAL */
+/* ===================================== */
+
+function gameLoop() {
+
+    movePlayer();
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
+
+gameLoop();
+
+
+/* ===================================== */
+/* AJUSTAR CÁMARA SI CAMBIA LA PANTALLA */
+/* ===================================== */
+
+window.addEventListener(
+"resize",
+function() {
+
+    if (forestStarted) {
+
+        updateCamera();
+
+    }
+
+});
 
 
 </script>
