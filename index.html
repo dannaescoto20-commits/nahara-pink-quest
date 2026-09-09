@@ -1117,6 +1117,46 @@ body {
 /* ===================================== */
 
 .gothicForestSVG {
+    /* ===================================== */
+/* OJOS DEL BOSQUE */
+/* ===================================== */
+
+.eyePair {
+
+    animation:
+        forestBlink 7s
+        ease-in-out
+        infinite;
+
+    transform-origin: center;
+
+}
+
+.eyePairTwo {
+
+    animation-delay: 3.5s;
+
+}
+
+@keyframes forestBlink {
+
+    0%,
+    18%,
+    22%,
+    100% {
+        opacity: .18;
+    }
+
+    19%,
+    21% {
+        opacity: 0;
+    }
+
+    55% {
+        opacity: .42;
+    }
+
+}
 
     position: absolute;
 
@@ -2981,41 +3021,58 @@ class="ghostEye right">
         <!-- OJOS ENTRE LOS ÁRBOLES -->
         <!-- ================================= -->
 
-        <g
-            fill="#b88a65"
-            opacity=".35"
-        >
+        <!-- ================================= -->
+<!-- OJOS ESCONDIDOS -->
+<!-- ================================= -->
 
-            <ellipse
-                cx="510"
-                cy="390"
-                rx="5"
-                ry="3"
-            />
+<g
+    id="hiddenEyes"
+    fill="#c49a72"
+    opacity=".18"
+>
 
-            <ellipse
-                cx="525"
-                cy="390"
-                rx="5"
-                ry="3"
-            />
+    <!-- OJOS ENTRE RAMAS DEL ÁRBOL CENTRAL -->
+
+    <g class="eyePair eyePairOne">
+
+        <ellipse
+            cx="770"
+            cy="300"
+            rx="5"
+            ry="3"
+        />
+
+        <ellipse
+            cx="786"
+            cy="300"
+            rx="5"
+            ry="3"
+        />
+
+    </g>
 
 
-            <ellipse
-                cx="1130"
-                cy="350"
-                rx="4"
-                ry="3"
-            />
+    <!-- OJOS PEGADOS AL ÁRBOL DERECHO -->
 
-            <ellipse
-                cx="1144"
-                cy="350"
-                rx="4"
-                ry="3"
-            />
+    <g class="eyePair eyePairTwo">
 
-        </g>
+        <ellipse
+            cx="1310"
+            cy="390"
+            rx="4"
+            ry="3"
+        />
+
+        <ellipse
+            cx="1324"
+            cy="390"
+            rx="4"
+            ry="3"
+        />
+
+    </g>
+
+</g>
 
     </svg>
 
