@@ -544,7 +544,431 @@ body {
 
 }
 
+/* ============================= */
+/* INTRO CINEMÁTICA */
+/* ============================= */
 
+#introScene {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: #050407;
+
+    display: none;
+
+    z-index: 100;
+
+    overflow: hidden;
+
+}
+
+
+#introScene.active {
+
+    display: block;
+
+}
+
+
+/* TEXTO DE LA INTRO */
+
+.introText {
+
+    position: absolute;
+
+    width: 100%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    text-align: center;
+
+    font-size: 34px;
+
+    letter-spacing: 7px;
+
+    color: #d8c9c0;
+
+    opacity: 0;
+
+    transition: opacity 1s;
+
+}
+
+
+.introText.show {
+
+    opacity: 1;
+
+}
+
+
+/* PASILLO OSCURO */
+
+.introHall {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        linear-gradient(
+            rgba(0,0,0,.35),
+            rgba(0,0,0,.8)
+        ),
+
+        radial-gradient(
+            circle at 50% 55%,
+            #29141c,
+            #0c080d 45%,
+            #030203 80%
+        );
+
+    opacity: 0;
+
+    transition: opacity 1.2s;
+
+}
+
+
+.introHall.show {
+
+    opacity: 1;
+
+}
+
+
+/* PUERTA GRANDE */
+
+.introDoor {
+
+    position: absolute;
+
+    width: 240px;
+    height: 390px;
+
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #12090d,
+            #32141c,
+            #12090d
+        );
+
+    border:
+
+        8px solid #080609;
+
+    box-shadow:
+
+        0 0 50px #000;
+
+}
+
+
+/* LÍNEA DE LA PUERTA */
+
+.introDoor::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 2px;
+    height: 100%;
+
+    background: #080608;
+
+    left: 50%;
+
+}
+
+
+/* MANIJA */
+
+.doorHandle {
+
+    position: absolute;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #a28152;
+
+    top: 55%;
+
+    left: 57%;
+
+    box-shadow:
+
+        0 0 10px
+        rgba(200,160,90,.3);
+
+}
+
+
+/* PUERTA ABIÉNDOSE */
+
+.introDoor.open {
+
+    animation:
+
+        doorOpen 1.8s forwards;
+
+}
+
+
+@keyframes doorOpen {
+
+    0% {
+
+        transform:
+            translateX(-50%)
+            scaleX(1);
+
+        opacity: 1;
+
+    }
+
+    60% {
+
+        transform:
+            translateX(-50%)
+            scaleX(.6);
+
+    }
+
+    100% {
+
+        transform:
+            translateX(-50%)
+            scaleX(.15);
+
+        opacity: .15;
+
+    }
+
+}
+
+
+/* FANTASMA ??? */
+
+.introGhost {
+
+    position: absolute;
+
+    width: 100px;
+    height: 120px;
+
+    left: 50%;
+    bottom: 22%;
+
+    transform:
+
+        translateX(-50%)
+        translateY(20px);
+
+    opacity: 0;
+
+    transition:
+
+        opacity 1s,
+        transform 1s;
+
+}
+
+
+.introGhost.show {
+
+    opacity: 1;
+
+    transform:
+
+        translateX(-50%)
+        translateY(0);
+
+}
+
+
+/* CABEZA DEL FANTASMA */
+
+.ghostHead {
+
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    left: 5px;
+
+    border-radius:
+
+        50% 50% 45% 45%;
+
+    background:
+
+        #d8d0c7;
+
+}
+
+
+/* CUERPO */
+
+.ghostBody {
+
+    position: absolute;
+
+    width: 90px;
+    height: 65px;
+
+    left: 5px;
+    top: 55px;
+
+    background: #d8d0c7;
+
+    clip-path:
+
+        polygon(
+            0 0,
+            100% 0,
+            100% 70%,
+            85% 100%,
+            70% 72%,
+            55% 100%,
+            40% 72%,
+            25% 100%,
+            0 75%
+        );
+
+}
+
+
+/* OJOS */
+
+.ghostEye {
+
+    position: absolute;
+
+    width: 13px;
+    height: 23px;
+
+    background: #141016;
+
+    border-radius: 50%;
+
+    top: 34px;
+
+    z-index: 3;
+
+}
+
+
+.ghostEye.left {
+
+    left: 28px;
+
+}
+
+
+.ghostEye.right {
+
+    right: 28px;
+
+}
+
+
+/* MOÑO */
+
+.ghostBow {
+
+    position: absolute;
+
+    width: 38px;
+    height: 22px;
+
+    left: 31px;
+    top: 74px;
+
+    z-index: 5;
+
+}
+
+
+.ghostBow::before,
+.ghostBow::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 22px;
+    height: 18px;
+
+    background: #a96476;
+
+}
+
+
+.ghostBow::before {
+
+    left: 0;
+
+    transform: rotate(25deg);
+
+}
+
+
+.ghostBow::after {
+
+    right: 0;
+
+    transform: rotate(-25deg);
+
+}
+
+
+/* TEXTO DEL FANTASMA */
+
+#ghostDialogue {
+
+    position: absolute;
+
+    width: 100%;
+
+    bottom: 7%;
+
+    text-align: center;
+
+    color: #d5c5bc;
+
+    font-size: 19px;
+
+    letter-spacing: 1px;
+
+    opacity: 0;
+
+    transition: opacity .7s;
+
+}
+
+
+#ghostDialogue.show {
+
+    opacity: 1;
+
+}
 /* ============================= */
 /* RESPONSIVE */
 /* ============================= */
@@ -674,6 +1098,75 @@ ENTRAR
 <!-- RELÁMPAGO -->
 
 <div id="lightning"></div>
+    <!-- ============================= -->
+<!-- INTRO CINEMÁTICA -->
+<!-- ============================= -->
+
+<div id="introScene">
+
+
+<div
+class="introHall"
+id="introHall">
+
+
+<div
+class="introDoor"
+id="introDoor">
+
+<div class="doorHandle"></div>
+
+</div>
+
+
+</div>
+
+
+<div
+class="introText"
+id="arrivalText">
+
+NAHARA. LLEGASTE.
+
+</div>
+
+
+
+<div
+class="introGhost"
+id="introGhost">
+
+
+<div class="ghostHead"></div>
+
+<div class="ghostBody"></div>
+
+
+<div
+class="ghostEye left">
+</div>
+
+
+<div
+class="ghostEye right">
+</div>
+
+
+<div class="ghostBow"></div>
+
+
+</div>
+
+
+
+<div id="ghostDialogue">
+
+???: Pensé que no vendrías.
+
+</div>
+
+
+</div>
 
 
 </div>
@@ -776,28 +1269,268 @@ thunderStorm();
 /* ============================= */
 
 
-document
-.getElementById(
-"enterButton"
-)
-.addEventListener(
-"click",
-function(){
+/* ============================= */
+/* INTRO AL PRESIONAR ENTRAR */
+/* ============================= */
 
-console.log(
-"Entrando a la mansión..."
+
+const enterButton =
+document.getElementById(
+"enterButton"
 );
 
 
-/*
+const introScene =
+document.getElementById(
+"introScene"
+);
 
-EN EL SIGUIENTE CÓDIGO
 
-AQUÍ COMENZARÁ
+const introHall =
+document.getElementById(
+"introHall"
+);
 
-EL VIDEOJUEGO
 
-*/
+const introDoor =
+document.getElementById(
+"introDoor"
+);
+
+
+const arrivalText =
+document.getElementById(
+"arrivalText"
+);
+
+
+const introGhost =
+document.getElementById(
+"introGhost"
+);
+
+
+const ghostDialogue =
+document.getElementById(
+"ghostDialogue"
+);
+
+
+
+enterButton.addEventListener(
+"click",
+function(){
+
+
+/* DESAPARECE EL BOTÓN */
+
+enterButton.style.display =
+"none";
+
+
+/* DESAPARECE EL TÍTULO */
+
+document
+.querySelector(
+".title"
+)
+.style.display =
+"none";
+
+
+
+/* RELÁMPAGO FUERTE */
+
+lightning
+.classList
+.add(
+"flash"
+);
+
+
+
+setTimeout(() => {
+
+
+lightning
+.classList
+.remove(
+"flash"
+);
+
+
+/* MOSTRAMOS LA INTRO */
+
+introScene
+.classList
+.add(
+"active"
+);
+
+
+},500);
+
+
+
+/* APARECE EL PASILLO */
+
+setTimeout(() => {
+
+
+introHall
+.classList
+.add(
+"show"
+);
+
+
+},900);
+
+
+
+/* LA PUERTA SE ABRE */
+
+setTimeout(() => {
+
+
+introDoor
+.classList
+.add(
+"open"
+);
+
+
+},2300);
+
+
+
+/* TODO SE OSCURECE */
+
+setTimeout(() => {
+
+
+introHall.style.opacity =
+"0";
+
+
+},4300);
+
+
+
+/* TEXTO NAHARA LLEGASTE */
+
+setTimeout(() => {
+
+
+arrivalText
+.classList
+.add(
+"show"
+);
+
+
+},5200);
+
+
+
+/* DESAPARECE EL TEXTO */
+
+setTimeout(() => {
+
+
+arrivalText
+.classList
+.remove(
+"show"
+);
+
+
+},7600);
+
+
+
+/* APARECE ??? */
+
+setTimeout(() => {
+
+
+introGhost
+.classList
+.add(
+"show"
+);
+
+
+},8500);
+
+
+
+/* PRIMER DIÁLOGO */
+
+setTimeout(() => {
+
+
+ghostDialogue
+.classList
+.add(
+"show"
+);
+
+
+},9600);
+
+
+
+/* SEGUNDO DIÁLOGO */
+
+setTimeout(() => {
+
+
+ghostDialogue.innerText =
+"???: Esta casa lleva mucho tiempo esperándote.";
+
+
+},12500);
+
+
+
+/* TERCER DIÁLOGO */
+
+setTimeout(() => {
+
+
+ghostDialogue.innerText =
+"???: Hay cuatro llaves escondidas aquí.";
+
+
+},15800);
+
+
+
+/* CUARTO DIÁLOGO */
+
+setTimeout(() => {
+
+
+ghostDialogue.innerText =
+"???: Consíguelas antes de medianoche.";
+
+
+},19000);
+
+
+
+/* ÚLTIMA FRASE */
+
+setTimeout(() => {
+
+
+ghostDialogue.innerText =
+"???: Y Nahara... intenta no separarte de mí.";
+
+
+},22000);
+
 
 
 });
