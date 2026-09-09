@@ -1,1 +1,69 @@
-/* Estilos de Nahara Pink Quest */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Quicksand:wght@500;600;700&display=swap');
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#090611;
+  color:white;
+  font-family:'Quicksand',sans-serif;
+}
+
+/* ESCENA */
+
+.scene{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at 50% 18%,
+    #d979b5 0%,
+    #62335f 20%,
+    #211329 48%,
+    #090611 80%);
+}
+
+/* ESTRELLAS */
+
+.stars{
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(#ffd4eb 1px,transparent 1px),
+    radial-gradient(#ffffff 1px,transparent 1px);
+
+  background-size:70px 70px,110px 110px;
+  background-position:0 0,30px 25px;
+
+  opacity:.55;
+  animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+  from{opacity:.3}
+  to{opacity:.75}
+}
+
+/* LUNA */
+
+.moon{
+  position:absolute;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+
+  background:#ffd6eb;
+
+  left:50%;
+  top:7%;
+  transform:translateX(-50%);
+
+  box-shadow:
+    0 0 30px #ff9dce,
+    0 0 80px #d866a8,
+}
