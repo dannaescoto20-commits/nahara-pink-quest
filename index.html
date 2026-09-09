@@ -1,2472 +1,812 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>La Mansión Encantada de Nahara</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>La Mansión de Nahara</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Quicksand:wght@500;600;700&display=swap');
 
-*{
-  box-sizing:border-box;
+/* ============================= */
+/* BASE DEL JUEGO */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  overflow:hidden;
-  background:#090611;
-  color:white;
-  font-family:'Quicksand',sans-serif;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #050407;
 }
 
-/* ESCENA */
-
-.scene{
-  width:100vw;
-  height:100vh;
-  position:relative;
-  overflow:hidden;
-
-  background:
-    radial-gradient(circle at 50% 18%,
-    #d979b5 0%,
-    #62335f 20%,
-    #211329 48%,
-    #090611 80%);
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #eadfd5;
 }
 
-/* ESTRELLAS */
 
-.stars{
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(#ffd4eb 1px,transparent 1px),
-    radial-gradient(#ffffff 1px,transparent 1px);
+/* ============================= */
+/* PANTALLA DEL JUEGO */
+/* ============================= */
 
-  background-size:70px 70px,110px 110px;
-  background-position:0 0,30px 25px;
+#game {
 
-  opacity:.55;
-  animation:twinkle 3s infinite alternate;
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 20%,
+            #24202a 0%,
+            #111017 40%,
+            #050407 75%
+        );
+
 }
 
-@keyframes twinkle{
-  from{opacity:.3}
-  to{opacity:.75}
+
+/* ============================= */
+/* LLUVIA */
+/* ============================= */
+
+.rain {
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    opacity: .28;
+
+    background-image:
+
+        repeating-linear-gradient(
+            110deg,
+            transparent 0px,
+            transparent 18px,
+            rgba(200,220,230,.4) 19px,
+            transparent 20px,
+            transparent 40px
+        );
+
+    animation: rainMove .35s linear infinite;
+
 }
 
+@keyframes rainMove {
+
+    from {
+        transform: translateY(-30px);
+    }
+
+    to {
+        transform: translateY(30px);
+    }
+
+}
+
+
+/* ============================= */
 /* LUNA */
+/* ============================= */
 
-.moon{
-  position:absolute;
-  width:190px;
-  height:190px;
-  border-radius:50%;
+.moon {
 
-  background:#ffd6eb;
+    position: absolute;
 
-  left:50%;
-  top:7%;
-  transform:translateX(-50%);
+    width: 150px;
+    height: 150px;
 
-  box-shadow:
-    0 0 30px #ff9dce,
-    0 0 80px #d866a8,
-    0 0 140px rgba(255,105,180,.4);
+    left: 12%;
+    top: 10%;
+
+    border-radius: 50%;
+
+    background: #d9d9d4;
+
+    box-shadow:
+        0 0 30px rgba(220,220,220,.25),
+        0 0 90px rgba(190,200,220,.15);
+
 }
 
-/* MURCIÉLAGOS */
 
-.bat{
-  position:absolute;
-  font-size:25px;
-  animation:fly 7s linear infinite;
+/* ============================= */
+/* MONTAÑAS / BOSQUE */
+/* ============================= */
+
+.mountain {
+
+    position: absolute;
+
+    bottom: 0;
+
+    width: 100%;
+    height: 48%;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            transparent 40%,
+            #08080c 41%
+        ),
+
+        linear-gradient(
+            215deg,
+            transparent 45%,
+            #0b090e 46%
+        );
+
 }
 
-.b1{top:18%;left:-10%}
-.b2{top:28%;left:-20%;animation-delay:2s}
-.b3{top:12%;left:-30%;animation-delay:4s}
 
-@keyframes fly{
-  to{
-    left:110%;
-    transform:translateY(-40px);
-  }
-}
-
+/* ============================= */
 /* MANSIÓN */
+/* ============================= */
 
-.house{
-  position:absolute;
+.mansion {
 
-  width:430px;
-  height:370px;
+    position: absolute;
 
-  left:50%;
-  bottom:3%;
+    width: 520px;
+    height: 340px;
 
-  transform:translateX(-50%);
+    left: 50%;
+    bottom: 7%;
+
+    transform: translateX(-50%);
+
+    background: #0b0a0e;
+
+    border: 2px solid #17131a;
+
+    box-shadow:
+        0 0 80px rgba(0,0,0,.9);
+
 }
 
-/* CUERPO */
-
-.main-house{
-  position:absolute;
-
-  width:310px;
-  height:260px;
-
-  left:60px;
-  bottom:0;
-
-  background:#8d4777;
-
-  border:6px solid #21121f;
-
-  box-shadow:
-    inset 0 0 40px #4c2343,
-    0 20px 40px rgba(0,0,0,.8);
-}
 
 /* TECHO */
 
-.roof{
-  position:absolute;
+.mansion::before {
 
-  left:25px;
-  bottom:250px;
+    content: "";
 
-  width:380px;
-  height:0;
+    position: absolute;
 
-  border-left:75px solid transparent;
-  border-right:75px solid transparent;
-  border-bottom:120px solid #1c1321;
+    width: 420px;
+    height: 210px;
+
+    left: 50%;
+    top: -145px;
+
+    transform:
+        translateX(-50%)
+        rotate(45deg);
+
+    background: #09090d;
+
+    z-index: -1;
+
 }
 
-/* TORRE */
 
-.tower{
-  position:absolute;
+/* ============================= */
+/* TORRES */
+/* ============================= */
 
-  width:105px;
-  height:310px;
+.tower {
 
-  left:25px;
-  bottom:0;
+    position: absolute;
 
-  background:#9f507f;
+    width: 110px;
+    height: 420px;
 
-  border:6px solid #21121f;
+    bottom: 0;
+
+    background: #09090d;
+
 }
 
-.towerRoof{
-  position:absolute;
-
-  left:5px;
-  bottom:300px;
-
-  border-left:62px solid transparent;
-  border-right:62px solid transparent;
-  border-bottom:110px solid #17101c;
+.tower.left {
+    left: -90px;
 }
 
+.tower.right {
+    right: -90px;
+}
+
+
+/* ============================= */
 /* VENTANAS */
+/* ============================= */
 
-.window{
-  position:absolute;
+.window {
 
-  width:48px;
-  height:65px;
+    position: absolute;
 
-  background:#ff9cca;
+    width: 45px;
+    height: 75px;
 
-  border:5px solid #21121f;
-  border-radius:25px 25px 4px 4px;
+    background: #17141a;
 
-  box-shadow:
-    0 0 15px #ff80bd,
-    0 0 30px rgba(255,128,189,.7);
+    border:
 
-  animation:flicker 4s infinite;
-}
-
-.w1{left:95px;top:70px}
-.w2{right:95px;top:70px}
-.w3{left:95px;top:155px}
-.w4{right:95px;top:155px}
-
-.tw{
-  left:27px;
-  top:85px;
-}
-
-@keyframes flicker{
-  0%,90%,100%{opacity:1}
-  92%{opacity:.3}
-  94%{opacity:1}
-  96%{opacity:.5}
-}
-
-/* PUERTA */
-
-.door{
-  position:absolute;
-
-  width:72px;
-  height:105px;
-
-  left:50%;
-  bottom:0;
-
-  transform:translateX(-50%);
-
-  background:#251525;
-
-  border:5px solid #120a13;
-  border-radius:35px 35px 0 0;
-
-  cursor:pointer;
-
-  box-shadow:0 0 20px rgba(255,105,180,.2);
-
-  transition:.5s;
-}
-
-.door:hover{
-  background:#ff8fc5;
-
-  box-shadow:
-    0 0 25px #ff70b7,
-    0 0 60px #ff70b7;
-}
-
-/* SUELO */
-
-.ground{
-  position:absolute;
-  bottom:-80px;
-  left:-10%;
-
-  width:120%;
-  height:200px;
-
-  border-radius:50% 50% 0 0;
-
-  background:#100b14;
-}
-
-/* FANTASMITOS */
-
-.ghost{
-  position:absolute;
-
-  font-size:55px;
-
-  filter:drop-shadow(0 0 12px #ffb8db);
-
-  animation:float 3s ease-in-out infinite;
-}
-
-.g1{
-  left:15%;
-  top:45%;
-}
-
-.g2{
-  right:14%;
-  top:36%;
-  animation-delay:1s;
-}
-
-@keyframes float{
-  50%{
-    transform:translateY(-18px) rotate(5deg);
-  }
-}
-
-/* GATITO */
-
-.cat{
-  position:absolute;
-
-  bottom:4%;
-  left:63%;
-
-  font-size:50px;
-
-  animation:catmove 2.5s ease-in-out infinite;
-}
-
-@keyframes catmove{
-  50%{transform:translateY(-5px)}
-}
-
-/* TITULO */
-
-.intro{
-  position:absolute;
-
-  width:100%;
-  top:7%;
-
-  text-align:center;
-
-  z-index:20;
-
-  pointer-events:none;
-}
-
-.small{
-  letter-spacing:6px;
-  font-size:13px;
-  color:#ffc4df;
-}
-
-h1{
-  font-family:'Creepster',cursive;
-
-  font-size:clamp(48px,7vw,90px);
-
-  line-height:.9;
-
-  margin:12px 0;
-
-  font-weight:400;
-
-  color:#ff9dca;
-
-  text-shadow:
-    3px 3px #3a1831,
-    0 0 20px rgba(255,111,181,.4);
-}
-
-h1 span{
-  color:#ffe2ef;
-}
-
-.subtitle{
-  font-size:16px;
-  color:#ffe0ee;
-}
-
-/* BOTÓN */
-
-.start{
-  position:absolute;
-
-  z-index:30;
-
-  left:50%;
-  bottom:5%;
-
-  transform:translateX(-50%);
-
-  border:2px solid #ff9cca;
-
-  background:#170e18;
-
-  color:#ffc1df;
-
-  padding:15px 30px;
-
-  border-radius:30px;
-
-  font-family:'Quicksand';
-  font-weight:700;
-
-  font-size:15px;
-
-  letter-spacing:2px;
-
-  cursor:pointer;
-
-  box-shadow:0 0 20px rgba(255,105,180,.25);
-
-  transition:.3s;
-}
-
-.start:hover{
-  background:#ff8fc5;
-  color:#1b101a;
-
-  box-shadow:
-    0 0 25px #ff78b8,
-    0 0 60px rgba(255,120,184,.6);
-
-  transform:translateX(-50%) scale(1.05);
-}
-
-/* MENSAJE */
-
-.message{
-  position:fixed;
-
-  inset:0;
-
-  background:#08050b;
-
-  z-index:100;
-
-  display:flex;
-
-  justify-content:center;
-  align-items:center;
-
-  flex-direction:column;
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:1.2s;
-}
-
-.message.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.guide{
-  font-size:90px;
-  animation:float 3s infinite;
-}
-
-.dialogue{
-  width:min(90%,550px);
-
-  margin-top:25px;
-
-  background:#211321;
-
-  border:2px solid #ff91c6;
-
-  border-radius:20px;
-
-  padding:25px;
-
-  text-align:center;
-
-  box-shadow:0 0 35px rgba(255,105,180,.2);
-}
-
-.dialogue strong{
-  color:#ff91c6;
-}
-
-.continue{
-  margin-top:15px;
-
-  border:none;
-
-  border-radius:20px;
-
-  padding:12px 20px;
-
-  background:#ff91c6;
-
-  color:#1c111b;
-
-  font-weight:bold;
-
-  cursor:pointer;
-}
-
-/* CELULAR */
-
-@media(max-width:600px){
-
-  .house{
-    transform:translateX(-50%) scale(.72);
-    transform-origin:bottom center;
-  }
-
-  .intro{
-    top:5%;
-  }
-
-  h1{
-    font-size:55px;
-  }
-
-  .subtitle{
-    font-size:13px;
-  }
-
-  .moon{
-    width:150px;
-    height:150px;
-  }
-
-  .ghost{
-    font-size:42px;
-  }
-
-  .start{
-    bottom:4%;
-    white-space:nowrap;
-  }
-}
-/* ========================================
-   TRANSICIÓN - RELOJ DE LA MANSIÓN
-======================================== */
-
-.clockScene{
-  width:100%;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  background:
-    radial-gradient(circle at center, #26191c 0%, #10090c 45%, #030203 100%);
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-
-.clockScene::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 120px,
-      rgba(120,90,70,.025) 121px
-    );
-  pointer-events:none;
-}
-
-.clockTime{
-  position:relative;
-  font-family:'Creepster',cursive;
-  font-size:clamp(55px,10vw,110px);
-  color:#d4c2a9;
-  letter-spacing:6px;
-  text-shadow:
-    0 0 12px rgba(255,220,170,.18),
-    4px 5px 0 #26090f;
-  animation:clockBreath 2.4s ease-in-out infinite;
-}
-
-.clockText{
-  position:relative;
-  margin-top:20px;
-  color:#82756c;
-  font-size:12px;
-  letter-spacing:5px;
-  text-transform:uppercase;
-}
-
-.clockHint{
-  position:relative;
-  margin-top:38px;
-  font-size:70px;
-  filter:grayscale(1) sepia(.25);
-  opacity:.75;
-  animation:clockSwing 3s ease-in-out infinite;
-}
-
-@keyframes clockBreath{
-  50%{
-    text-shadow:
-      0 0 25px rgba(255,220,170,.30),
-      4px 5px 0 #26090f;
-  }
-}
-
-@keyframes clockSwing{
-  0%,100%{
-    transform:rotate(-3deg);
-  }
-
-  50%{
-    transform:rotate(3deg);
-  }
-}
-
-
-/* ========================================
-   PARPADEO DE LAS LUCES
-======================================== */
-
-.flicker{
-  animation:mansionFlicker .4s linear;
-}
-
-@keyframes mansionFlicker{
-  0%{filter:brightness(1);}
-  12%{filter:brightness(.15);}
-  25%{filter:brightness(.85);}
-  38%{filter:brightness(.04);}
-  48%{filter:brightness(.55);}
-  60%{filter:brightness(.08);}
-  72%{filter:brightness(.9);}
-  100%{filter:brightness(1);}
-}
-
-
-/* ========================================
-   VESTÍBULO PRINCIPAL
-======================================== */
-
-.hall{
-  width:100%;
-  min-height:100vh;
-  position:relative;
-  box-sizing:border-box;
-  padding:105px 30px 70px;
-  overflow:auto;
-
-  background:
-    radial-gradient(
-      ellipse at 50% 20%,
-      rgba(108,61,54,.25) 0%,
-      transparent 30%
-    ),
-    linear-gradient(
-      to bottom,
-      #251417 0%,
-      #150b0e 48%,
-      #070506 100%
-    );
-}
-
-
-/* textura/paneles de la pared */
-
-.hall::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 125px,
-      rgba(0,0,0,.22) 127px,
-      rgba(137,98,78,.06) 129px
-    );
-
-  pointer-events:none;
-}
-
-
-/* sombra en las esquinas */
-
-.hall::after{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 25%,
-      rgba(0,0,0,.72) 100%
-    );
-
-  pointer-events:none;
-}
-
-
-/* ========================================
-   HUD
-======================================== */
-
-.hud{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  box-sizing:border-box;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:50px;
-
-  padding:17px 15px;
-
-  background:rgba(3,2,3,.94);
-  border-bottom:1px solid #5a3d3b;
-
-  color:#d1c1ae;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:2px;
-
-  box-shadow:0 8px 25px rgba(0,0,0,.5);
-
-  z-index:20;
-}
-
-
-/* ========================================
-   TÍTULO DEL VESTÍBULO
-======================================== */
-
-.hallTitle{
-  position:relative;
-  z-index:3;
-
-  text-align:center;
-
-  font-family:'Creepster',cursive;
-  font-size:clamp(42px,7vw,75px);
-
-  color:#c0ad98;
-  letter-spacing:3px;
-
-  text-shadow:
-    3px 4px 0 #1b080c,
-    0 0 18px rgba(185,140,110,.15);
-}
-
-.hallSubtitle{
-  position:relative;
-  z-index:3;
-
-  text-align:center;
-
-  margin:5px auto 48px;
-
-  color:#756862;
-
-  font-size:12px;
-  font-style:italic;
-  letter-spacing:2px;
-}
-
-
-/* ========================================
-   PUERTAS
-======================================== */
-
-.doors{
-  width:min(880px,95%);
-  margin:auto;
-
-  position:relative;
-  z-index:3;
-
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:32px;
-}
+        4px solid #08070a;
 
+    border-radius:
 
-.doorGame{
-  min-height:220px;
+        30px 30px 0 0;
 
-  border:3px solid #382527;
-  border-radius:100px 100px 8px 8px;
+    overflow: hidden;
 
-  background:
-    radial-gradient(
-      circle at 50% 20%,
-      rgba(111,69,60,.16),
-      transparent 30%
-    ),
-    repeating-linear-gradient(
-      90deg,
-      #160d10 0px,
-      #241417 35px,
-      #180e11 70px
-    );
-
-  color:#c8b7a5;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  gap:13px;
-
-  font-size:43px;
-
-  box-shadow:
-    inset 0 0 0 5px rgba(5,3,4,.45),
-    inset 0 0 35px #050304,
-    0 15px 30px rgba(0,0,0,.65);
-
-  transition:
-    transform .35s ease,
-    border-color .35s ease,
-    box-shadow .35s ease;
-
-  position:relative;
-}
-
-
-/* pequeño pomo */
-
-.doorGame::after{
-  content:"";
-  width:8px;
-  height:8px;
-  border-radius:50%;
-
-  position:absolute;
-  right:23px;
-  bottom:52px;
-
-  background:#8c7354;
-
-  box-shadow:0 0 8px rgba(220,180,110,.25);
-}
-
-
-.doorGame span{
-  font-family:'Creepster',cursive;
-  font-size:26px;
-  letter-spacing:2px;
-}
-
-
-.doorGame small{
-  font-family:'Quicksand',sans-serif;
-  font-size:9px;
-  letter-spacing:3px;
-  font-weight:700;
-}
-
-
-.doorGame.available{
-  cursor:pointer;
-  border-color:#76504e;
-}
-
-
-.doorGame.available:hover{
-  transform:translateY(-8px) scale(1.01);
-
-  border-color:#a27770;
-
-  box-shadow:
-    inset 0 0 0 5px rgba(5,3,4,.45),
-    inset 0 0 40px #050304,
-    0 0 30px rgba(125,69,63,.22),
-    0 20px 35px rgba(0,0,0,.7);
-}
-
-
-.doorGame.locked{
-  cursor:not-allowed;
-  opacity:.42;
-  filter:grayscale(.8);
-}
-
-
-/* ========================================
-   FANTASMITA DEL VESTÍBULO
-======================================== */
-
-.ghostHall{
-  position:fixed;
-
-  right:25px;
-  bottom:20px;
-
-  z-index:30;
-
-  font-size:55px;
-
-  filter:
-    drop-shadow(0 0 8px rgba(255,255,255,.20))
-    grayscale(.15);
-
-  animation:ghostFloatHall 3s ease-in-out infinite;
-}
-
-
-@keyframes ghostFloatHall{
-  0%,100%{
-    transform:translateY(0) rotate(-2deg);
-  }
-
-  50%{
-    transform:translateY(-12px) rotate(2deg);
-  }
-}
-
-
-/* ========================================
-   VERSIÓN CELULAR
-======================================== */
-
-@media(max-width:650px){
-
-  .hud{
-    gap:14px;
-    font-size:10px;
-    letter-spacing:1px;
-  }
-
-  .hall{
-    padding:
-      90px 12px
-      70px;
-  }
-
-  .hallSubtitle{
-    margin-bottom:30px;
-  }
-
-  .doors{
-    grid-template-columns:1fr;
-    gap:20px;
-  }
-
-  .doorGame{
-    min-height:155px;
-    border-radius:75px 75px 7px 7px;
-  }
-
-  .doorGame span{
-    font-size:22px;
-  }
-
-  .ghostHall{
-    right:12px;
-    bottom:12px;
-    font-size:45px;
-  }
-
-}
-
-
-/* ========================================
-   NUEVO VESTÍBULO - ESCENA GÓTICA
-======================================== */
-
-.hall{
-  width:100%;
-  height:100vh;
-  min-height:760px;
-  overflow:hidden;
-  position:relative;
-  background:
-    radial-gradient(circle at 50% 14%, rgba(95,65,56,.18), transparent 24%),
-    linear-gradient(to bottom,#160c0f 0%,#0c0709 54%,#040304 100%);
-}
-
-
-/* pared de fondo */
-
-.hall::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 145px,
-      rgba(98,74,65,.06) 147px,
-      rgba(0,0,0,.25) 150px
-    );
-  pointer-events:none;
-}
-
-
-/* sombra cinematográfica */
-
-.hall::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 35%,
-      rgba(0,0,0,.77) 100%
-    );
-  pointer-events:none;
-  z-index:15;
-}
-
-
-/* HUD */
-
-.hud{
-  z-index:60;
-}
-
-
-/* título */
-
-.hallTitle{
-    color:#f4c6d5;
-    letter-spacing:6px;
-
-    text-shadow:
-        0 0 8px rgba(255,120,160,.5),
-        0 3px 4px #000;
-
-    position:absolute;
-    top:105px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:100%;
-    text-align:center;
-
-    z-index:20;
-    pointer-events:none;
-}
-
-.hallSubtitle{
-    color:#b99aa8;
-    font-style:italic;
-
-    position:absolute;
-    top:165px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:100%;
-    text-align:center;
-
-    z-index:20;
-    pointer-events:none;
-}
-
-
-/* ========================================
-   CANDELABRO
-======================================== */
-
-.chandelier{
-  position:absolute;
-  top:18px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:20;
-  font-size:35px;
-  filter:sepia(.7);
-  animation:chandelierMove 5s ease-in-out infinite;
-  opacity:.8;
-}
-
-.chandelier span{
-  margin:0 6px;
-}
-
-@keyframes chandelierMove{
-  0%,100%{
-    transform:translateX(-50%) rotate(-1deg);
-  }
-
-  50%{
-    transform:translateX(-50%) rotate(1deg);
-  }
-}
-
-
-/* ========================================
-   PISO SUPERIOR
-======================================== */
-
-.upperFloor{
-  position:absolute;
-  top:180px;
-  left:50%;
-  transform:translateX(-50%);
-  width:100%;
-  display:flex;
-  justify-content:center;
-  z-index:10;
-}
-
-.midnightDoor{
-  width:250px;
-  height:190px;
-  border:4px solid #382527;
-  border-radius:110px 110px 8px 8px;
-  background:
-    linear-gradient(90deg,#120b0d,#27161a,#120b0d);
-  color:#8b7b70;
-  box-shadow:
-    inset 0 0 35px #040304,
-    0 10px 30px rgba(0,0,0,.7);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  font-family:'Quicksand',sans-serif;
-}
-
-.midnightDoor strong{
-  font-family:'Creepster',cursive;
-  font-size:24px;
-  letter-spacing:2px;
-}
-
-.midnightDoor small{
-  font-size:9px;
-  letter-spacing:2px;
-}
-
-.doorLocks{
-  font-size:15px;
-  filter:grayscale(1);
-  opacity:.7;
-}
-
-
-/* ========================================
-   ESCALERA CENTRAL
-======================================== */
-
-.stairs{
-  position:absolute;
-  left:50%;
-  top:340px;
-  transform:translateX(-50%);
-  width:520px;
-  height:250px;
-  z-index:8;
-}
-
-.stairsCenter{
-  position:absolute;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:340px;
-}
-
-.step{
-  height:22px;
-  margin:auto;
-  background:
-    linear-gradient(to bottom,#3a2423,#170f11);
-  border-top:1px solid #5b4039;
-  box-shadow:0 8px 15px rgba(0,0,0,.5);
-}
-
-.step1{width:165px;}
-.step2{width:195px;}
-.step3{width:225px;}
-.step4{width:255px;}
-.step5{width:290px;}
-.step6{width:330px;}
-
-.stairRail{
-  position:absolute;
-  bottom:28px;
-  width:160px;
-  height:180px;
-  border-top:4px solid #5c423a;
-  opacity:.55;
-}
-
-.leftRail{
-  left:30px;
-  transform:skewY(-35deg);
-  border-left:4px solid #5c423a;
-}
-
-.rightRail{
-  right:30px;
-  transform:skewY(35deg);
-  border-right:4px solid #5c423a;
-}
-
-
-/* ========================================
-   PLANTA BAJA
-======================================== */
-
-.hallFloor{
-  position:absolute;
-  bottom:35px;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  gap:330px;
-  z-index:12;
-}
-
-.mansionDoor{
-  width:185px;
-  height:260px;
-  border:4px solid #493031;
-  border-radius:100px 100px 5px 5px;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #140c0e 0px,
-      #29171a 32px,
-      #140c0e 64px
-    );
-  position:relative;
-  box-shadow:
-    inset 0 0 35px #030203,
-    0 20px 30px rgba(0,0,0,.6);
-  transition:.3s;
-}
-
-.mansionDoor.available{
-  cursor:pointer;
-}
-
-.mansionDoor.available:hover{
-  transform:scale(1.03);
-  border-color:#8b5d57;
-  box-shadow:
-    inset 0 0 35px #030203,
-    0 0 25px rgba(129,78,69,.25);
-}
-
-.mansionDoor.locked{
-  opacity:.4;
-  filter:grayscale(.7);
-}
-
-.doorIcon{
-  font-size:38px;
-  position:absolute;
-  top:90px;
-  left:50%;
-  transform:translateX(-50%);
-}
-
-.lockMark{
-  position:absolute;
-  top:140px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:14px;
-}
-
-.doorHandle{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#94724e;
-  position:absolute;
-  right:18px;
-  bottom:95px;
-  box-shadow:0 0 7px rgba(200,160,100,.3);
-}
-
-.centerRug{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:-20px;
-  width:280px;
-  height:130px;
-  border-radius:50%;
-  background:
-    radial-gradient(ellipse,#491d24,#230e13 60%,transparent 70%);
-  opacity:.55;
-}
-
-
-/* ========================================
-   OBJETOS DEL VESTÍBULO
-======================================== */
-
-.sideObjects{
-  position:absolute;
-  inset:0;
-  z-index:18;
-  pointer-events:none;
-}
-
-.portrait,
-.grandClock{
-  pointer-events:auto;
-  position:absolute;
-  border:none;
-  background:transparent;
-  cursor:pointer;
-  filter:grayscale(.8) sepia(.3);
-  opacity:.6;
-  transition:.3s;
-}
-
-.portrait:hover,
-.grandClock:hover{
-  opacity:1;
-  transform:scale(1.08);
-}
-
-.portrait{
-  left:8%;
-  top:255px;
-  font-size:44px;
 }
 
-.grandClock{
-  right:8%;
-  top:250px;
-  font-size:55px;
-}
-
-
-/* ========================================
-   GATO
-======================================== */
-
-.hallCat{
-  position:absolute;
-  bottom:20px;
-  left:-80px;
-  z-index:35;
-  font-size:35px;
-  animation:catWalk 18s linear infinite;
-  filter:brightness(.45);
-}
-
-@keyframes catWalk{
-  0%{
-    left:-80px;
-  }
-
-  35%{
-    left:40%;
-  }
-
-  42%{
-    left:40%;
-  }
-
-  100%{
-    left:110%;
-  }
-}
-
-
-/* ========================================
-   FANTASMA
-======================================== */
-
-.ghostHall{
-  z-index:50;
-  cursor:pointer;
-}
-
-
-/* ========================================
-   RELÁMPAGOS
-======================================== */
-
-.lightning{
-  position:absolute;
-  inset:0;
-  background:rgba(220,220,255,.22);
-  opacity:0;
-  pointer-events:none;
-  z-index:40;
-}
-
-.lightningOne{
-  animation:lightFlash 14s infinite;
-}
-
-.lightningTwo{
-  animation:lightFlash 21s 7s infinite;
-}
-
-@keyframes lightFlash{
-
-  0%,92%,100%{
-    opacity:0;
-  }
-
-  93%{
-    opacity:.9;
-  }
 
-  94%{
-    opacity:.05;
-  }
+/* POSICIONES */
 
-  95%{
-    opacity:.55;
-  }
-
-  96%{
-    opacity:0;
-  }
-}
-
-
-/* ========================================
-   POPUP DE PUERTA
-======================================== */
-
-.doorPopup{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(2,1,2,.82);
-  backdrop-filter:blur(4px);
-}
-
-.popupCard{
-  width:min(420px,88vw);
-  padding:38px 30px;
-  text-align:center;
-  border:1px solid #694849;
-  background:
-    radial-gradient(circle at top,#382023,#120b0e 70%);
-  box-shadow:0 20px 60px rgba(0,0,0,.8);
+.window.w1 {
+    left: 70px;
+    top: 80px;
 }
 
-.popupIcon{
-  font-size:45px;
+.window.w2 {
+    left: 180px;
+    top: 65px;
 }
 
-.popupCard h2{
-  font-family:'Creepster',cursive;
-  font-size:35px;
-  letter-spacing:2px;
-  color:#cdb7a0;
+.window.w3 {
+    right: 180px;
+    top: 65px;
 }
 
-.popupCard p{
-  color:#8e7c71;
-  font-size:13px;
-  line-height:1.7;
+.window.w4 {
+    right: 70px;
+    top: 80px;
 }
-
-
-/* ========================================
-   CELULAR
-======================================== */
-
-@media(max-width:700px){
-
-  .hall{
-    min-height:720px;
-  }
-
-  .hallTitle{
-    font-size:38px;
-    top:75px;
-  }
-
-  .hallSubtitle{
-    top:125px;
-    font-size:9px;
-  }
 
-  .upperFloor{
-    top:170px;
-  }
-
-  .midnightDoor{
-    width:190px;
-    height:145px;
-  }
-
-  .stairs{
-    width:360px;
-    top:295px;
-  }
-
-  .stairsCenter{
-    width:260px;
-  }
-
-  .step1{width:120px;}
-  .step2{width:145px;}
-  .step3{width:170px;}
-  .step4{width:195px;}
-  .step5{width:220px;}
-  .step6{width:250px;}
-
-  .hallFloor{
-    gap:85px;
-    bottom:35px;
-  }
-
-  .mansionDoor{
-    width:110px;
-    height:175px;
-  }
-
-  .doorIcon{
-    top:60px;
-    font-size:27px;
-  }
-
-  .doorHandle{
-    bottom:65px;
-  }
-
-  .centerRug{
-    width:170px;
-  }
-
-  .portrait{
-    left:4%;
-    top:260px;
-    font-size:30px;
-  }
-
-  .grandClock{
-    right:4%;
-    top:250px;
-    font-size:38px;
-  }
-
-}
 
-  /* =====================================================
-   NAHARA'S HAUNTED MANSION
-   GOTHIC FOYER OVERHAUL
-===================================================== */
+/* VENTANA ENCENDIDA */
 
-/* Mansión interior */
-.hall{
-    min-height:100vh;
-    overflow:hidden;
+.window.light {
 
     background:
+
         radial-gradient(
-            ellipse at 50% 25%,
-            rgba(118,22,55,.32) 0%,
-            rgba(38,9,30,.15) 35%,
-            transparent 58%
-        ),
+            circle,
+            #b87657,
+            #55251e 60%,
+            #1a0d0d
+        );
+
+    box-shadow:
+
+        0 0 25px
+        rgba(180,90,60,.3);
+
+}
+
+
+/* ============================= */
+/* FIGURA EN LA VENTANA */
+/* ============================= */
+
+.figure {
+
+    position: absolute;
+
+    width: 17px;
+    height: 45px;
+
+    bottom: 0;
+    left: 14px;
+
+    background: #050506;
+
+    border-radius:
+
+        50% 50% 20% 20%;
+
+    opacity: 0;
+
+}
+
+.figure.show {
+
+    opacity: 1;
+
+}
+
+
+/* ============================= */
+/* PUERTA */
+/* ============================= */
+
+.door {
+
+    position: absolute;
+
+    width: 80px;
+    height: 135px;
+
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    background:
+
         linear-gradient(
             90deg,
-            #100812 0%,
-            #24101d 18%,
-            #351322 50%,
-            #24101d 82%,
-            #100812 100%
+            #120b0d,
+            #261116,
+            #120b0d
         );
 
-    box-shadow:
-        inset 0 0 120px #000,
-        inset 0 -120px 100px rgba(0,0,0,.75);
+    border:
+
+        4px solid #080608;
+
 }
 
-/* Papel tapiz gótico */
-.hall::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    opacity:.28;
 
-    background-image:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 72px,
-            rgba(213,112,143,.10) 73px,
-            rgba(213,112,143,.10) 75px
-        );
+/* ============================= */
+/* TÍTULO */
+/* ============================= */
 
-    z-index:0;
-}
+.title {
 
-/* Molduras de las paredes */
-.hall::after{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:67%;
-    height:5px;
+    position: absolute;
 
-    background:#160b12;
+    width: 100%;
 
-    border-top:2px solid rgba(181,101,125,.45);
-    border-bottom:2px solid #050306;
+    top: 12%;
 
-    box-shadow:
-        0 -4px 15px rgba(0,0,0,.8),
-        0 4px 15px rgba(0,0,0,.8);
+    text-align: center;
 
-    pointer-events:none;
-    z-index:1;
-}
-
-/* Título */
-.hallTitle{
-    color:#f4c6d5;
-    letter-spacing:6px;
+    z-index: 10;
 
     text-shadow:
-        0 0 8px rgba(255,120,160,.5),
-        0 3px 4px #000;
 
-    position:relative;
-    z-index:10;
+        0 5px 20px #000;
+
 }
 
-.hallSubtitle{
-    color:#b99aa8;
-    font-style:italic;
-    position:relative;
-    z-index:10;
+
+.title-small {
+
+    font-size: 22px;
+
+    letter-spacing: 8px;
+
 }
 
-/* Piso oscuro */
-.hallFloor{
-    position:relative;
-    z-index:5;
 
-    border-top:3px solid #29151d;
+.title-main {
+
+    font-size: 72px;
+
+    letter-spacing: 5px;
+
+    margin-top: 5px;
+
+}
+
+
+.title-name {
+
+    font-size: 30px;
+
+    letter-spacing: 8px;
+
+    color: #c79aa4;
+
+}
+
+
+.subtitle {
+
+    margin-top: 16px;
+
+    font-size: 15px;
+
+    letter-spacing: 4px;
+
+    color: #9e858b;
+
+}
+
+
+/* ============================= */
+/* BOTÓN ENTRAR */
+/* ============================= */
+
+.enter {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 17%;
+
+    transform: translateX(-50%);
+
+    padding:
+
+        16px 65px;
+
+    color: #e7d7ce;
 
     background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(255,255,255,.018) 0px,
-            rgba(255,255,255,.018) 2px,
-            transparent 2px,
-            transparent 85px
-        ),
-        linear-gradient(
-            to bottom,
-            #130a0e,
-            #070407
-        );
+
+        rgba(15,8,11,.9);
+
+    border:
+
+        1px solid #75434f;
+
+    font-family: Georgia;
+
+    letter-spacing: 4px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    z-index: 20;
+
+}
+
+
+.enter:hover {
+
+    background: #35121c;
+
+    border-color: #b47482;
 
     box-shadow:
-        0 -15px 35px rgba(0,0,0,.75);
+
+        0 0 25px
+        rgba(150,70,90,.25);
+
 }
 
-/* Alfombra vino */
-.centerRug{
-    background:
-        linear-gradient(
-            90deg,
-            #310814,
-            #74152e 20%,
-            #4d0d20 50%,
-            #74152e 80%,
-            #310814
-        ) !important;
 
-    border:3px solid #a56b70;
+/* ============================= */
+/* RELÁMPAGO */
+/* ============================= */
 
-    box-shadow:
-        0 0 0 4px #290711,
-        0 8px 25px rgba(0,0,0,.8),
-        inset 0 0 18px rgba(0,0,0,.7);
+#lightning {
 
-    position:relative;
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    background: #dce4eb;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 50;
+
 }
 
-/* Detalle central de alfombra */
-.centerRug::after{
-    content:"✦";
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
 
-    color:rgba(231,176,185,.35);
-    font-size:40px;
+.flash {
+
+    animation:
+
+        lightningFlash .5s;
+
 }
 
-/* Escalera */
-.stairsCenter{
-    filter:
-        drop-shadow(0 12px 12px rgba(0,0,0,.8));
-}
 
-.step{
-    background:
-        linear-gradient(
-            to bottom,
-            #4a2734,
-            #211017
-        ) !important;
+@keyframes lightningFlash {
 
-    border-top:2px solid #9b6070 !important;
-    border-bottom:4px solid #090407 !important;
-
-    box-shadow:
-        inset 0 3px 8px rgba(255,180,200,.07),
-        0 5px 8px rgba(0,0,0,.7);
-}
-
-/* Barandales */
-.stairRail{
-    background:linear-gradient(
-        90deg,
-        #080508,
-        #704351,
-        #12090e
-    ) !important;
-
-    box-shadow:
-        0 0 5px #000,
-        0 0 10px rgba(134,69,89,.35);
-}
-
-/* Puertas */
-.mansionDoor{
-    background:
-        linear-gradient(
-            90deg,
-            #12080d,
-            #35131f 22%,
-            #4a1727 50%,
-            #35131f 78%,
-            #12080d
-        ) !important;
-
-    border:4px solid #080408 !important;
-
-    outline:2px solid #704050;
-
-    box-shadow:
-        inset 0 0 0 5px #251019,
-        inset 0 0 25px #000,
-        0 12px 25px rgba(0,0,0,.8);
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        filter .25s ease;
-}
-
-.mansionDoor.available:hover{
-    transform:translateY(-4px) scale(1.025);
-
-    box-shadow:
-        inset 0 0 0 5px #35121e,
-        inset 0 0 25px #000,
-        0 0 25px rgba(202,72,117,.4),
-        0 14px 30px #000;
-}
-
-/* Puerta final */
-.midnightDoor{
-    background:
-        linear-gradient(
-            90deg,
-            #10070c,
-            #451426,
-            #160910
-        ) !important;
-
-    border:4px solid #090408 !important;
-
-    outline:2px solid #70404e;
-
-    box-shadow:
-        inset 0 0 25px #000,
-        0 10px 25px rgba(0,0,0,.85),
-        0 0 18px rgba(120,31,62,.2);
-}
-
-/* Candelabro */
-.chandelier{
-    filter:
-        drop-shadow(0 0 8px rgba(255,184,99,.55))
-        drop-shadow(0 0 20px rgba(255,94,111,.20));
-
-    animation:hauntedChandelier 4s ease-in-out infinite;
-}
-
-@keyframes hauntedChandelier{
-    0%,100%{
-        transform:rotate(-1deg);
-        filter:brightness(.85);
+    0% {
+        opacity: 0;
     }
 
-    45%{
-        transform:rotate(1deg);
-        filter:brightness(1.05);
+    10% {
+        opacity: .7;
     }
 
-    48%{
-        filter:brightness(.35);
+    20% {
+        opacity: .1;
     }
 
-    51%{
-        filter:brightness(1.2);
+    30% {
+        opacity: .4;
     }
 
-    54%{
-        filter:brightness(.55);
+    100% {
+        opacity: 0;
     }
 
-    58%{
-        filter:brightness(1);
-    }
 }
 
-/* Reloj */
-.grandClock{
-    filter:
-        drop-shadow(0 8px 8px #000)
-        sepia(.3);
-}
 
-/* Retrato */
-.portrait{
-    background:#130a0e !important;
-    border:6px ridge #70414e !important;
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
 
-    box-shadow:
-        0 7px 14px #000,
-        inset 0 0 18px #000;
-}
+@media(max-width:700px) {
 
-/* Fantasma */
-.ghostHall{
-    filter:
-        drop-shadow(0 0 10px rgba(255,204,230,.5));
-
-    animation:ghostFloat 3.5s ease-in-out infinite;
-}
-
-@keyframes ghostFloat{
-    0%,100%{
-        transform:translateY(0);
+    .title-main {
+        font-size: 45px;
     }
 
-    50%{
-        transform:translateY(-12px);
+    .mansion {
+
+        transform:
+
+            translateX(-50%)
+            scale(.72);
+
+        transform-origin: bottom;
+
     }
+
 }
 
-/* Oscuridad alrededor de la pantalla */
-.hall .hud{
-    background:rgba(7,3,8,.72);
-    border:1px solid rgba(172,92,119,.35);
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.55),
-        inset 0 0 15px rgba(107,31,59,.15);
-
-    backdrop-filter:blur(5px);
-}
-
-/* Pequeño parpadeo de luz aleatorio visual */
-.lightning{
-    mix-blend-mode:screen;
-    opacity:.10;
-}
-
-/* En celular mantenemos visible la mansión */
-@media(max-width:700px){
-
-    .hall{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-    .hallTitle{
-        letter-spacing:3px;
-    }
-
-    .mansionDoor{
-        min-width:105px;
-    }
-
-    .centerRug{
-        min-width:70px;
-    }
-}
 </style>
-  
 </head>
+
 
 <body>
 
-<div class="scene" id="scene">
 
-<div class="stars"></div>
+<div id="game">
+
+
+<!-- LUNA -->
 
 <div class="moon"></div>
 
-<div class="bat b1">🦇</div>
-<div class="bat b2">🦇</div>
-<div class="bat b3">🦇</div>
 
-<div class="intro">
+<!-- MONTAÑAS -->
 
-<div class="small">
-UNA AVENTURA DE CUMPLEAÑOS
-</div>
+<div class="mountain"></div>
 
-<h1>
-LA MANSIÓN<br>
-<span>DE NAHARA</span>
-</h1>
 
-<div class="subtitle">
-Algo te está esperando dentro...
-</div>
+<!-- MANSIÓN -->
 
-</div>
+<div class="mansion">
 
-<div class="ground"></div>
 
-<div class="ghost g1">👻</div>
-<div class="ghost g2">👻</div>
+<div class="tower left"></div>
 
-<div class="house">
+<div class="tower right"></div>
 
-<div class="tower"></div>
-<div class="towerRoof"></div>
-
-<div class="main-house">
 
 <div class="window w1"></div>
-<div class="window w2"></div>
+
+<div class="window w2 light">
+
+<div
+class="figure"
+id="windowFigure">
+</div>
+
+</div>
+
 <div class="window w3"></div>
+
 <div class="window w4"></div>
 
-<div class="door" onclick="enterHouse()"></div>
+
+<div class="door"></div>
+
 
 </div>
 
-<div class="window tw"></div>
 
-<div class="roof"></div>
+<!-- LLUVIA -->
+
+<div class="rain"></div>
+
+
+<!-- TÍTULO -->
+
+<div class="title">
+
+<div class="title-small">
+
+LA
 
 </div>
 
-<div class="cat">🐈‍⬛</div>
 
-<button class="start" onclick="enterHouse()">
-♡ ENTRAR A LA MANSIÓN ♡
+<div class="title-main">
+
+MANSIÓN
+
+</div>
+
+
+<div class="title-name">
+
+DE NAHARA
+
+</div>
+
+
+<div class="subtitle">
+
+ALGUIEN TE ESTÁ ESPERANDO.
+
+</div>
+
+
+</div>
+
+
+<!-- BOTÓN -->
+
+<button
+class="enter"
+id="enterButton">
+
+ENTRAR
+
 </button>
 
-</div>
 
+<!-- RELÁMPAGO -->
 
-<!-- SEGUNDA ESCENA -->
+<div id="lightning"></div>
 
-<div class="message" id="message">
-
-<div class="guide">👻</div>
-
-<div class="dialogue">
-
-<strong>???</strong>
-
-<p>
-¡Nahara! Por fin llegaste...
-</p>
-
-<p>
-Llevo toda la noche esperándote.
-</p>
-
-<button class="continue" onclick="nextDialogue()">
-CONTINUAR ♡
-</button>
 
 </div>
 
-</div>
 
 
 <script>
 
-let dialogue = 0;
 
-function enterHouse(){
+/* ============================= */
+/* RELÁMPAGOS */
+/* ============================= */
 
-document.getElementById("scene").style.transition="1.3s";
 
-document.getElementById("scene").style.transform="scale(1.35)";
+const lightning =
+document.getElementById(
+"lightning"
+);
 
-document.getElementById("scene").style.opacity="0";
 
-setTimeout(function(){
+const figure =
+document.getElementById(
+"windowFigure"
+);
 
-document.getElementById("message").classList.add("show");
 
-},900);
 
-}
+function thunderStorm() {
 
-function nextDialogue(){
 
-const box=document.querySelector(".dialogue");
+let delay =
 
-dialogue++;
+4000 +
 
-if(dialogue===1){
+Math.random()
+* 7000;
 
-box.innerHTML=`
 
-<strong>???</strong>
 
-<p>
-Tenemos un pequeño problema...
-</p>
+setTimeout(() => {
 
-<p>
-Los habitantes de la mansión escondieron
-<strong>cuatro llaves</strong> antes de tu fiesta.
-</p>
 
-<button class="continue" onclick="nextDialogue()">
-¿CUATRO LLAVES? 👀
-</button>
+lightning.classList.add(
+"flash"
+);
 
-`;
 
-}
 
-else if(dialogue===2){
+/* A VECES APARECE ALGUIEN */
 
-box.innerHTML=`
 
-<strong>???</strong>
+if(
+Math.random() < .45
+){
 
-<p>
-Sip. 🔑
-</p>
-
-<p>
-Vampiros, criaturas, fantasmas...
-</p>
-
-<p>
-Ya sabes cómo son.
-</p>
-
-<button class="continue" onclick="nextDialogue()">
-¿Y AHORA QUÉ? ♡
-</button>
-
-`;
+figure.classList.add(
+"show"
+);
 
 }
 
-else{
 
-box.innerHTML=`
 
-<strong>???</strong>
+setTimeout(() => {
 
-<p>
-Encuentra las cuatro llaves antes de medianoche.
-</p>
+figure.classList.remove(
+"show"
+);
 
-<p>
-Y quizá descubras qué están preparando
-para ti...
-</p>
+},700);
 
-<button class="continue" onclick="startAdventure()">
-COMENZAR AVENTURA 👻
-</button>
 
-`;
-}
 
-}
+setTimeout(() => {
 
-function startAdventure(){
+lightning.classList.remove(
+"flash"
+);
 
-  const message = document.getElementById("message");
+},500);
 
-  message.innerHTML = `
-    <div class="clockScene">
 
-      <div class="clockTime">
-        11:00 P.M.
-      </div>
 
-      <div class="clockText">
-        La mansión ha despertado.
-      </div>
+thunderStorm();
 
-      <div class="clockHint">
-        🕰️
-      </div>
 
-    </div>
-  `;
+},delay);
 
-  setTimeout(() => {
-    document.body.classList.add("flicker");
-  }, 1500);
-
-  setTimeout(() => {
-    document.body.classList.remove("flicker");
-  }, 1900);
-
-  setTimeout(() => {
-    document.body.classList.add("flicker");
-  }, 2300);
-
-  setTimeout(() => {
-    document.body.classList.remove("flicker");
-  }, 2500);
-
-  setTimeout(() => {
-    showVecnaJoke();
-  }, 3400);
-}
-
-
-function showVecnaJoke(){
-
-  const message = document.getElementById("message");
-
-  message.innerHTML = `
-    <div class="guide">👻</div>
-
-    <div class="dialogue">
-
-      <strong>???</strong>
-
-      <p>...</p>
-
-      <p>No.</p>
-
-      <p>Ni se te ocurra decirlo.</p>
-
-      <button class="continue" onclick="vecnaAnswer()">
-        ES VECNA 😭
-      </button>
-
-    </div>
-  `;
-}
-
-
-function vecnaAnswer(){
-
-  const message = document.getElementById("message");
-
-  message.innerHTML = `
-    <div class="guide">👻</div>
-
-    <div class="dialogue">
-
-      <strong>???</strong>
-
-      <p>Sabía que ibas a decir eso.</p>
-
-      <p>🙄</p>
-
-      <button class="continue" onclick="enterHall()">
-        SEGUIR CAMINANDO 🕯️
-      </button>
-
-    </div>
-  `;
-}
-
-
-function enterHall(){
-
-  const message = document.getElementById("message");
-
-  message.innerHTML = `
-   <div class="hall">
-
-  <div class="hud">
-    <span>🔑 0/4</span>
-    <span>🐈‍⬛ 0/9</span>
-    <span>🕰️ 11:00 P.M.</span>
-  </div>
-
-  <div class="lightning lightningOne"></div>
-  <div class="lightning lightningTwo"></div>
-
-  <div class="chandelier">
-    🕯️ <span>🕯️</span> <span>🕯️</span>
-  </div>
-
-  <div class="hallTitle">
-    VESTÍBULO PRINCIPAL
-  </div>
-
-  <div class="hallSubtitle">
-    La mansión guarda silencio.
-  </div>
-
-  <div class="upperFloor">
-
-    <button class="midnightDoor lockedDoor">
-
-      <span class="doorLocks">
-        🔒 🔒 🔒 🔒
-      </span>
-
-      <strong>
-        SALÓN DE MEDIANOCHE
-      </strong>
-
-      <small>
-        La puerta no responde.
-      </small>
-
-    </button>
-
-  </div>
-
-
-  <div class="stairs">
-
-    <div class="stairRail leftRail"></div>
-    <div class="stairRail rightRail"></div>
-
-    <div class="stairsCenter">
-      <div class="step step1"></div>
-      <div class="step step2"></div>
-      <div class="step step3"></div>
-      <div class="step step4"></div>
-      <div class="step step5"></div>
-      <div class="step step6"></div>
-    </div>
-
-  </div>
-
-
-  <div class="hallFloor">
-
-    <button
-      class="mansionDoor available"
-      onclick="showCinemaDoor()"
-    >
-
-      <div class="doorArch"></div>
-      <div class="doorHandle"></div>
-
-      <span class="doorIcon">
-        🎬
-      </span>
-
-    </button>
-
-
-    <div class="centerRug"></div>
-
-
-    <button class="mansionDoor locked">
-
-      <div class="doorArch"></div>
-      <div class="doorHandle"></div>
-
-      <span class="doorIcon">
-        🧛
-      </span>
-
-      <span class="lockMark">
-        🔒
-      </span>
-
-    </button>
-
-  </div>
-
-
-  <div class="sideObjects">
-
-    <button
-      class="portrait"
-      onclick="portraitClick()"
-    >
-      👁️
-    </button>
-
-    <button
-      class="grandClock"
-      onclick="clockClick()"
-    >
-      🕰️
-    </button>
-
-  </div>
-
-
-  <div
-    class="ghostHall"
-    onclick="ghostHint()"
-  >
-    👻
-  </div>
-
-
-  <div
-    class="hallCat"
-    id="hallCat"
-  >
-    🐈‍⬛
-  </div>
-
-</div>
-  `;
-  triggerHauntedHallEvent();
-}
-
-  function showCinemaDoor(){
-
-  const message = document.getElementById("message");
-
-  message.innerHTML += `
-    <div class="doorPopup" id="doorPopup">
-
-      <div class="popupCard">
-
-        <div class="popupIcon">🎬</div>
-
-        <h2>CINE MALDITO</h2>
-
-        <p>
-          Se escucha un proyector funcionando
-          al otro lado.
-        </p>
-
-        <button class="continue" onclick="closeDoorPopup()">
-          TODAVÍA NO ENTRAR
-        </button>
-
-      </div>
-
-    </div>
-  `;
-}
-
-
-function closeDoorPopup(){
-
-  const popup = document.getElementById("doorPopup");
-
-  if(popup){
-    popup.remove();
-  }
 
 }
 
 
-function ghostHint(){
 
-  alert("👻 ???: La puerta de la izquierda parece menos peligrosa. Eso no significa que sea segura.");
-
-}
-function triggerHauntedHallEvent(){
-
-  const events = [
-
-    function(){
-      setTimeout(()=>{
-        alert("DONG...");
-      },1200);
-    },
-
-    function(){
-      setTimeout(()=>{
-        const ghost = document.querySelector(".ghostHall");
-
-        if(ghost){
-          ghost.style.transition="opacity .3s";
-          ghost.style.opacity="0";
-
-          setTimeout(()=>{
-            ghost.style.opacity="1";
-          },1800);
-        }
-      },1500);
-    },
-
-    function(){
-      setTimeout(()=>{
-        const subtitle = document.querySelector(".hallSubtitle");
-
-        if(subtitle){
-          const oldText = subtitle.innerText;
-
-          subtitle.innerText="No estás sola.";
-
-          setTimeout(()=>{
-            subtitle.innerText=oldText;
-          },2200);
-        }
-      },1700);
-    },
-
-    function(){
-      setTimeout(()=>{
-        const clock = document.querySelector(".grandClock");
-
-        if(clock){
-          clock.style.transition="transform .2s";
-          clock.style.transform="scale(1.12)";
-
-          setTimeout(()=>{
-            clock.style.transform="scale(1)";
-          },500);
-        }
-      },1400);
-    },
-
-    function(){
-      setTimeout(()=>{
-        const cat = document.getElementById("hallCat");
-
-        if(cat){
-          cat.style.filter=
-            "drop-shadow(0 0 12px rgba(255,0,80,.8))";
-
-          setTimeout(()=>{
-            cat.style.filter="";
-          },1400);
-        }
-      },1600);
-    }
-
-  ];
-
-  const randomEvent =
-    events[Math.floor(Math.random() * events.length)];
-
-  randomEvent();
-}
-
-function portraitClick(){
-
-  const messages = [
-    "El retrato parece normal.",
-    "¿Los ojos siempre estaban mirando hacia aquí?",
-    "Algo se movió detrás del marco.",
-    "No pasa nada... creo."
-  ];
-
-  alert(messages[Math.floor(Math.random() * messages.length)]);
-
-}
+thunderStorm();
 
 
-function clockClick(){
 
-  const messages = [
-    "DONG...",
-    "El reloj está detenido.",
-    "11:00 P.M.",
-    "No parece buena idea tocarlo."
-  ];
+/* ============================= */
+/* BOTÓN ENTRAR */
+/* ============================= */
 
-  alert(messages[Math.floor(Math.random() * messages.length)]);
 
-}
+document
+.getElementById(
+"enterButton"
+)
+.addEventListener(
+"click",
+function(){
+
+console.log(
+"Entrando a la mansión..."
+);
+
+
+/*
+
+EN EL SIGUIENTE CÓDIGO
+
+AQUÍ COMENZARÁ
+
+EL VIDEOJUEGO
+
+*/
+
+
+});
+
+
+
 </script>
 
+
 </body>
+
 </html>
