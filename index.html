@@ -1510,6 +1510,362 @@ h1 span{
   }
 
 }
+
+  /* =====================================================
+   NAHARA'S HAUNTED MANSION
+   GOTHIC FOYER OVERHAUL
+===================================================== */
+
+/* Mansión interior */
+.hall{
+    min-height:100vh;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 25%,
+            rgba(118,22,55,.32) 0%,
+            rgba(38,9,30,.15) 35%,
+            transparent 58%
+        ),
+        linear-gradient(
+            90deg,
+            #100812 0%,
+            #24101d 18%,
+            #351322 50%,
+            #24101d 82%,
+            #100812 100%
+        );
+
+    box-shadow:
+        inset 0 0 120px #000,
+        inset 0 -120px 100px rgba(0,0,0,.75);
+}
+
+/* Papel tapiz gótico */
+.hall::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.28;
+
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 72px,
+            rgba(213,112,143,.10) 73px,
+            rgba(213,112,143,.10) 75px
+        );
+
+    z-index:0;
+}
+
+/* Molduras de las paredes */
+.hall::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:67%;
+    height:5px;
+
+    background:#160b12;
+
+    border-top:2px solid rgba(181,101,125,.45);
+    border-bottom:2px solid #050306;
+
+    box-shadow:
+        0 -4px 15px rgba(0,0,0,.8),
+        0 4px 15px rgba(0,0,0,.8);
+
+    pointer-events:none;
+    z-index:1;
+}
+
+/* Título */
+.hallTitle{
+    color:#f4c6d5;
+    letter-spacing:6px;
+
+    text-shadow:
+        0 0 8px rgba(255,120,160,.5),
+        0 3px 4px #000;
+
+    position:relative;
+    z-index:10;
+}
+
+.hallSubtitle{
+    color:#b99aa8;
+    font-style:italic;
+    position:relative;
+    z-index:10;
+}
+
+/* Piso oscuro */
+.hallFloor{
+    position:relative;
+    z-index:5;
+
+    border-top:3px solid #29151d;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,.018) 0px,
+            rgba(255,255,255,.018) 2px,
+            transparent 2px,
+            transparent 85px
+        ),
+        linear-gradient(
+            to bottom,
+            #130a0e,
+            #070407
+        );
+
+    box-shadow:
+        0 -15px 35px rgba(0,0,0,.75);
+}
+
+/* Alfombra vino */
+.centerRug{
+    background:
+        linear-gradient(
+            90deg,
+            #310814,
+            #74152e 20%,
+            #4d0d20 50%,
+            #74152e 80%,
+            #310814
+        ) !important;
+
+    border:3px solid #a56b70;
+
+    box-shadow:
+        0 0 0 4px #290711,
+        0 8px 25px rgba(0,0,0,.8),
+        inset 0 0 18px rgba(0,0,0,.7);
+
+    position:relative;
+}
+
+/* Detalle central de alfombra */
+.centerRug::after{
+    content:"✦";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+    color:rgba(231,176,185,.35);
+    font-size:40px;
+}
+
+/* Escalera */
+.stairsCenter{
+    filter:
+        drop-shadow(0 12px 12px rgba(0,0,0,.8));
+}
+
+.step{
+    background:
+        linear-gradient(
+            to bottom,
+            #4a2734,
+            #211017
+        ) !important;
+
+    border-top:2px solid #9b6070 !important;
+    border-bottom:4px solid #090407 !important;
+
+    box-shadow:
+        inset 0 3px 8px rgba(255,180,200,.07),
+        0 5px 8px rgba(0,0,0,.7);
+}
+
+/* Barandales */
+.stairRail{
+    background:linear-gradient(
+        90deg,
+        #080508,
+        #704351,
+        #12090e
+    ) !important;
+
+    box-shadow:
+        0 0 5px #000,
+        0 0 10px rgba(134,69,89,.35);
+}
+
+/* Puertas */
+.mansionDoor{
+    background:
+        linear-gradient(
+            90deg,
+            #12080d,
+            #35131f 22%,
+            #4a1727 50%,
+            #35131f 78%,
+            #12080d
+        ) !important;
+
+    border:4px solid #080408 !important;
+
+    outline:2px solid #704050;
+
+    box-shadow:
+        inset 0 0 0 5px #251019,
+        inset 0 0 25px #000,
+        0 12px 25px rgba(0,0,0,.8);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+}
+
+.mansionDoor.available:hover{
+    transform:translateY(-4px) scale(1.025);
+
+    box-shadow:
+        inset 0 0 0 5px #35121e,
+        inset 0 0 25px #000,
+        0 0 25px rgba(202,72,117,.4),
+        0 14px 30px #000;
+}
+
+/* Puerta final */
+.midnightDoor{
+    background:
+        linear-gradient(
+            90deg,
+            #10070c,
+            #451426,
+            #160910
+        ) !important;
+
+    border:4px solid #090408 !important;
+
+    outline:2px solid #70404e;
+
+    box-shadow:
+        inset 0 0 25px #000,
+        0 10px 25px rgba(0,0,0,.85),
+        0 0 18px rgba(120,31,62,.2);
+}
+
+/* Candelabro */
+.chandelier{
+    filter:
+        drop-shadow(0 0 8px rgba(255,184,99,.55))
+        drop-shadow(0 0 20px rgba(255,94,111,.20));
+
+    animation:hauntedChandelier 4s ease-in-out infinite;
+}
+
+@keyframes hauntedChandelier{
+    0%,100%{
+        transform:rotate(-1deg);
+        filter:brightness(.85);
+    }
+
+    45%{
+        transform:rotate(1deg);
+        filter:brightness(1.05);
+    }
+
+    48%{
+        filter:brightness(.35);
+    }
+
+    51%{
+        filter:brightness(1.2);
+    }
+
+    54%{
+        filter:brightness(.55);
+    }
+
+    58%{
+        filter:brightness(1);
+    }
+}
+
+/* Reloj */
+.grandClock{
+    filter:
+        drop-shadow(0 8px 8px #000)
+        sepia(.3);
+}
+
+/* Retrato */
+.portrait{
+    background:#130a0e !important;
+    border:6px ridge #70414e !important;
+
+    box-shadow:
+        0 7px 14px #000,
+        inset 0 0 18px #000;
+}
+
+/* Fantasma */
+.ghostHall{
+    filter:
+        drop-shadow(0 0 10px rgba(255,204,230,.5));
+
+    animation:ghostFloat 3.5s ease-in-out infinite;
+}
+
+@keyframes ghostFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+/* Oscuridad alrededor de la pantalla */
+.hall .hud{
+    background:rgba(7,3,8,.72);
+    border:1px solid rgba(172,92,119,.35);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.55),
+        inset 0 0 15px rgba(107,31,59,.15);
+
+    backdrop-filter:blur(5px);
+}
+
+/* Pequeño parpadeo de luz aleatorio visual */
+.lightning{
+    mix-blend-mode:screen;
+    opacity:.10;
+}
+
+/* En celular mantenemos visible la mansión */
+@media(max-width:700px){
+
+    .hall{
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    .hallTitle{
+        letter-spacing:3px;
+    }
+
+    .mansionDoor{
+        min-width:105px;
+    }
+
+    .centerRug{
+        min-width:70px;
+    }
+}
 </style>
   
 </head>
