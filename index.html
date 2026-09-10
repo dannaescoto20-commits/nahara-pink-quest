@@ -4612,37 +4612,7 @@ stalkerFigure.style.opacity = ".82";
     }
 
 
-    /* ================================= */
-    /* PRIMER GATO */
-    /* ================================= */
-
-    if (
-        playerX > 1160 &&
-        playerX < 1300 &&
-        playerY > 200 &&
-        !catCollected
-    ) {
-
-        catCollected = true;
-
-        firstCat.style.display =
-        "none";
-
-
-        showGhostMessage(
-            "???: Encontraste un gato."
-        );
-
-
-        setTimeout(() => {
-
-            showGhostMessage(
-                "???: ...¿Por qué hay tantos gatos en esta casa?"
-            );
-
-        }, 2200);
-
-    }
+   
     /* ================================= */
 /* FINAL DEL BOSQUE - MANSIÓN */
 /* ================================= */
