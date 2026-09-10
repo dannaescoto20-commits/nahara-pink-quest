@@ -1395,6 +1395,60 @@ body {
     pointer-events: none;
 }
     /* ===================================== */
+/* SILUETA QUE SIGUE A NAHARA */
+/* ===================================== */
+
+#stalkerFigure {
+
+    position: absolute;
+
+    width: 34px;
+    height: 120px;
+
+    left: 31%;
+    bottom: 20%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #09080c,
+            #040305
+        );
+
+    border-radius:
+        50% 50% 20% 20%;
+
+    opacity: 0;
+
+    z-index: 4;
+
+    filter:
+        blur(.4px);
+
+    transition:
+        opacity .35s ease;
+}
+
+
+/* CABEZA */
+
+#stalkerFigure::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 26px;
+    height: 26px;
+
+    left: 4px;
+    top: -14px;
+
+    border-radius: 50%;
+
+    background: #070609;
+}
+    /* ===================================== */
 /* SVG DEL BOSQUE */
 /* ===================================== */
 
@@ -3153,6 +3207,7 @@ class="ghostEye right">
   <div class="forestBack">
 
     <svg
+        
         class="gothicForestSVG"
         viewBox="0 0 1800 700"
         preserveAspectRatio="none"
@@ -3506,7 +3561,7 @@ class="ghostEye right">
 </g>
 
     </svg>
-
+<div id="stalkerFigure"></div>
 </div>
 
 
@@ -4501,6 +4556,10 @@ function checkForestEvents() {
     ) {
 
         forestWatchingTriggered = true;
+        const stalkerFigure =
+document.getElementById("stalkerFigure");
+
+stalkerFigure.style.opacity = ".55";
 
         showGhostMessage(
             "???: Nahara..."
@@ -4513,6 +4572,11 @@ function checkForestEvents() {
             );
 
         }, 1700);
+        setTimeout(() => {
+
+    stalkerFigure.style.opacity = "0";
+
+}, 3200);
 
         setTimeout(() => {
 
