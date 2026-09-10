@@ -1398,55 +1398,107 @@ body {
 /* SILUETA QUE SIGUE A NAHARA */
 /* ===================================== */
 
-#stalkerFigure {
+/* ===================================== */
+/* PRESENCIA ENTRE LOS ÁRBOLES */
+/* ===================================== */
 
+#stalkerFigure {
     position: absolute;
 
-   width: 30px;
-height: 135px;
+    width: 56px;
+    height: 165px;
 
-left: 44%;
-bottom: 19%;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #09080c,
-            #040305
-        );
-
-    border-radius:
-        50% 50% 20% 20%;
+    left: 44%;
+    bottom: 19%;
 
     opacity: 0;
-
     z-index: 4;
 
-    filter:
-        blur(.4px);
+    transition: opacity .45s ease;
 
-    transition:
-        opacity .35s ease;
+    filter:
+        blur(.7px)
+        drop-shadow(0 0 8px rgba(0,0,0,.9));
 }
 
 
-/* CABEZA */
+/* TORSO Y CABEZA */
 
 #stalkerFigure::before {
-
     content: "";
 
     position: absolute;
 
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 150px;
 
-    left: 4px;
-    top: -14px;
+    left: 14px;
+    bottom: 0;
 
-    border-radius: 50%;
+    background: #030204;
 
-    background: #070609;
+    clip-path: polygon(
+        39% 0%,
+        61% 1%,
+
+        69% 7%,
+        66% 15%,
+
+        78% 22%,
+        88% 30%,
+
+        72% 34%,
+        67% 48%,
+
+        72% 100%,
+        53% 100%,
+
+        48% 57%,
+
+        43% 100%,
+        24% 100%,
+
+        31% 47%,
+        27% 34%,
+
+        12% 30%,
+        24% 22%,
+
+        34% 15%,
+        31% 8%
+    );
+
+    transform:
+        rotate(-2deg)
+        skewX(-2deg);
+
+    transform-origin: bottom center;
+}
+
+
+/* CABEZA INCLINADA / SOMBRA */
+
+#stalkerFigure::after {
+    content: "";
+
+    position: absolute;
+
+    width: 24px;
+    height: 32px;
+
+    left: 17px;
+    top: -5px;
+
+    background: #020203;
+
+    border-radius:
+        46% 54% 48% 52% /
+        42% 45% 55% 58%;
+
+    transform: rotate(9deg);
+
+    box-shadow:
+        -2px 5px 0 #030204;
 }
     /* ===================================== */
 /* SVG DEL BOSQUE */
