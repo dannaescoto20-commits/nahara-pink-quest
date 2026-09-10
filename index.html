@@ -1073,6 +1073,29 @@ body {
     box-shadow:
         0 0 50px rgba(220,220,220,.12);
 }
+    /* ===================================== */
+/* TRANSICIÓN HACIA LA MANSIÓN */
+/* ===================================== */
+
+#mansionTransition {
+    position: absolute;
+    inset: 0;
+
+    background: #020203;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 100;
+
+    transition:
+        opacity 2.2s ease;
+}
+
+#mansionTransition.show {
+    opacity: 1;
+}
 
 
 /* ===================================== */
@@ -3223,6 +3246,7 @@ class="ghostEye right">
 <!-- ===================================== -->
 
 <div id="forestLevel">
+    <div id="mansionTransition"></div>
 
 
     <!-- LUNA -->
@@ -4153,6 +4177,7 @@ let dollGone = false;
 
 let catCollected = false;
     let forestWatchingTriggered = false;
+    let forestEndingStarted = false;
 
 let keysPressed = {};
 
@@ -4672,6 +4697,46 @@ stalkerFigure.style.opacity = ".82";
         }, 2200);
 
     }
+    /* ================================= */
+/* FINAL DEL BOSQUE - MANSIÓN */
+/* ================================= */
+
+if (
+    playerX > 2200 &&
+    !forestEndingStarted
+) {
+
+    forestEndingStarted = true;
+
+    showGhostMessage(
+        "???: Llegamos."
+    );
+    setTimeout(() => {
+
+    showGhostMessage(
+        "???: La puerta está abierta."
+    );
+
+}, 2200);
+
+
+setTimeout(() => {
+
+    showGhostMessage(
+        "???: Quédate cerca de mí."
+    );
+
+}, 4700);
+    setTimeout(() => {
+
+    const transition =
+        document.getElementById("mansionTransition");
+
+    transition.classList.add("show");
+
+}, 7000);
+
+}
 
 }
 
