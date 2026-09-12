@@ -1207,41 +1207,112 @@ body {
 }
 
 
-/* ESCALERA CENTRAL */
+/* ===================================== */
+/* ESCALERA CENTRAL GÓTICA */
+/* ===================================== */
 
 .foyerStairs {
     position: absolute;
 
-    width: 330px;
-    height: 220px;
+    width: 420px;
+    height: 250px;
 
     left: 50%;
-    bottom: 17%;
+    bottom: 13%;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     background:
         repeating-linear-gradient(
             to bottom,
-            #181017 0px,
-            #181017 20px,
-            #090609 21px,
-            #090609 24px
+            #24151e 0px,
+            #24151e 18px,
+            #120b10 19px,
+            #120b10 24px
         );
 
     clip-path:
         polygon(
-            25% 0%,
-            75% 0%,
+            31% 0%,
+            69% 0%,
             100% 100%,
             0% 100%
         );
 
     box-shadow:
-        0 -12px 25px
-        rgba(0,0,0,.7);
+        0 -14px 28px rgba(0,0,0,.85),
+        inset 0 10px 20px rgba(74,35,49,.15);
+
+    border-top:
+        4px solid #3b202d;
+
+    z-index: 5;
 }
+
+
+/* BARANDAL IZQUIERDO */
+
+.foyerStairs::before {
+    content: "";
+
+    position: absolute;
+
+    width: 16px;
+    height: 245px;
+
+    left: 48px;
+    bottom: -8px;
+
+    background:
+        linear-gradient(
+            to right,
+            #110a0f,
+            #3a1e2a,
+            #0c070b
+        );
+
+    transform:
+        rotate(17deg);
+
+    transform-origin:
+        bottom center;
+
+    box-shadow:
+        0 0 8px rgba(0,0,0,.9);
+}
+
+
+/* BARANDAL DERECHO */
+
+.foyerStairs::after {
+    content: "";
+
+    position: absolute;
+
+    width: 16px;
+    height: 245px;
+
+    right: 48px;
+    bottom: -8px;
+
+    background:
+        linear-gradient(
+            to left,
+            #110a0f,
+            #3a1e2a,
+            #0c070b
+        );
+
+    transform:
+        rotate(-17deg);
+
+    transform-origin:
+        bottom center;
+
+    box-shadow:
+        0 0 8px rgba(0,0,0,.9);
+}
+
 
 
 /* VENTANAS GÓTICAS */
