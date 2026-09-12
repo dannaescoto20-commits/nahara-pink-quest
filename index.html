@@ -1096,6 +1096,272 @@ body {
 #mansionTransition.show {
     opacity: 1;
 }
+    /* ===================================== */
+/* VESTÍBULO DE LA MANSIÓN */
+/* ===================================== */
+
+#mansionFoyer {
+    position: absolute;
+    inset: 0;
+
+    display: none;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 38%,
+            rgba(92, 38, 52, .18),
+            transparent 30%
+        ),
+        linear-gradient(
+            to bottom,
+            #120b11 0%,
+            #090609 55%,
+            #030203 100%
+        );
+
+    z-index: 120;
+}
+
+#mansionFoyer.active {
+    display: block;
+
+    animation:
+        foyerReveal 2s ease forwards;
+}
+
+@keyframes foyerReveal {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* PARED DEL FONDO */
+
+.foyerBackWall {
+    position: absolute;
+
+    width: 100%;
+    height: 72%;
+
+    left: 0;
+    top: 0;
+
+    background:
+        repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,.012) 0px,
+            rgba(255,255,255,.012) 2px,
+            transparent 2px,
+            transparent 95px
+        ),
+        linear-gradient(
+            to bottom,
+            #1b1118,
+            #0e080d
+        );
+
+    border-bottom:
+        4px solid #21131b;
+}
+
+
+/* PISO */
+
+.foyerFloor {
+    position: absolute;
+
+    width: 120%;
+    height: 38%;
+
+    left: -10%;
+    bottom: -3%;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #080608 0px,
+            #080608 85px,
+            #0d090c 85px,
+            #0d090c 88px
+        );
+
+    transform:
+        perspective(450px)
+        rotateX(58deg);
+
+    transform-origin:
+        bottom center;
+
+    box-shadow:
+        inset 0 18px 30px
+        rgba(0,0,0,.8);
+}
+
+
+/* ESCALERA CENTRAL */
+
+.foyerStairs {
+    position: absolute;
+
+    width: 330px;
+    height: 220px;
+
+    left: 50%;
+    bottom: 17%;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #181017 0px,
+            #181017 20px,
+            #090609 21px,
+            #090609 24px
+        );
+
+    clip-path:
+        polygon(
+            25% 0%,
+            75% 0%,
+            100% 100%,
+            0% 100%
+        );
+
+    box-shadow:
+        0 -12px 25px
+        rgba(0,0,0,.7);
+}
+
+
+/* VENTANAS GÓTICAS */
+
+.foyerWindow {
+    position: absolute;
+
+    width: 78px;
+    height: 170px;
+
+    top: 17%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(76,51,62,.28),
+            rgba(19,12,18,.9)
+        );
+
+    border:
+        5px solid #23141d;
+
+    border-radius:
+        50px 50px 5px 5px;
+
+    box-shadow:
+        inset 0 0 25px
+        rgba(0,0,0,.9),
+        0 0 16px
+        rgba(80,30,48,.12);
+}
+
+.foyerWindow.left {
+    left: 13%;
+}
+
+.foyerWindow.right {
+    right: 13%;
+}
+
+
+/* PUERTAS LATERALES */
+
+.foyerDoor {
+    position: absolute;
+
+    width: 120px;
+    height: 225px;
+
+    bottom: 24%;
+
+    background:
+        linear-gradient(
+            to right,
+            #10090e,
+            #21121b,
+            #0c070b
+        );
+
+    border:
+        5px solid #2b1922;
+
+    border-radius:
+        60px 60px 4px 4px;
+
+    box-shadow:
+        inset 0 0 30px
+        rgba(0,0,0,.9),
+        0 12px 20px
+        rgba(0,0,0,.55);
+}
+
+.leftDoor {
+    left: 22%;
+}
+
+.rightDoor {
+    right: 22%;
+}
+
+
+/* CANDELABRO */
+
+.foyerChandelier {
+    position: absolute;
+
+    width: 90px;
+    height: 24px;
+
+    left: 50%;
+    top: 12%;
+
+    transform:
+        translateX(-50%);
+
+    border-bottom:
+        5px solid #1c1318;
+
+    border-radius:
+        50%;
+
+    box-shadow:
+        0 8px 18px
+        rgba(94,42,55,.12);
+}
+
+.foyerChandelier::before {
+    content: "";
+
+    position: absolute;
+
+    width: 3px;
+    height: 75px;
+
+    left: 50%;
+    bottom: 19px;
+
+    background:
+        #1c1318;
+}
 
 
 /* ===================================== */
@@ -3710,7 +3976,31 @@ class="ghostEye right">
 </div>
 
 
+<!-- ===================================== -->
+<!-- VESTÍBULO DE LA MANSIÓN -->
+<!-- ===================================== -->
 
+<div id="mansionFoyer">
+
+    <div class="foyerBackWall"></div>
+
+    <div class="foyerWindow left"></div>
+    <div class="foyerWindow right"></div>
+
+    <div class="foyerDoor leftDoor"></div>
+    <div class="foyerDoor rightDoor"></div>
+
+    <div class="foyerStairs"></div>
+
+    <div class="foyerChandelier"></div>
+
+    <div class="foyerFloor"></div>
+
+    <div id="foyerNahara"></div>
+
+    <div id="foyerGhost"></div>
+
+</div>
 <script>
 
 
@@ -4651,6 +4941,20 @@ setTimeout(() => {
     transition.classList.add("show");
 
 }, 7000);
+    setTimeout(() => {
+
+    forestStarted = false;
+    keysPressed = {};
+
+    forestLevel.classList.remove("active");
+
+    const mansionFoyer =
+        document.getElementById("mansionFoyer");
+
+    mansionFoyer.classList.add("active");
+
+}, 9400);
+    
 
 }
 
