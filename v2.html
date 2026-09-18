@@ -58,7 +58,15 @@ h1{font-size:clamp(44px,8vw,100px);letter-spacing:8px;text-shadow:5px 6px #1b0c1
 .chapterCard h2{font-size:clamp(34px,6vw,72px);letter-spacing:7px}
 .chapterCard p{margin-top:12px;letter-spacing:5px;color:#b78999}
 
-#player{position:absolute;width:74px;height:128px;z-index:90;transform-origin:center bottom;filter:drop-shadow(0 8px 3px #0008)}
+#player{
+  position:absolute;
+  width:74px;
+  height:128px;
+  z-index:90;
+  transform-origin:center bottom;
+  filter:drop-shadow(0 8px 3px #0008);
+  display:none;
+}
 #player.flip{transform:scaleX(-1)}
 .hair{position:absolute;width:70px;height:70px;left:2px;top:0;background:#1a1118;border:5px solid #070507;border-radius:48% 52% 38% 42%;z-index:4}
 .face{position:absolute;width:48px;height:51px;left:13px;top:18px;background:#c69e94;border:4px solid #070507;border-radius:48%;z-index:5}
@@ -76,7 +84,15 @@ h1{font-size:clamp(44px,8vw,100px);letter-spacing:8px;text-shadow:5px 6px #1b0c1
 .leg.l .boot{left:-10px}
 .leg.r .boot{right:-10px}
 
-#ghost{position:absolute;width:82px;height:92px;z-index:88;transition:opacity .5s;filter:drop-shadow(0 8px 8px #0008)}
+#ghost{
+  position:absolute;
+  width:82px;
+  height:92px;
+  z-index:88;
+  transition:opacity .5s;
+  filter:drop-shadow(0 8px 8px #0008);
+  display:none;
+}
 .ghostBody{position:absolute;inset:0;background:#d8d0c3;border:5px solid #0a080b;border-radius:48% 48% 20% 20%;clip-path:polygon(0 0,100% 0,100% 82%,82% 100%,65% 85%,50% 100%,34% 85%,17% 100%,0 84%)}
 .ghostEyes{position:absolute;width:11px;height:20px;left:20px;top:29px;border-radius:50%;background:#080609;box-shadow:31px 0 #080609;z-index:3}
 .ghostBow{position:absolute;right:-3px;top:5px;width:35px;height:24px;z-index:4}
@@ -883,6 +899,7 @@ function buildEnemies(){
   });
 }
 
+
 async function startAct(key,entry=220){
   if(transitioning)return;
 
@@ -892,8 +909,22 @@ async function startAct(key,entry=220){
   transition.classList.add("show");
   await sleep(650);
 
-  $$(".scene").forEach(s=>s.classList.remove("active"));
-  $(ACTS[key].scene).classList.add("active");
+  // Ocultar absolutamente todas las escenas.
+  $$(".scene").forEach(scene=>{
+    scene.classList.remove("active");
+    scene.style.display="none";
+  });
+
+  // La portada nunca debe permanecer sobre el juego.
+  const title=$("#title");
+  title.classList.remove("active");
+  title.style.display="none";
+
+  // Activar únicamente el acto solicitado.
+  const nextScene=$(ACTS[key].scene);
+
+  nextScene.classList.add("active");
+  nextScene.style.display="block";
 
   act=key;
   world=$(ACTS[key].world);
@@ -903,9 +934,10 @@ async function startAct(key,entry=220){
   bottom=GROUND;
   vy=0;
   grounded=true;
+  facing=1;
   camera=0;
 
-  world.style.transform="translateX(0)";
+  world.style.transform="translateX(0px)";
 
   buildPlatforms();
   buildEnemies();
@@ -916,9 +948,14 @@ async function startAct(key,entry=220){
   projectiles=[];
   enemyShots=[];
 
+  // Mostrar protagonistas únicamente después de entrar al juego.
   player.style.display="block";
   ghost.style.display="block";
   ghost.style.opacity="1";
+
+  // Limpiar elementos exclusivos de otros actos.
+  $("#bossBar").classList.remove("show");
+  $("#clock").classList.toggle("show",key==="midnight");
 
   setUI();
 
@@ -931,9 +968,7 @@ async function startAct(key,entry=220){
 
   introFor(key);
 }
-
-function introFor(key){
-
+  
   if(key==="forest"){
     say("Pensé que no vendrías.");
     say("Quédate cerca de mí.");
@@ -1018,31 +1053,35 @@ function physics(){
     grounded=true;
   }
 
-  player.classList.toggle("flip",facing<0);
-  player.style.left=x+"px";
-  player.style.bottom=bottom+"px";
+camera+=(x-innerWidth*.36-camera)*.12;
 
-  const gx=x+(facing>0?-95:90);
-  const gb=bottom+80+Math.sin(performance.now()/330)*8;
+camera=Math.max(
+  0,
+  Math.min(
+    Math.max(0,worldWidth-innerWidth),
+    camera
+  )
+);
 
-  ghost.style.left=gx+"px";
-  ghost.style.bottom=gb+"px";
+world.style.transform=`translateX(${-camera}px)`;
 
-  camera+=(x-innerWidth*.36-camera)*.12;
-  camera=Math.max(
-    0,
-    Math.min(Math.max(0,worldWidth-innerWidth),camera)
-  );
+// Nahara y ??? están fuera del world.
+// Por eso debemos restar la cámara al dibujarlos.
+const screenX=x-camera;
 
-  world.style.transform=`translateX(${-camera}px)`;
-}
+player.classList.toggle("flip",facing<0);
+player.style.left=screenX+"px";
+player.style.bottom=bottom+"px";
 
-function jump(){
-  if(act!=="title"&&!inputLocked&&grounded){
-    vy=JUMP;
-    grounded=false;
-  }
-}
+const ghostWorldX=x+(facing>0?-95:90);
+const ghostScreenX=ghostWorldX-camera;
+const gb=
+  bottom+
+  80+
+  Math.sin(performance.now()/330)*8;
+
+ghost.style.left=ghostScreenX+"px";
+ghost.style.bottom=gb+"px";
 
 function attack(){
   if(!["mansion","castle"].includes(act)||inputLocked)return;
@@ -1822,10 +1861,15 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-$("#play").addEventListener(
-  "click",
-  ()=>startAct("forest")
-);
+$("#play").addEventListener("click",()=>{
+  if(transitioning)return;
+
+  // Desactivar inmediatamente la portada.
+  $("#title").classList.remove("active");
+  $("#title").style.display="none";
+
+  startAct("forest");
+});
 
 addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
