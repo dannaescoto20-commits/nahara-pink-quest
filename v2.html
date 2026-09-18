@@ -1,9668 +1,1882 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Nahara & ??? — The Haunted Birthday</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#09070a;--wine:#512638;--pink:#c9869d;--ivory:#e6ddd0;--plum:#24131f}
+html,body{width:100%;height:100%;overflow:hidden;background:#050406;font-family:Georgia,"Times New Roman",serif;color:var(--ivory)}
+button{font:inherit}
+#game{position:relative;width:100vw;height:100vh;overflow:hidden;background:#08060a}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.scene.active{display:block}
+.world{position:absolute;left:0;top:0;height:100%;will-change:transform}
+.world::after{content:"";position:absolute;left:0;right:0;bottom:0;height:190px;background:linear-gradient(#21151b,#090609 55%);border-top:7px solid #070507;box-shadow:0 -8px 25px #0008}
+
+.film{position:fixed;inset:0;z-index:900;pointer-events:none;opacity:.22;background-image:repeating-radial-gradient(circle at 20% 30%,#fff 0 1px,transparent 1px 5px);mix-blend-mode:soft-light;animation:grain .18s steps(2) infinite}
+.vignette{position:fixed;inset:0;z-index:899;pointer-events:none;box-shadow:inset 0 0 140px 45px #000}
+@keyframes grain{50%{transform:translate(2px,-2px)}}
+
+#title{display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 70% 20%,#65425455,transparent 25%),linear-gradient(#17111a,#070609)}
+.titleMoon{position:absolute;width:240px;height:240px;border-radius:50%;right:9%;top:9%;background:#d8cfc0;box-shadow:0 0 60px #caaeb244}
+.titleMansion{position:absolute;left:50%;bottom:110px;transform:translateX(-50%);width:min(720px,80vw);height:390px;background:#130d13;clip-path:polygon(12% 35%,24% 35%,24% 20%,35% 20%,35% 5%,50% 18%,63% 4%,63% 22%,76% 22%,76% 35%,90% 35%,95% 100%,5% 100%);border-bottom:12px solid #050405;filter:drop-shadow(0 18px 20px #000)}
+.titleCopy{position:relative;z-index:5;margin-top:-80px}
+.eyebrow{letter-spacing:8px;font-size:14px;color:#b994a1}
+h1{font-size:clamp(44px,8vw,100px);letter-spacing:8px;text-shadow:5px 6px #1b0c14}
+.titleCopy p{margin:18px auto 28px;letter-spacing:4px;color:#bba7ad}
+#play{padding:14px 34px;border:2px solid #b98597;background:#180d13;color:#ead9de;letter-spacing:5px;cursor:pointer;box-shadow:5px 6px #050405}
+#play:hover{transform:translateY(-2px)}
+
+#hud{position:fixed;left:24px;top:20px;z-index:300;display:none;align-items:center;gap:18px;padding:12px 18px;background:#09070bd9;border:2px solid #6f4050;box-shadow:5px 6px #000}
+#hud.show{display:flex}
+#hearts{display:flex;gap:7px}
+.heart{width:22px;height:20px;position:relative;transform:rotate(-45deg);background:#a84863}
+.heart::before,.heart::after{content:"";position:absolute;width:22px;height:20px;border-radius:50%;background:inherit}
+.heart::before{top:-10px}
+.heart::after{left:10px}
+.heart.lost{opacity:.18}
+#actLabel{letter-spacing:3px;font-size:12px;min-width:150px}
+#counter{font-size:12px;letter-spacing:2px;color:#d6aeb9}
+
+#objective{position:fixed;right:24px;top:24px;z-index:300;display:none;max-width:420px;text-align:right;letter-spacing:3px;font-size:12px;color:#d2bdc4}
+#objective.show{display:block}
+#controls{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:300;display:none;padding:9px 14px;background:#080609cc;border:1px solid #593442;letter-spacing:2px;font-size:11px}
+#controls.show{display:block}
+
+#dialogue{position:fixed;z-index:500;left:50%;bottom:55px;transform:translateX(-50%) translateY(20px);width:min(720px,88vw);padding:18px 24px;background:#080609ee;border:3px solid #6c3d4d;box-shadow:7px 8px #000;opacity:0;pointer-events:none;transition:.25s}
+#dialogue.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#speaker{font-size:12px;letter-spacing:4px;color:#c88ba0;margin-bottom:7px}
+#dialogueText{font-size:18px;line-height:1.35}
+
+.chapterCard{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;text-align:center;background:#050406;opacity:0;pointer-events:none;transition:.5s}
+.chapterCard.show{opacity:1}
+.chapterCard h2{font-size:clamp(34px,6vw,72px);letter-spacing:7px}
+.chapterCard p{margin-top:12px;letter-spacing:5px;color:#b78999}
+
+#player{position:absolute;width:74px;height:128px;z-index:90;transform-origin:center bottom;filter:drop-shadow(0 8px 3px #0008)}
+#player.flip{transform:scaleX(-1)}
+.hair{position:absolute;width:70px;height:70px;left:2px;top:0;background:#1a1118;border:5px solid #070507;border-radius:48% 52% 38% 42%;z-index:4}
+.face{position:absolute;width:48px;height:51px;left:13px;top:18px;background:#c69e94;border:4px solid #070507;border-radius:48%;z-index:5}
+.face::before{content:"";position:absolute;width:6px;height:9px;left:9px;top:21px;border-radius:50%;background:#090609;box-shadow:20px 0 #090609}
+
+.bow{position:absolute;right:-8px;top:-9px;width:38px;height:28px;z-index:8}
+.bow::before,.bow::after{content:"";position:absolute;width:22px;height:22px;background:#bd728b;border:4px solid #080608;border-radius:60% 30%}
+.bow::after{right:0;transform:scaleX(-1)}
+
+.dress{position:absolute;left:8px;top:61px;width:58px;height:58px;background:#672d45;border:5px solid #070507;clip-path:polygon(28% 0,72% 0,100% 100%,0 100%)}
+.leg{position:absolute;bottom:0;width:15px;height:28px;background:#d6c7bc;border:4px solid #070507}
+.leg.l{left:17px}
+.leg.r{right:17px}
+.boot{position:absolute;bottom:-2px;width:26px;height:14px;background:#0b090c;border:4px solid #050405}
+.leg.l .boot{left:-10px}
+.leg.r .boot{right:-10px}
+
+#ghost{position:absolute;width:82px;height:92px;z-index:88;transition:opacity .5s;filter:drop-shadow(0 8px 8px #0008)}
+.ghostBody{position:absolute;inset:0;background:#d8d0c3;border:5px solid #0a080b;border-radius:48% 48% 20% 20%;clip-path:polygon(0 0,100% 0,100% 82%,82% 100%,65% 85%,50% 100%,34% 85%,17% 100%,0 84%)}
+.ghostEyes{position:absolute;width:11px;height:20px;left:20px;top:29px;border-radius:50%;background:#080609;box-shadow:31px 0 #080609;z-index:3}
+.ghostBow{position:absolute;right:-3px;top:5px;width:35px;height:24px;z-index:4}
+.ghostBow::before,.ghostBow::after{content:"";position:absolute;width:20px;height:18px;background:#bd728b;border:3px solid #080608;border-radius:60% 30%}
+.ghostBow::after{right:0;transform:scaleX(-1)}
+.medal{position:absolute;left:32px;top:58px;width:22px;height:22px;border-radius:50%;background:#a78670;border:3px solid #21131a;color:#21131a;font:bold 13px Georgia;display:flex;align-items:center;justify-content:center;z-index:4}
+
+.platform{position:absolute;height:34px;background:linear-gradient(#745064,#2a1721);border:5px solid #090609;box-shadow:0 9px #050405;z-index:40}
+.door{position:absolute;width:150px;height:330px;bottom:190px;background:linear-gradient(90deg,#130b10,#5a3040,#130b10);border:10px solid #080507;border-radius:80px 80px 3px 3px;z-index:30}
+.door::after{content:"";position:absolute;right:22px;top:175px;width:10px;height:10px;border-radius:50%;background:#b58c75}
+
+.cat{position:absolute;width:54px;height:50px;z-index:65;transition:.4s}
+.cat.taken{opacity:0;transform:translateY(-50px) scale(.3)}
+.catHead{position:absolute;width:34px;height:31px;left:10px;background:#111014;border-radius:50%;border:3px solid #050405}
+.catHead::before,.catHead::after{content:"";position:absolute;top:-8px;width:14px;height:15px;background:#111014;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.catHead::before{left:0}
+.catHead::after{right:0}
+.catEyes{position:absolute;left:7px;top:13px;width:5px;height:6px;border-radius:50%;background:#d6b29d;box-shadow:14px 0 #d6b29d}
+.catBody{position:absolute;left:8px;top:27px;width:40px;height:25px;background:#111014;border-radius:50%}
+
+.enemy{position:absolute;z-index:70}
+.enemy.dead{opacity:0;transform:translateY(60px) rotate(30deg);transition:.5s}
+.bat{width:52px;height:28px;background:#100c12;border-radius:50%}
+.bat::before,.bat::after{content:"";position:absolute;top:0;width:42px;height:30px;background:#1e1420;clip-path:polygon(0 0,100% 30%,65% 100%,40% 60%,15% 100%)}
+.bat::before{left:-34px;transform:scaleX(-1)}
+.bat::after{right:-34px}
+
+.enemyGhost{width:72px;height:85px;background:#bfb8b0;border:5px solid #080608;border-radius:48% 48% 20% 20%;clip-path:polygon(0 0,100% 0,100% 80%,80% 100%,60% 84%,40% 100%,20% 84%,0 100%);opacity:.82}
+.enemyGhost::after{content:"";position:absolute;left:18px;top:28px;width:9px;height:15px;border-radius:50%;background:#080608;box-shadow:25px 0 #080608}
+
+.projectile{position:absolute;width:30px;height:18px;border-radius:50%;background:#d6b3bd;border:3px solid #120b10;box-shadow:0 0 14px #d38da5;z-index:100}
+.enemyShot{position:absolute;width:27px;height:27px;border-radius:50%;background:#7b304b;box-shadow:0 0 16px #a94c6c;z-index:100}
+   .scenery{position:absolute;z-index:10}
+.window{width:150px;height:300px;border:11px solid #0b080d;border-radius:90px 90px 4px 4px;background:radial-gradient(circle at 55% 28%,#c7bcb8 0 12%,#514656 25%,#17121b 70%);box-shadow:0 0 0 5px #3b2834}
+.candle{width:13px;height:70px;background:#c4b2a4;border:3px solid #0c080b}
+.candle::before{content:"";position:absolute;left:-2px;top:-23px;width:11px;height:21px;border-radius:50%;background:#c98071;box-shadow:0 0 13px #d6927a}
+
+.sceneTitle{position:absolute;left:50%;top:55px;transform:translateX(-50%);z-index:25;text-align:center;letter-spacing:7px;color:#c7a8b3;font-size:14px}
+.sceneTitle strong{display:block;font-size:30px;color:#eadde1;margin-top:5px}
+
+#forestWorld{width:3600px;background:linear-gradient(#10101a,#151019 58%,#080609)}
+.moon{position:absolute;right:280px;top:75px;width:210px;height:210px;border-radius:50%;background:#d4ccc0;box-shadow:0 0 50px #c9b6b744}
+.tree{position:absolute;bottom:180px;width:90px;height:520px;background:#0b090d;clip-path:polygon(42% 0,58% 0,65% 28%,100% 38%,65% 42%,75% 100%,25% 100%,34% 44%,0 37%,36% 30%)}
+.eyes{position:absolute;width:8px;height:8px;border-radius:50%;background:#b87c88;box-shadow:20px 0 #b87c88;opacity:.65}
+#stalker{position:absolute;left:2250px;bottom:190px;width:65px;height:230px;background:#030304;border-radius:50% 50% 10% 10%;opacity:0;transition:.25s;z-index:35}
+#stalker.show{opacity:.8}
+.farMansion{position:absolute;right:120px;bottom:190px;width:470px;height:410px;background:#100b10;clip-path:polygon(10% 35%,25% 35%,25% 18%,40% 18%,50% 3%,60% 18%,77% 18%,77% 35%,92% 35%,100% 100%,0 100%);filter:drop-shadow(0 15px 15px #000)}
+
+#mansionWorld{width:5200px;background:linear-gradient(#1b111a,#110a11)}
+.wallpaper{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 100px,#6d3b4c18 101px 105px)}
+.painting{position:absolute;width:140px;height:190px;bottom:390px;border:12px solid #3b2530;background:#151016;box-shadow:0 0 0 4px #090609}
+.painting::after{content:"";position:absolute;left:37px;top:48px;width:12px;height:17px;border-radius:50%;background:#0b080b;box-shadow:42px 0 #0b080b}
+
+#cinemaWorld{width:4300px;background:linear-gradient(#191017,#080608)}
+.screen{position:absolute;left:2750px;bottom:300px;width:620px;height:350px;background:#d0c4b3;border:18px solid #130c11;box-shadow:0 0 0 8px #4c2a37}
+.screen.awake::after{content:"NAHARA";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4a2632;font-size:60px;letter-spacing:12px}
+.seat{position:absolute;bottom:190px;width:95px;height:100px;background:#4d2334;border:6px solid #0a0709;border-radius:30px 30px 8px 8px}
+.fragment{position:absolute;width:45px;height:58px;border:5px solid #0a0709;background:repeating-linear-gradient(#d5c2a6 0 8px,#6b4250 9px 16px);z-index:65;animation:float 1.2s ease-in-out infinite alternate}
+.fragment.taken{display:none}
+@keyframes float{to{transform:translateY(-12px)}}
+
+#blackout,#womanDarkness,#midnightDarkness,#bellFlash,#transition{position:fixed;inset:0;pointer-events:none;opacity:0}
+#blackout{z-index:650;background:#000;transition:.2s}
+#blackout.show{opacity:.95}
+
+#castleWorld{width:4800px;background:linear-gradient(#17131b,#180a12 65%,#050304)}
+.coffin{position:absolute;width:105px;height:235px;bottom:190px;background:linear-gradient(90deg,#170b10,#542431,#170b10);clip-path:polygon(25% 0,75% 0,100% 18%,88% 100%,12% 100%,0 18%);border:7px solid #080507}
+.coffin::after{content:"†";position:absolute;top:70px;width:100%;text-align:center;font-size:48px;color:#8e5b68}
+#boss{position:absolute;width:125px;height:185px;left:3900px;bottom:190px;z-index:75;opacity:0;transition:.8s}
+#boss.awake{opacity:1}
+.bossCape{position:absolute;bottom:0;width:125px;height:135px;background:#5c1e31;clip-path:polygon(50% 0,100% 20%,85% 100%,65% 80%,50% 100%,35% 80%,15% 100%,0 20%);border:5px solid #080507}
+.bossHead{position:absolute;left:27px;top:0;width:72px;height:80px;background:#c2aaa2;border:5px solid #080507;border-radius:48%;z-index:2}
+.bossHead::before{content:"";position:absolute;left:12px;top:34px;width:8px;height:12px;border-radius:50%;background:#8f3448;box-shadow:30px 0 #8f3448}
+
+#bossBar{position:fixed;left:50%;bottom:42px;transform:translateX(-50%);width:min(430px,70vw);z-index:360;display:none}
+#bossBar.show{display:block}
+#bossName{text-align:center;letter-spacing:5px;font-size:12px;color:#d2aab0;margin-bottom:7px}
+#bossTrack{height:22px;padding:4px;background:#090507;border:3px solid #70404e}
+#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#6e243a,#ae5268);transition:.2s}
+
+#toyWorld{width:4400px;background:linear-gradient(#1c1118,#10090e 65%,#050304)}
+.musicBox{position:absolute;left:850px;bottom:205px;width:130px;height:95px;background:#49252f;border:7px solid #10080d}
+.musicBox::before{content:"";position:absolute;left:20px;top:-48px;width:80px;height:45px;background:#6d3b49;border:6px solid #10080d}
+.doll{position:absolute;width:75px;height:130px;bottom:190px;z-index:45;transition:left .05s}
+.dollHead{position:absolute;left:7px;width:60px;height:65px;background:#c7a79e;border:5px solid #0b0709;border-radius:48%}
+.dollHead::before{content:"";position:absolute;left:10px;top:27px;width:8px;height:12px;border-radius:50%;background:#090608;box-shadow:27px 0 #090608}
+.dollDress{position:absolute;left:2px;top:58px;width:70px;height:72px;background:#5b2c3b;border:5px solid #0b0709;clip-path:polygon(30% 0,70% 0,100% 100%,0 100%)}
+
+#spectralWoman{position:fixed;left:50%;bottom:0;transform:translateX(-50%) scale(.7);width:180px;height:510px;z-index:885;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent,#ded6ccaa,transparent);clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)}
+#spectralWoman.show{animation:woman .9s forwards}
+@keyframes woman{40%,75%{opacity:1;transform:translateX(-50%) scale(1.05)}100%{opacity:0;transform:translateX(-50%) scale(1.3)}}
+#womanDarkness{z-index:880;background:#000}
+#womanDarkness.show{opacity:.85}
+
+#midnightWorld{width:4400px;background:linear-gradient(#171019,#0b070d 70%,#030203)}
+.memory{position:absolute;width:170px;height:210px;bottom:340px;background:#0b080b;border:12px solid #3b2630;opacity:.18;transition:1s}
+.memory.lit{opacity:1;box-shadow:0 0 20px #9b5b7044}
+
+#clock{position:fixed;left:50%;top:90px;transform:translateX(-50%);z-index:350;width:145px;height:145px;border-radius:50%;background:#c7b8a7;border:10px solid #160d13;display:none;align-items:center;justify-content:center;color:#211219;font:bold 24px Georgia;letter-spacing:3px}
+#clock.show{display:flex}
+#midnightDarkness{z-index:880;background:#000;transition:.5s}
+#midnightDarkness.show{opacity:1}
+#bellFlash{z-index:890;background:#d7c3c055}
+#bellFlash.show{animation:flash .5s forwards}
+@keyframes flash{20%{opacity:1}100%{opacity:0}}
+
+#finalWorld{width:2500px;background:radial-gradient(circle at 60% 30%,#7d4a5c33,transparent 30%),linear-gradient(#3d2230,#201018 70%,#0b0609)}
+.banner{position:absolute;left:950px;bottom:610px;width:900px;height:90px;border-top:4px solid #ba8d98}
+.banner::after{content:"HAPPY BIRTHDAY · NAHARA";position:absolute;top:20px;width:100%;text-align:center;letter-spacing:8px;color:#ddb5c0;font-size:25px}
+.cake{position:absolute;left:1500px;bottom:220px;width:210px;height:150px;background:#8a4c60;border:7px solid #10080d;border-radius:18px}
+.cake::before{content:"";position:absolute;left:22px;top:-55px;width:150px;height:60px;background:#b57b8e;border:7px solid #10080d;border-radius:15px}
+.cake::after{content:"";position:absolute;left:96px;top:-95px;width:12px;height:42px;background:#d0b0b5;box-shadow:0 -18px 12px #e2b281}
+
+#reveal{position:fixed;inset:0;z-index:760;background:#060407f5;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+#reveal.show{display:flex}
+.bigGhost{position:relative;width:220px;height:250px;margin-bottom:30px}
+.bigGhost .ghostBody{border-width:8px}
+.bigGhost .ghostEyes{left:54px;top:75px;width:23px;height:38px;box-shadow:76px 0 #080609}
+.bigGhost .ghostBow{right:10px;top:10px;transform:scale(2)}
+.bigGhost .medal{left:90px;top:165px;width:55px;height:55px;font-size:28px;border-width:6px}
+#reveal h2{font-size:clamp(32px,5vw,68px);letter-spacing:8px;color:#ddb6c1}
+#reveal p{margin-top:15px;letter-spacing:5px;color:#c9abb4}
+
+#ending{position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#311924,#080407 70%);display:none;align-items:center;justify-content:center;text-align:center}
+#ending.show{display:flex}
+#ending h2{font-size:clamp(42px,8vw,100px);letter-spacing:9px;color:#dfb4c0}
+
+#transition{z-index:1000;background:#000;transition:.7s}
+#transition.show{opacity:1}
+.hurt{animation:hurt .18s 4}
+@keyframes hurt{50%{opacity:.2}}
+
+@media(max-width:800px){
+  #objective{display:none!important}
+  .sceneTitle{top:90px}
+  #hud{left:10px;top:10px;transform:scale(.86);transform-origin:left top}
+  #controls{font-size:9px}
+}
+</style>
+</head>
+
+<body>
+<div id="game">
+
+<section id="title" class="scene active">
+  <div class="titleMoon"></div>
+  <div class="titleMansion"></div>
+
+  <div class="titleCopy">
+    <div class="eyebrow">NAHARA &amp; ???</div>
+    <h1>THE HAUNTED<br>BIRTHDAY</h1>
+    <p>ALGUIEN TE ESTÁ ESPERANDO.</p>
+    <button id="play">ENTRAR</button>
+  </div>
+</section>
+
+<section id="forest" class="scene">
+  <div id="forestWorld" class="world">
+       <div class="moon"></div>
+  <div class="sceneTitle">ACTO I<strong>THE WOODS</strong></div>
+
+  <div class="tree" style="left:180px"></div>
+  <div class="tree" style="left:620px;height:600px"></div>
+  <div class="tree" style="left:1080px;height:480px"></div>
+  <div class="tree" style="left:1580px;height:610px"></div>
+  <div class="tree" style="left:2100px;height:520px"></div>
+  <div class="tree" style="left:2620px;height:590px"></div>
+
+  <div class="eyes" style="left:820px;bottom:410px"></div>
+  <div class="eyes" style="left:1450px;bottom:350px"></div>
+  <div class="eyes" style="left:1980px;bottom:470px"></div>
+
+  <div id="stalker"></div>
+  <div class="farMansion"></div>
+  <div class="door" style="left:3340px"></div>
+</div>
+</section>
+
+
+<section id="mansion" class="scene">
+<div id="mansionWorld" class="world">
+
+  <div class="wallpaper"></div>
+  <div class="sceneTitle">ACTO II<strong>THE HAUNTED MANSION</strong></div>
+
+  <div class="window scenery" style="left:450px;bottom:320px"></div>
+  <div class="window scenery" style="left:1900px;bottom:320px"></div>
+  <div class="window scenery" style="left:3550px;bottom:320px"></div>
+
+  <div class="painting scenery" style="left:950px"></div>
+  <div class="painting scenery" style="left:2500px"></div>
+  <div class="painting scenery" style="left:4050px"></div>
+
+  <div class="platform" style="left:650px;bottom:300px;width:350px"></div>
+  <div class="platform" style="left:1250px;bottom:390px;width:320px"></div>
+  <div class="platform" style="left:2050px;bottom:290px;width:380px"></div>
+  <div class="platform" style="left:2900px;bottom:410px;width:330px"></div>
+  <div class="platform" style="left:3800px;bottom:310px;width:400px"></div>
+
+  <div class="cat" data-x="820" data-bottom="334" style="left:820px;bottom:334px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat" data-x="1420" data-bottom="424" style="left:1420px;bottom:424px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat" data-x="2230" data-bottom="324" style="left:2230px;bottom:324px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat" data-x="3050" data-bottom="444" style="left:3050px;bottom:444px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat" data-x="3990" data-bottom="344" style="left:3990px;bottom:344px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="enemy enemyGhost" data-kind="ghost" data-x="1750" data-bottom="190" style="left:1750px;bottom:190px"></div>
+  <div class="enemy enemyGhost" data-kind="ghost" data-x="3400" data-bottom="190" style="left:3400px;bottom:190px"></div>
+  <div class="enemy enemyGhost" data-kind="ghost" data-x="4450" data-bottom="190" style="left:4450px;bottom:190px"></div>
+
+  <div class="door" style="left:4900px"></div>
+</div>
+</section>
+
+
+<section id="cinema" class="scene">
+<div id="cinemaWorld" class="world">
+
+  <div class="sceneTitle">ACTO III<strong>THE CURSED CINEMA</strong></div>
+
+  <div class="seat" style="left:500px"></div>
+  <div class="seat" style="left:620px"></div>
+  <div class="seat" style="left:740px"></div>
+  <div class="seat" style="left:1500px"></div>
+  <div class="seat" style="left:1620px"></div>
+  <div class="seat" style="left:1740px"></div>
+
+  <div class="platform" style="left:650px;bottom:290px;width:400px"></div>
+  <div class="platform" style="left:1400px;bottom:390px;width:350px"></div>
+  <div class="platform" style="left:2050px;bottom:300px;width:400px"></div>
+  <div class="platform" style="left:3100px;bottom:300px;width:420px"></div>
+
+  <div class="fragment" data-x="850" data-bottom="324" style="left:850px;bottom:324px"></div>
+  <div class="fragment" data-x="1550" data-bottom="424" style="left:1550px;bottom:424px"></div>
+  <div class="fragment" data-x="3300" data-bottom="334" style="left:3300px;bottom:334px"></div>
+
+  <div id="cursedScreen" class="screen"></div>
+  <div class="door" style="left:4050px"></div>
+</div>
+</section>
+
+
+<section id="castle" class="scene">
+<div id="castleWorld" class="world">
+
+  <div class="sceneTitle">ACTO IV<strong>THE VAMPIRE'S CASTLE</strong></div>
+
+  <div class="window scenery" style="left:450px;bottom:320px"></div>
+  <div class="window scenery" style="left:1900px;bottom:320px"></div>
+  <div class="window scenery" style="left:3150px;bottom:320px"></div>
+
+  <div class="coffin scenery" style="left:700px"></div>
+  <div class="coffin scenery" style="left:1450px"></div>
+  <div class="coffin scenery" style="left:2700px"></div>
+
+  <div class="platform" style="left:600px;bottom:300px;width:380px"></div>
+
+  <div class="platform moving"
+       data-base="410"
+       data-phase="0"
+       style="left:1250px;bottom:410px;width:300px"></div>
+
+  <div class="platform"
+       style="left:2100px;bottom:290px;width:380px"></div>
+
+  <div class="platform moving"
+       data-base="390"
+       data-phase="2"
+       style="left:2850px;bottom:390px;width:320px"></div>
+
+  <div class="enemy bat"
+       data-kind="bat"
+       data-x="900"
+       data-base-x="900"
+       data-bottom="470"
+       style="left:900px;bottom:470px"></div>
+
+  <div class="enemy bat"
+       data-kind="bat"
+       data-x="1750"
+       data-base-x="1750"
+       data-bottom="500"
+       style="left:1750px;bottom:500px"></div>
+
+  <div class="enemy bat"
+       data-kind="bat"
+       data-x="2650"
+       data-base-x="2650"
+       data-bottom="430"
+       style="left:2650px;bottom:430px"></div>
+
+  <div id="boss">
+    <div class="bossCape"></div>
+    <div class="bossHead"></div>
+  </div>
+
+  <div class="door" style="left:4550px"></div>
+</div>
+</section>
+
+
+<section id="toy" class="scene">
+<div id="toyWorld" class="world">
+
+  <div class="sceneTitle">ACTO V<strong>THE TOY ROOM</strong></div>
+
+  <div class="musicBox"></div>
+
+  <div id="doll1" class="doll" style="left:1500px">
+    <div class="dollHead"></div>
+    <div class="dollDress"></div>
+  </div>
+
+  <div id="doll2" class="doll" style="left:2450px">
+    <div class="dollHead"></div>
+    <div class="dollDress"></div>
+  </div>
+
+  <div id="doll3" class="doll" style="left:3300px">
+    <div class="dollHead"></div>
+    <div class="dollDress"></div>
+  </div>
+
+  <div class="platform" style="left:1100px;bottom:300px;width:330px"></div>
+  <div class="platform" style="left:2200px;bottom:360px;width:350px"></div>
+  <div class="platform" style="left:3200px;bottom:300px;width:360px"></div>
+
+  <div class="door" style="left:4100px"></div>
+</div>
+</section>
+
+
+<section id="midnight" class="scene">
+<div id="midnightWorld" class="world">
+
+  <div class="sceneTitle">ACTO VI<strong>MIDNIGHT</strong></div>
+
+  <div class="window scenery" style="left:400px;bottom:320px"></div>
+  <div class="window scenery" style="left:1450px;bottom:320px"></div>
+  <div class="window scenery" style="left:2550px;bottom:320px"></div>
+  <div class="window scenery" style="left:3650px;bottom:320px"></div>
+
+  <div id="memory1" class="memory" style="left:750px"></div>
+  <div id="memory2" class="memory" style="left:1900px"></div>
+  <div id="memory3" class="memory" style="left:3000px"></div>
+
+  <div class="door" style="left:4170px"></div>
+</div>
+</section>
+
+
+<section id="final" class="scene">
+<div id="finalWorld" class="world">
+
+  <div class="banner"></div>
+  <div class="cake"></div>
+  <div class="door" style="left:600px"></div>
+
+  <div class="cat finalCat" style="left:980px;bottom:190px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat finalCat" style="left:1100px;bottom:190px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat finalCat" style="left:1220px;bottom:190px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat finalCat" style="left:1340px;bottom:190px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+  <div class="cat finalCat" style="left:1460px;bottom:190px">
+    <div class="catHead"><div class="catEyes"></div></div>
+    <div class="catBody"></div>
+  </div>
+
+</div>
+</section>
+
+
+<div id="player">
+  <div class="hair"></div>
+  <div class="face"></div>
+  <div class="bow"></div>
+  <div class="dress"></div>
+
+  <div class="leg l">
+    <div class="boot"></div>
+  </div>
+
+  <div class="leg r">
+    <div class="boot"></div>
+  </div>
+</div>
+
+
+<div id="ghost">
+  <div class="ghostBody"></div>
+  <div class="ghostEyes"></div>
+  <div class="ghostBow"></div>
+  <div class="medal">N</div>
+</div>
+
+
+<div id="hud">
+  <div id="hearts">
+    <i class="heart"></i>
+    <i class="heart"></i>
+    <i class="heart"></i>
+  </div>
+
+  <div id="actLabel">ACTO I</div>
+  <div id="counter"></div>
+</div>
+
+<div id="objective"></div>
+
+<div id="controls">
+  A / D · FLECHAS — MOVER
+  &nbsp;&nbsp;
+  W / ↑ / ESPACIO — SALTAR
+  &nbsp;&nbsp;
+  F — ATAQUE
+</div>
+
+<div id="dialogue">
+  <div id="speaker">???</div>
+  <div id="dialogueText"></div>
+</div>
+
+<div id="chapterCard" class="chapterCard">
+  <div>
+    <p id="chapterNo"></p>
+    <h2 id="chapterTitle"></h2>
+    <p id="chapterSub"></p>
+  </div>
+</div>
+<div id="bossBar">
+  <div id="bossName">THE COUNT</div>
+  <div id="bossTrack">
+    <div id="bossFill"></div>
+  </div>
+</div>
+
+<div id="clock">11:57</div>
+<div id="blackout"></div>
+<div id="womanDarkness"></div>
+<div id="spectralWoman"></div>
+<div id="midnightDarkness"></div>
+<div id="bellFlash"></div>
+<div id="transition"></div>
+
+<div id="reveal">
+  <div class="bigGhost">
+    <div class="ghostBody"></div>
+    <div class="ghostEyes"></div>
+    <div class="ghostBow"></div>
+    <div class="medal">N</div>
+  </div>
+  <h2>LOOK OUTSIDE THE SCREEN</h2>
+  <p>ESTOY MÁS CERCA DE LO QUE CREES.</p>
+</div>
+
+<div id="ending">
+  <h2>HAPPY BIRTHDAY,<br>NAHARA</h2>
+</div>
+
+<div class="vignette"></div>
+<div class="film"></div>
+
+</div>
 
 <script>
+"use strict";
 
-/* =========================================================
-   NAHARA & ???
-   ACTO II — THE HAUNTED MANSION
-   SISTEMA DE COMBATE
-   ========================================================= */
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
 
+const player=$("#player");
+const ghost=$("#ghost");
+const hud=$("#hud");
+const objective=$("#objective");
+const controls=$("#controls");
 
-/* =========================================================
-   CONFIGURACIÓN DEL ACTO II
-   ========================================================= */
+const dialogue=$("#dialogue");
+const dialogueText=$("#dialogueText");
+const speaker=$("#speaker");
 
-const ACT2 = {
+const transition=$("#transition");
+const chapterCard=$("#chapterCard");
 
-    active: false,
+const GROUND=190;
+const PW=74;
+const PH=128;
+const SPEED=6.1;
+const JUMP=16;
+const GRAV=.78;
 
-    health: 3,
-    maxHealth: 3,
+const ACTS={
+  forest:{
+    scene:"#forest",
+    world:"#forestWorld",
+    width:3600,
+    label:"ACTO I",
+    title:"THE WOODS",
+    sub:"EL CAMINO A LA MANSIÓN",
+    objective:"LLEGA A LA MANSIÓN"
+  },
 
-    invulnerable: false,
+  mansion:{
+    scene:"#mansion",
+    world:"#mansionWorld",
+    width:5200,
+    label:"ACTO II",
+    title:"THE HAUNTED MANSION",
+    sub:"ENCUENTRA EL PASILLO FINAL",
+    objective:"ENCUENTRA 5 GATOS Y LLEGA A LA PUERTA"
+  },
 
-    checkpointX: 240,
-    checkpointBottom: GROUND_Y,
+  cinema:{
+    scene:"#cinema",
+    world:"#cinemaWorld",
+    width:4300,
+    label:"ACTO III",
+    title:"THE CURSED CINEMA",
+    sub:"LA PELÍCULA YA EMPEZÓ",
+    objective:"ENCUENTRA 3 FRAGMENTOS DE PELÍCULA"
+  },
 
-    currentCheckpoint: 0,
+  castle:{
+    scene:"#castle",
+    world:"#castleWorld",
+    width:4800,
+    label:"ACTO IV",
+    title:"THE VAMPIRE'S CASTLE",
+    sub:"NO DESPIERTES AL CONDE",
+    objective:"CRUZA EL CASTILLO"
+  },
 
-    canShoot: true,
+  toy:{
+    scene:"#toy",
+    world:"#toyWorld",
+    width:4400,
+    label:"ACTO V",
+    title:"THE TOY ROOM",
+    sub:"NO DEJES DE MIRARLAS",
+    objective:"ENCUENTRA LA SALIDA"
+  },
 
-    projectiles: [],
+  midnight:{
+    scene:"#midnight",
+    world:"#midnightWorld",
+    width:4400,
+    label:"ACTO VI",
+    title:"MIDNIGHT",
+    sub:"FALTAN TRES MINUTOS",
+    objective:"LLEGA A LA ÚLTIMA PUERTA"
+  },
 
-    introShown: false,
-
-    completed: false
-
+  final:{
+    scene:"#final",
+    world:"#finalWorld",
+    width:2500,
+    label:"FINAL",
+    title:"NAHARA'S BIRTHDAY",
+    sub:"UNA ÚLTIMA SORPRESA",
+    objective:"SIGUE A ???"
+  }
 };
 
+let act="title";
+let world=null;
+let worldWidth=0;
 
-/* =========================================================
-   ENEMIGOS
-   ========================================================= */
+let x=220;
+let bottom=GROUND;
+let vy=0;
+let grounded=true;
+let facing=1;
+let camera=0;
 
-ACT2.enemies = [
+let lives=3;
+let invul=false;
+let transitioning=false;
+let inputLocked=false;
 
-    {
-        selector: ".enemy1",
+const keys={
+  left:false,
+  right:false
+};
 
-        x: 1600,
-        baseX: 1600,
+let platforms=[];
+let enemies=[];
+let projectiles=[];
+let enemyShots=[];
 
-        bottom: 300,
+let dialogueQueue=[];
+let dialogueBusy=false;
 
-        hp: 2,
-        maxHp: 2,
+const state={
+  forest:{
+    eyes:false,
+    stalker:false,
+    end:false
+  },
 
-        alive: true,
+  mansion:{
+    cats:0,
+    story1:false,
+    story2:false,
+    end:false
+  },
 
-        direction: 1,
+  cinema:{
+    fragments:0,
+    blackout:false,
+    screen:false,
+    exitWarn:false,
+    end:false
+  },
 
-        speed: 1.1,
+  castle:{
+    bossStarted:false,
+    bossHP:5,
+    bossDead:false,
+    end:false
+  },
 
-        range: 140
-    },
+  toy:{
+    music:false,
+    doll1:false,
+    doll2:false,
+    loop:false,
+    woman:false,
+    end:false
+  },
 
+  midnight:{
+    minute:57,
+    m1:false,
+    m2:false,
+    m3:false,
+    started:false,
+    ghostBack:false,
+    end:false
+  },
 
-    {
-        selector: ".enemy2",
+  final:{
+    door:false,
+    reveal:false,
+    end:false
+  }
+};
 
-        x: 2900,
-        baseX: 2900,
-
-        bottom: 390,
-
-        hp: 2,
-        maxHp: 2,
-
-        alive: true,
-
-        direction: -1,
-
-        speed: 1.2,
-
-        range: 170
-    },
-
-
-    {
-        selector: ".enemy3",
-
-        x: 4200,
-        baseX: 4200,
-
-        bottom: 310,
-
-        hp: 2,
-        maxHp: 2,
-
-        alive: true,
-
-        direction: 1,
-
-        speed: 1.3,
-
-        range: 180
-    }
-
-];
-
-
-/* =========================================================
-   CHECKPOINTS
-   ========================================================= */
-
-ACT2.checkpoints = [
-
-    {
-        x: 1850,
-        respawnX: 1800
-    },
-
-    {
-        x: 3350,
-        respawnX: 3300
-    }
-
-];
-
-
-/* =========================================================
-   INICIAR ACTO II
-   ========================================================= */
-
-function startAct2(){
-
-    ACT2.active = true;
-
-    ACT2.health = 3;
-
-    ACT2.completed = false;
-
-    updateAct2Hearts();
-
-
-    ACT2.enemies.forEach(enemy => {
-
-        enemy.element =
-            document.querySelector(
-                enemy.selector
-            );
-
-    });
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Tengo una sensación horrible sobre este pasillo."
-        );
-
-    }, 1200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Si algo intenta comernos, presiona F."
-        );
-
-    }, 4200);
-
+function sleep(ms){
+  return new Promise(r=>setTimeout(r,ms));
 }
 
+function say(text,who="???",duration=1900){
+  dialogueQueue.push({text,who,duration});
+  pumpDialogue();
+}
 
-/* =========================================================
-   ATAQUE DE NAHARA
-   ========================================================= */
+async function pumpDialogue(){
+  if(dialogueBusy||!dialogueQueue.length)return;
 
-function act2Shoot(){
+  dialogueBusy=true;
+
+  while(dialogueQueue.length){
+    const m=dialogueQueue.shift();
+
+    speaker.textContent=m.who;
+    dialogueText.textContent=m.text;
+    dialogue.classList.add("show");
+
+    await sleep(m.duration);
+
+    dialogue.classList.remove("show");
+    await sleep(260);
+  }
+
+  dialogueBusy=false;
+}
+
+async function chapter(key){
+  const a=ACTS[key];
+
+  $("#chapterNo").textContent=a.label;
+  $("#chapterTitle").textContent=a.title;
+  $("#chapterSub").textContent=a.sub;
+
+  chapterCard.classList.add("show");
+  await sleep(1500);
+
+  chapterCard.classList.remove("show");
+  await sleep(450);
+}
+
+function setUI(){
+  if(act==="title"){
+    hud.classList.remove("show");
+    objective.classList.remove("show");
+    controls.classList.remove("show");
+    return;
+  }
+
+  hud.classList.add("show");
+  objective.classList.add("show");
+  controls.classList.add("show");
+
+  $("#actLabel").textContent=
+    ACTS[act].label+" · "+ACTS[act].title;
+
+  objective.textContent=ACTS[act].objective;
+
+  updateHearts();
+  updateCounter();
+}
+
+function updateHearts(){
+  $$("#hearts .heart").forEach((h,i)=>
+    h.classList.toggle("lost",i>=lives)
+  );
+}
+
+function updateCounter(){
+  let t="";
+
+  if(act==="mansion")
+    t=`GATOS ${state.mansion.cats}/5`;
+
+  if(act==="cinema")
+    t=`FILM ${state.cinema.fragments}/3`;
+
+  if(
+    act==="castle" &&
+    state.castle.bossStarted &&
+    !state.castle.bossDead
+  )
+    t=`THE COUNT ${Math.max(0,state.castle.bossHP)}/5`;
+
+  $("#counter").textContent=t;
+}
+
+function buildPlatforms(){
+  platforms=[];
+
+  if(!world)return;
+
+  world.querySelectorAll(".platform").forEach(el=>{
+    platforms.push({
+      el,
+      x:parseFloat(el.style.left),
+      w:parseFloat(el.style.width),
+      bottom:parseFloat(el.style.bottom),
+      moving:el.classList.contains("moving"),
+      base:parseFloat(el.dataset.base||el.style.bottom),
+      phase:parseFloat(el.dataset.phase||0)
+    });
+  });
+}
+
+function buildEnemies(){
+  enemies=[];
+
+  if(!world)return;
+
+  world.querySelectorAll(".enemy").forEach(el=>{
+    enemies.push({
+      el,
+      kind:el.dataset.kind,
+      x:parseFloat(el.dataset.x),
+      baseX:parseFloat(el.dataset.baseX||el.dataset.x),
+      bottom:parseFloat(el.dataset.bottom),
+      dir:1,
+      hp:el.dataset.kind==="ghost"?2:1,
+      dead:false
+    });
+  });
+}
+
+async function startAct(key,entry=220){
+  if(transitioning)return;
+
+  transitioning=true;
+  inputLocked=true;
+
+  transition.classList.add("show");
+  await sleep(650);
+
+  $$(".scene").forEach(s=>s.classList.remove("active"));
+  $(ACTS[key].scene).classList.add("active");
+
+  act=key;
+  world=$(ACTS[key].world);
+  worldWidth=ACTS[key].width;
+
+  x=entry;
+  bottom=GROUND;
+  vy=0;
+  grounded=true;
+  camera=0;
+
+  world.style.transform="translateX(0)";
+
+  buildPlatforms();
+  buildEnemies();
+
+  projectiles.forEach(p=>p.el.remove());
+  enemyShots.forEach(p=>p.el.remove());
+
+  projectiles=[];
+  enemyShots=[];
+
+  player.style.display="block";
+  ghost.style.display="block";
+  ghost.style.opacity="1";
+
+  setUI();
+
+  transition.classList.remove("show");
+
+  await chapter(key);
+
+  inputLocked=false;
+  transitioning=false;
+
+  introFor(key);
+}
+
+function introFor(key){
+
+  if(key==="forest"){
+    say("Pensé que no vendrías.");
+    say("Quédate cerca de mí.");
+  }
+
+  if(key==="mansion"){
+    say("Llegamos.");
+    say("La puerta estaba abierta.");
+    say("Eso nunca es buena señal.");
+  }
+
+  if(key==="cinema"){
+    say("Un cine dentro de una mansión.");
+    say("Claro. Totalmente normal.");
+  }
+
+  if(key==="castle"){
+    say("Oh.");
+    say("Ataúdes.");
+    say("Muchísimos ataúdes.");
+  }
+
+  if(key==="toy"){
+    say("No me gustan las muñecas.");
+    say("Especialmente cuando parecen estar mirándonos.");
+  }
+     if(key==="midnight"){
+    say("11:57.");
+    say("Tenemos tres minutos.");
+    say("No preguntes para qué.");
+  }
+
+  if(key==="final"){
+    say("Adelante.");
+  }
+}
+
+function onGroundTop(){
+  return bottom;
+}
+
+function physics(){
+  if(inputLocked)return;
+
+  if(keys.left){
+    x-=SPEED;
+    facing=-1;
+  }
+
+  if(keys.right){
+    x+=SPEED;
+    facing=1;
+  }
+
+  x=Math.max(20,Math.min(worldWidth-PW-20,x));
+
+  const prevBottom=bottom;
+
+  vy-=GRAV;
+  bottom+=vy;
+  grounded=false;
+
+  let landing=GROUND;
+
+  for(const p of platforms){
+    const top=p.bottom+34;
 
     if(
-        !ACT2.active ||
-        ending ||
-        !ACT2.canShoot
+      x+PW>p.x+5 &&
+      x<p.x+p.w-5 &&
+      prevBottom>=top-4 &&
+      bottom<=top &&
+      vy<=0
     ){
-        return;
+      landing=Math.max(landing,top);
     }
+  }
 
+  if(bottom<=landing){
+    bottom=landing;
+    vy=0;
+    grounded=true;
+  }
 
-    ACT2.canShoot = false;
+  player.classList.toggle("flip",facing<0);
+  player.style.left=x+"px";
+  player.style.bottom=bottom+"px";
 
+  const gx=x+(facing>0?-95:90);
+  const gb=bottom+80+Math.sin(performance.now()/330)*8;
 
-    setTimeout(() => {
+  ghost.style.left=gx+"px";
+  ghost.style.bottom=gb+"px";
 
-        ACT2.canShoot = true;
+  camera+=(x-innerWidth*.36-camera)*.12;
+  camera=Math.max(
+    0,
+    Math.min(Math.max(0,worldWidth-innerWidth),camera)
+  );
 
-    }, 280);
-
-
-    const projectile =
-        document.createElement("div");
-
-
-    projectile.className =
-        "naharaProjectile";
-
-
-    const direction =
-        facingRight ? 1 : -1;
-
-
-    const startX =
-        playerX +
-        (
-            facingRight
-            ? 75
-            : -15
-        );
-
-
-    const startBottom =
-        playerBottom + 75;
-
-
-    projectile.style.left =
-        startX + "px";
-
-
-    projectile.style.bottom =
-        startBottom + "px";
-
-
-    world.appendChild(
-        projectile
-    );
-
-
-    ACT2.projectiles.push({
-
-        element: projectile,
-
-        x: startX,
-
-        bottom: startBottom,
-
-        velocityX:
-            direction * 13,
-
-        life: 0
-
-    });
-
+  world.style.transform=`translateX(${-camera}px)`;
 }
 
+function jump(){
+  if(act!=="title"&&!inputLocked&&grounded){
+    vy=JUMP;
+    grounded=false;
+  }
+}
 
-/* =========================================================
-   TECLA DE ATAQUE
-   ========================================================= */
+function attack(){
+  if(!["mansion","castle"].includes(act)||inputLocked)return;
 
-window.addEventListener(
-    "keydown",
+  const el=document.createElement("div");
+  el.className="projectile";
+  world.appendChild(el);
 
-    event => {
+  const p={
+    el,
+    x:x+(facing>0?65:-15),
+    bottom:bottom+68,
+    vx:facing*10
+  };
 
-        if(
-            event.code === "KeyF" &&
-            !event.repeat
-        ){
+  projectiles.push(p);
+}
 
-            act2Shoot();
+function updateProjectiles(){
+  for(let i=projectiles.length-1;i>=0;i--){
+    const p=projectiles[i];
 
+    p.x+=p.vx;
+    p.el.style.left=p.x+"px";
+    p.el.style.bottom=p.bottom+"px";
+
+    let used=false;
+
+    for(const e of enemies){
+      if(e.dead)continue;
+
+      if(
+        hit(
+          p.x,p.bottom,30,18,
+          e.x,e.bottom,
+          e.kind==="bat"?52:72,
+          e.kind==="bat"?28:85
+        )
+      ){
+        e.hp--;
+        used=true;
+
+        if(e.hp<=0){
+          e.dead=true;
+          e.el.classList.add("dead");
         }
 
+        break;
+      }
     }
+
+    if(
+      act==="castle" &&
+      state.castle.bossStarted &&
+      !state.castle.bossDead
+    ){
+      const b=$("#boss");
+
+      if(
+        hit(
+          p.x,p.bottom,30,18,
+          parseFloat(b.style.left||3900),
+          190,125,185
+        )
+      ){
+        state.castle.bossHP--;
+        used=true;
+
+        $("#bossFill").style.width=
+          (state.castle.bossHP/5*100)+"%";
+
+        updateCounter();
+
+        if(state.castle.bossHP<=0){
+          defeatBoss();
+        }
+      }
+    }
+
+    if(used||p.x<0||p.x>worldWidth){
+      p.el.remove();
+      projectiles.splice(i,1);
+    }
+  }
+}
+
+function hit(ax,ay,aw,ah,bx,by,bw,bh){
+  return (
+    ax+aw>bx &&
+    ax<bx+bw &&
+    ay+ah>by &&
+    ay<by+bh
+  );
+}
+
+function damage(){
+  if(invul||inputLocked)return;
+
+  lives--;
+  updateHearts();
+
+  player.classList.add("hurt");
+  invul=true;
+
+  setTimeout(
+    ()=>player.classList.remove("hurt"),
+    800
+  );
+
+  setTimeout(
+    ()=>invul=false,
+    1400
+  );
+
+  if(lives<=0){
+    lives=3;
+
+    say("No. Todavía no terminamos.");
+
+    x=Math.max(180,x-450);
+    bottom=GROUND;
+    vy=0;
+
+    updateHearts();
+  }
+}
+
+function updateEnemies(){
+  for(const e of enemies){
+    if(e.dead)continue;
+
+    if(e.kind==="bat"){
+      e.x+=e.dir*1.6;
+
+      if(Math.abs(e.x-e.baseX)>170){
+        e.dir*=-1;
+      }
+
+      e.el.style.left=e.x+"px";
+    }else{
+      e.x+=Math.sin(
+        performance.now()/600+e.baseX
+      )*.35;
+
+      e.el.style.left=e.x+"px";
+    }
+
+    if(
+      hit(
+        x,bottom,PW,PH,
+        e.x,e.bottom,
+        e.kind==="bat"?52:72,
+        e.kind==="bat"?28:85
+      )
+    ){
+      damage();
+    }
+  }
+}
+
+function updateMoving(){
+  const t=performance.now()/1000;
+
+  for(const p of platforms){
+    if(!p.moving)continue;
+
+    p.bottom=
+      p.base+
+      Math.sin(t+p.phase)*55;
+
+    p.el.style.bottom=p.bottom+"px";
+  }
+}
+
+function collectMansion(){
+  world
+    .querySelectorAll(".cat:not(.taken)")
+    .forEach(c=>{
+
+      const cx=parseFloat(c.dataset.x);
+      const cb=parseFloat(c.dataset.bottom);
+
+      if(hit(x,bottom,PW,PH,cx,cb,54,50)){
+        c.classList.add("taken");
+
+        state.mansion.cats++;
+        updateCounter();
+
+        if(state.mansion.cats===1){
+          say("Uno.");
+        }
+
+        if(state.mansion.cats===3){
+          say("Nos están siguiendo.");
+        }
+
+        if(state.mansion.cats===5){
+          say("Los encontramos a todos.");
+        }
+      }
+    });
+}
+
+function collectCinema(){
+  world
+    .querySelectorAll(".fragment:not(.taken)")
+    .forEach(f=>{
+
+      const fx=parseFloat(f.dataset.x);
+      const fb=parseFloat(f.dataset.bottom);
+
+      if(hit(x,bottom,PW,PH,fx,fb,45,58)){
+        f.classList.add("taken");
+
+        state.cinema.fragments++;
+        updateCounter();
+
+        say(
+          `Fragmento ${state.cinema.fragments} de 3.`
+        );
+
+        if(state.cinema.fragments===3){
+          say("La película está completa.");
+          $("#cursedScreen").classList.add("awake");
+        }
+      }
+    });
+}
+
+function forestEvents(){
+  const s=state.forest;
+
+  if(x>950&&!s.eyes){
+    s.eyes=true;
+    say("¿Viste esos ojos?");
+  }
+
+  if(x>2050&&!s.stalker){
+    s.stalker=true;
+
+    $("#stalker").classList.add("show");
+    say("No voltees.");
+
+    setTimeout(
+      ()=>$("#stalker").classList.remove("show"),
+      1500
+    );
+  }
+
+  if(x>3260&&!s.end){
+    s.end=true;
+    inputLocked=true;
+
+    say("Llegamos.");
+    say("La puerta está abierta.");
+    say("Quédate cerca de mí.");
+
+    setTimeout(
+      ()=>startAct("mansion"),
+      5600
+    );
+  }
+}
+
+function mansionEvents(){
+  const s=state.mansion;
+
+  collectMansion();
+
+  if(x>1150&&!s.story1){
+    s.story1=true;
+    say("Esta casa lleva mucho tiempo esperando.");
+  }
+
+  if(x>2750&&!s.story2){
+    s.story2=true;
+    say("Los retratos nos están mirando.");
+  }
+
+  if(x>4820&&!s.end){
+
+    if(s.cats<5){
+      x=4780;
+      say("Espera. Faltan gatos.");
+      return;
+    }
+
+    s.end=true;
+    inputLocked=true;
+
+    say("La puerta del cine.");
+
+    setTimeout(
+      ()=>startAct("cinema"),
+      2200
+    );
+  }
+}
+
+function cinemaEvents(){
+  const s=state.cinema;
+
+  collectCinema();
+
+  if(x>1300&&!s.blackout){
+    s.blackout=true;
+
+    $("#blackout").classList.add("show");
+
+    setTimeout(
+      ()=>$("#blackout").classList.remove("show"),
+      1200
+    );
+
+    say("Nahara...");
+  }
+
+  if(x>2650&&!s.screen){
+    s.screen=true;
+
+    $("#cursedScreen").classList.add("awake");
+    say("La película tiene tu nombre.");
+  }
+
+  if(x>3980&&!s.end){
+
+    if(s.fragments<3){
+      x=3940;
+
+      if(!s.exitWarn){
+        s.exitWarn=true;
+
+        say("Está cerrada. Nos falta algo.");
+
+        setTimeout(
+          ()=>s.exitWarn=false,
+          2200
+        );
+      }
+
+      return;
+    }
+
+    s.end=true;
+    inputLocked=true;
+
+    say("No quiero ver los créditos.");
+
+    setTimeout(
+      ()=>startAct("castle"),
+      2200
+    );
+  }
+}
+
+function castleEvents(){
+  const s=state.castle;
+
+  if(x>3500&&!s.bossStarted){
+    s.bossStarted=true;
+
+    $("#boss").classList.add("awake");
+    $("#bossBar").classList.add("show");
+
+    say("Nahara.");
+    say("El ataúd se está abriendo.");
+
+    updateCounter();
+  }
+
+  if(s.bossStarted&&!s.bossDead){
+    const bx=parseFloat(
+      $("#boss").style.left||3900
+    );
+
+    if(
+      hit(
+        x,bottom,PW,PH,
+        bx,190,125,185
+      )
+    ){
+      damage();
+    }
+
+    if(Math.random()<.008){
+      bossShot();
+    }
+  }
+
+  if(x>4470&&!s.end){
+
+    if(!s.bossDead){
+      x=4430;
+      return;
+    }
+
+    s.end=true;
+
+    $("#bossBar").classList.remove("show");
+
+    inputLocked=true;
+
+    say("Hay otra habitación.");
+    say("Y escucho una caja musical.");
+    say("Eso nunca es buena señal.");
+
+    setTimeout(
+      ()=>startAct("toy"),
+      5400
+    );
+  }
+}
+
+function bossShot(){
+  const el=document.createElement("div");
+
+  el.className="enemyShot";
+  world.appendChild(el);
+
+  enemyShots.push({
+    el,
+    x:3900,
+    bottom:300,
+    vx:x<3900?-5.2:5.2
+  });
+}
+
+function updateEnemyShots(){
+  for(let i=enemyShots.length-1;i>=0;i--){
+    const p=enemyShots[i];
+
+    p.x+=p.vx;
+    p.el.style.left=p.x+"px";
+    p.el.style.bottom=p.bottom+"px";
+
+    if(
+      hit(
+        x,bottom,PW,PH,
+        p.x,p.bottom,27,27
+      )
+    ){
+      damage();
+
+      p.el.remove();
+      enemyShots.splice(i,1);
+
+      continue;
+    }
+
+    if(p.x<3300||p.x>4550){
+      p.el.remove();
+      enemyShots.splice(i,1);
+    }
+  }
+}
+
+function defeatBoss(){
+  const s=state.castle;
+
+  if(s.bossDead)return;
+
+  s.bossDead=true;
+
+  $("#boss").classList.remove("awake");
+  $("#bossBar").classList.remove("show");
+
+  say("¿Eso fue un vampiro?");
+  say("No importa. Ganamos.");
+}
+
+function toyEvents(){
+  const s=state.toy;
+
+  if(x>650&&!s.music){
+    s.music=true;
+
+    say("Nahara...");
+    say("Dime que tú encendiste eso.");
+  }
+
+  if(x>1200&&!s.doll1){
+    s.doll1=true;
+
+    blink(
+      ()=>$("#doll1").style.left="1320px"
+    );
+
+    say("Esa muñeca estaba más lejos.");
+  }
+
+  if(x>2050&&!s.doll2){
+    s.doll2=true;
+
+    blink(()=>{
+      $("#doll1").style.left="1180px";
+      $("#doll2").style.left="2240px";
+    });
+
+    say("No voltees.");
+    say("En realidad... sí. Voltea.");
+    say("No. Mala idea. Sigue caminando.");
+  }
+
+  if(x>2900&&!s.loop){
+    s.loop=true;
+    inputLocked=true;
+
+    $("#blackout").classList.add("show");
+
+    setTimeout(()=>{
+      x=2250;
+
+      $("#blackout").classList.remove("show");
+
+      inputLocked=false;
+
+      say("¿No acabamos de pasar por aquí?");
+    },800);
+  }
+
+  if(s.loop&&x>3400&&!s.woman){
+    s.woman=true;
+
+    $("#womanDarkness").classList.add("show");
+    $("#spectralWoman").classList.add("show");
+
+    setTimeout(()=>{
+      $("#womanDarkness").classList.remove("show");
+      $("#spectralWoman").classList.remove("show");
+    },1000);
+
+    say("Corre.");
+  }
+
+  if(x>4020&&!s.end){
+
+    if(!s.woman){
+      x=3980;
+      return;
+    }
+
+    s.end=true;
+    inputLocked=true;
+
+    say("Espera.");
+    say("¿Ese reloj estaba ahí antes?");
+
+    setTimeout(
+      ()=>startAct("midnight"),
+      3600
+    );
+  }
+}
+
+function blink(fn){
+  $("#blackout").classList.add("show");
+
+  setTimeout(()=>{
+    fn();
+
+    $("#blackout").classList.remove("show");
+  },350);
+}
+
+function midnightEvents(){
+  const s=state.midnight;
+
+  if(x>600&&!s.m1){
+    s.m1=true;
+
+    $("#memory1").classList.add("lit");
+    say("¿Eso es... un recuerdo?");
+  }
+
+  if(x>1250&&s.minute===57){
+    s.minute=58;
+
+    $("#clock").textContent="11:58";
+
+    bell();
+
+    say("11:58.");
+    say("La casa está más silenciosa.");
+  }
+
+  if(x>1750&&!s.m2){
+    s.m2=true;
+
+    $("#memory2").classList.add("lit");
+
+    say("Esta casa sabe cosas sobre ti.");
+  }
+
+  if(x>2350&&s.minute===58){
+    s.minute=59;
+
+    $("#clock").textContent="11:59";
+
+    bell();
+
+    say("11:59.");
+    say("Pase lo que pase cuando sean las doce...");
+    say("quédate conmigo.");
+  }
+
+  if(x>2850&&!s.m3){
+    s.m3=true;
+
+    $("#memory3").classList.add("lit");
+
+    say("O quizá no es la casa.");
+  }
+
+  if(x>3400&&!s.started){
+    s.started=true;
+    midnightSequence();
+  }
+
+  if(x>4070&&!s.end){
+
+    if(!s.ghostBack){
+      x=4030;
+      return;
+    }
+
+    s.end=true;
+    inputLocked=true;
+
+    say("Nahara.");
+    say("Antes de abrir esa puerta...");
+    say("hay algo que tengo que enseñarte.");
+
+    setTimeout(
+      ()=>startAct("final"),
+      5200
+    );
+  }
+}
+
+function bell(){
+  const f=$("#bellFlash");
+
+  f.classList.remove("show");
+  void f.offsetWidth;
+  f.classList.add("show");
+}
+
+async function midnightSequence(){
+  const s=state.midnight;
+
+  inputLocked=true;
+
+  $("#clock").textContent="12:00";
+  $("#midnightDarkness").classList.add("show");
+
+  bell();
+  await sleep(800);
+
+  bell();
+  await sleep(800);
+
+  bell();
+
+  ghost.style.opacity="0";
+
+  await sleep(1200);
+
+  $("#midnightDarkness").classList.remove("show");
+
+  say("???","NAHARA");
+  say("¿Dónde estás?","NAHARA");
+  say("Si aparece Vecna, yo me voy.","NAHARA");
+
+  await sleep(6500);
+
+  ghost.style.opacity="1";
+
+  say("Estoy aquí.");
+  say("Solo necesitaba asegurarme de algo.");
+  say("Ya podemos irnos.");
+
+  s.ghostBack=true;
+  inputLocked=false;
+}
+
+function finalEvents(){
+  const s=state.final;
+
+  if(x>550&&!s.door){
+    s.door=true;
+
+    say("Sorpresa.");
+    say("Mira quiénes llegaron.");
+  }
+
+  if(x>1600&&!s.reveal){
+    s.reveal=true;
+    inputLocked=true;
+
+    finalReveal();
+  }
+}
+
+async function finalReveal(){
+  say("Nahara.");
+  say("Hay una última cosa.");
+  say("Todo este tiempo me llamaste ???.");
+  say("Supongo que ya no necesito esconderme.");
+
+  await sleep(7800);
+
+  $("#reveal").classList.add("show");
+
+  say("Soy yo.");
+  say("El mismo que estuvo contigo desde el bosque.");
+  say("Solo que...");
+  say("no pertenezco únicamente a este lugar.");
+  say("También existo fuera de aquí.");
+
+  await sleep(9500);
+
+  say("Creo que ahora deberías buscarme.");
+  say("Fuera de la pantalla.");
+  say("Estoy más cerca de lo que crees.");
+
+  await sleep(7200);
+
+  $("#reveal").classList.remove("show");
+
+  say("Feliz cumpleaños, Nahara.");
+
+  await sleep(3000);
+
+  $("#ending").classList.add("show");
+
+  state.final.end=true;
+}
+
+function updateEvents(){
+  if(act==="forest"){
+    forestEvents();
+  }
+  else if(act==="mansion"){
+    mansionEvents();
+  }
+  else if(act==="cinema"){
+    cinemaEvents();
+  }
+  else if(act==="castle"){
+    castleEvents();
+  }
+  else if(act==="toy"){
+    toyEvents();
+  }
+  else if(act==="midnight"){
+    midnightEvents();
+  }
+  else if(act==="final"){
+    finalEvents();
+  }
+}
+
+function loop(){
+  if(
+    act!=="title" &&
+    world &&
+    !transitioning
+  ){
+    updateMoving();
+    physics();
+    updateEnemies();
+    updateProjectiles();
+    updateEnemyShots();
+    updateEvents();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+$("#play").addEventListener(
+  "click",
+  ()=>startAct("forest")
 );
 
-
-/* =========================================================
-   ACTUALIZAR PROYECTILES
-   ========================================================= */
-
-function updateAct2Projectiles(){
-
-    for(
-        let i =
-            ACT2.projectiles.length - 1;
-
-        i >= 0;
-
-        i--
-    ){
-
-        const projectile =
-            ACT2.projectiles[i];
-
-
-        projectile.x +=
-            projectile.velocityX;
-
-
-        projectile.life++;
-
-
-        projectile.element.style.left =
-            projectile.x + "px";
-
-
-        let removeProjectile =
-            false;
-
-
-        if(
-            projectile.life > 100 ||
-            projectile.x < 0 ||
-            projectile.x > WORLD_WIDTH
-        ){
-
-            removeProjectile =
-                true;
-
-        }
-
-
-        for(
-            const enemy
-            of ACT2.enemies
-        ){
-
-            if(!enemy.alive)
-                continue;
-
-
-            const collision =
-
-                projectile.x + 30
-                    > enemy.x
-
-                &&
-
-                projectile.x
-                    < enemy.x + 70
-
-                &&
-
-                projectile.bottom + 30
-                    > enemy.bottom
-
-                &&
-
-                projectile.bottom
-                    < enemy.bottom + 80;
-
-
-            if(collision){
-
-                damageAct2Enemy(
-                    enemy
-                );
-
-
-                removeProjectile =
-                    true;
-
-
-                break;
-
-            }
-
-        }
-
-
-        if(removeProjectile){
-
-            projectile.element.remove();
-
-
-            ACT2.projectiles.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   DAÑO A ENEMIGOS
-   ========================================================= */
-
-function damageAct2Enemy(enemy){
-
-    if(!enemy.alive)
-        return;
-
-
-    enemy.hp--;
-
-
-    enemy.element.classList.add(
-        "enemyHit"
-    );
-
-
-    setTimeout(() => {
-
-        enemy.element.classList.remove(
-            "enemyHit"
-        );
-
-    }, 130);
-
-
-    if(enemy.hp <= 0){
-
-        defeatAct2Enemy(
-            enemy
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   DERROTAR ENEMIGO
-   ========================================================= */
-
-function defeatAct2Enemy(enemy){
-
-    enemy.alive =
-        false;
-
-
-    enemy.element.classList.add(
-        "enemyDefeated"
-    );
-
-
-    setTimeout(() => {
-
-        enemy.element.style.display =
-            "none";
-
-    }, 350);
-
-}
-
-
-/* =========================================================
-   MOVIMIENTO DE ENEMIGOS
-   ========================================================= */
-
-function updateAct2Enemies(){
-
-    for(
-        const enemy
-        of ACT2.enemies
-    ){
-
-        if(
-            !enemy.alive ||
-            !enemy.element
-        ){
-            continue;
-        }
-
-
-        enemy.x +=
-
-            enemy.speed *
-            enemy.direction;
-
-
-        if(
-            enemy.x >
-            enemy.baseX +
-            enemy.range
-        ){
-
-            enemy.x =
-                enemy.baseX +
-                enemy.range;
-
-
-            enemy.direction =
-                -1;
-
-        }
-
-
-        if(
-            enemy.x <
-            enemy.baseX -
-            enemy.range
-        ){
-
-            enemy.x =
-                enemy.baseX -
-                enemy.range;
-
-
-            enemy.direction =
-                1;
-
-        }
-
-
-        enemy.element.style.left =
-            enemy.x + "px";
-
-
-        checkAct2EnemyCollision(
-            enemy
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   COLISIÓN ENEMIGO / NAHARA
-   ========================================================= */
-
-function checkAct2EnemyCollision(
-    enemy
-){
-
-    if(
-        ACT2.invulnerable ||
-        !enemy.alive
-    ){
-        return;
-    }
-
-
-    const touching =
-
-        playerX +
-        PLAYER_WIDTH -
-        15
-            > enemy.x
-
-        &&
-
-        playerX + 15
-            < enemy.x + 70
-
-        &&
-
-        playerBottom +
-        PLAYER_HEIGHT -
-        20
-            > enemy.bottom
-
-        &&
-
-        playerBottom
-            < enemy.bottom + 80;
-
-
-    if(touching){
-
-        damageNaharaAct2();
-
-    }
-
-}
-
-
-/* =========================================================
-   DAÑO A NAHARA
-   ========================================================= */
-
-function damageNaharaAct2(){
-
-    if(
-        ACT2.invulnerable ||
-        ACT2.health <= 0
-    ){
-        return;
-    }
-
-
-    ACT2.health--;
-
-
-    updateAct2Hearts();
-
-
-    ACT2.invulnerable =
-        true;
-
-
-    nahara.classList.add(
-        "naharaHurt"
-    );
-
-
-    /* pequeño empujón */
-
-    if(facingRight){
-
-        playerX -= 80;
-
-    }else{
-
-        playerX += 80;
-
-    }
-
-
-    velocityY = 7;
-
-
-    if(ACT2.health <= 0){
-
-        setTimeout(() => {
-
-            respawnAct2();
-
-        }, 600);
-
-
-        return;
-
-    }
-
-
-    setTimeout(() => {
-
-        ACT2.invulnerable =
-            false;
-
-
-        nahara.classList.remove(
-            "naharaHurt"
-        );
-
-    }, 1300);
-
-}
-
-
-/* =========================================================
-   CORAZONES
-   ========================================================= */
-
-function updateAct2Hearts(){
-
-    const hearts =
-        document.querySelectorAll(
-            ".heart"
-        );
-
-
-    hearts.forEach(
-        (heart, index) => {
-
-            if(
-                index <
-                ACT2.health
-            ){
-
-                heart.classList.remove(
-                    "heartLost"
-                );
-
-            }else{
-
-                heart.classList.add(
-                    "heartLost"
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CHECKPOINTS
-   ========================================================= */
-
-function updateAct2Checkpoints(){
-
-    if(
-        ACT2.currentCheckpoint >=
-        ACT2.checkpoints.length
-    ){
-        return;
-    }
-
-
-    const checkpoint =
-
-        ACT2.checkpoints[
-            ACT2.currentCheckpoint
-        ];
-
-
-    if(
-        playerX >=
-        checkpoint.x
-    ){
-
-        ACT2.checkpointX =
-            checkpoint.respawnX;
-
-
-        ACT2.checkpointBottom =
-            GROUND_Y;
-
-
-        ACT2.currentCheckpoint++;
-
-
-        showAct2Checkpoint();
-
-
-        showDialogue(
-            "Bien. Si algo sale mal, volvemos desde aquí."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   AVISO CHECKPOINT
-   ========================================================= */
-
-function showAct2Checkpoint(){
-
-    const notice =
-
-        document.getElementById(
-            "checkpointNotice"
-        );
-
-
-    if(!notice)
-        return;
-
-
-    notice.classList.add(
-        "show"
-    );
-
-
-    setTimeout(() => {
-
-        notice.classList.remove(
-            "show"
-        );
-
-    }, 1500);
-
-}
-
-
-/* =========================================================
-   RESPAWN
-   ========================================================= */
-
-function respawnAct2(){
-
-    ACT2.health =
-        ACT2.maxHealth;
-
-
-    updateAct2Hearts();
-
-
-    playerX =
-        ACT2.checkpointX;
-
-
-    playerBottom =
-        ACT2.checkpointBottom;
-
-
-    velocityY = 0;
-
-
-    /* eliminar proyectiles */
-
-    ACT2.projectiles.forEach(
-        projectile => {
-
-            projectile.element.remove();
-
-        }
-    );
-
-
-    ACT2.projectiles = [];
-
-
-    /* revivir enemigos */
-
-    ACT2.enemies.forEach(
-        enemy => {
-
-            enemy.hp =
-                enemy.maxHp;
-
-
-            enemy.alive =
-                true;
-
-
-            enemy.x =
-                enemy.baseX;
-
-
-            if(enemy.element){
-
-                enemy.element.style.display =
-                    "block";
-
-
-                enemy.element.classList.remove(
-                    "enemyDefeated"
-                );
-
-            }
-
-        }
-    );
-
-
-    nahara.classList.remove(
-        "naharaHurt"
-    );
-
-
-    ACT2.invulnerable =
-        true;
-
-
-    showDialogue(
-        "Nope. Todavía no terminamos."
-    );
-
-
-    setTimeout(() => {
-
-        ACT2.invulnerable =
-            false;
-
-    }, 1400);
-
-}
-
-
-/* =========================================================
-   INTRODUCCIÓN AL COMBATE
-   ========================================================= */
-
-function updateAct2CombatIntro(){
-
-    if(
-        ACT2.introShown ||
-        playerX < 1250
-    ){
-        return;
-    }
-
-
-    ACT2.introShown =
-        true;
-
-
-    showDialogue(
-        "Nahara... prueba presionando F. Por si acaso."
-    );
-
-
-    const hint =
-
-        document.getElementById(
-            "attackHint"
-        );
-
-
-    if(hint){
-
-        hint.classList.add(
-            "show"
-        );
-
-
-        setTimeout(() => {
-
-            hint.classList.remove(
-                "show"
-            );
-
-        }, 4500);
-
-    }
-
-}
-
-
-/* =========================================================
-   ACTUALIZACIÓN GENERAL DEL ACTO II
-   ========================================================= */
-
-function updateAct2(){
-
-    if(
-        !ACT2.active ||
-        ACT2.completed
-    ){
-        return;
-    }
-
-
-    updateAct2CombatIntro();
-
-    updateAct2Checkpoints();
-
-    updateAct2Enemies();
-
-    updateAct2Projectiles();
-
-}
-
-
-/* =========================================================
-   FINALIZAR ACTO II
-   ========================================================= */
-
-function finishAct2(){
-
-    if(ACT2.completed)
-        return;
-
-
-    ACT2.completed =
-        true;
-
-
-    ACT2.active =
-        false;
-
-
-    showDialogue(
-        "Esa puerta... definitivamente no estaba ahí antes."
-    );
-
-
-    /*
-       Después conectaremos aquí:
-
-       transitionToAct3();
-
-       ACTO III —
-       THE CURSED CINEMA
-    */
-
-}
-          
-
-          
-  /* =========================================================
-   ACTO II — COMBATE
-   ========================================================= */
-
-
-/* ATAQUE DE NAHARA */
-
-.naharaProjectile{
-
-    position:absolute;
-
-    width:30px;
-    height:30px;
-
-    z-index:70;
-
-    background:#d9a4b5;
-
-    clip-path:
-        polygon(
-            50% 0%,
-            61% 35%,
-            98% 35%,
-            68% 57%,
-            79% 94%,
-            50% 72%,
-            21% 94%,
-            32% 57%,
-            2% 35%,
-            39% 35%
-        );
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(220,160,180,.9)
-        );
-
-    animation:
-        projectileSpin
-        .35s linear infinite;
-}
-
-
-@keyframes projectileSpin{
-
-    from{
-        transform:
-            rotate(0deg);
-    }
-
-    to{
-        transform:
-            rotate(360deg);
-    }
-
-}
-
-
-/* ENEMIGO RECIBE GOLPE */
-
-.enemyHit{
-
-    filter:
-        brightness(2.5)
-        drop-shadow(
-            0 0 10px
-            #d9a4b5
-        ) !important;
-
-}
-
-
-/* ENEMIGO DERROTADO */
-
-.enemyDefeated{
-
-    animation:
-        enemyDeath
-        .35s forwards !important;
-
-}
-
-
-@keyframes enemyDeath{
-
-    0%{
-
-        opacity:1;
-
-        transform:
-            scale(1)
-            rotate(0);
-
-    }
-
-    50%{
-
-        transform:
-            scale(1.3)
-            rotate(15deg);
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            scale(.1)
-            rotate(80deg);
-
-    }
-
-}
-
-
-/* NAHARA RECIBE DAÑO */
-
-.naharaHurt{
-
-    animation:
-        naharaDamage
-        .15s steps(2)
-        infinite !important;
-
-}
-
-
-@keyframes naharaDamage{
-
-    0%{
-        opacity:1;
-    }
-
-    50%{
-        opacity:.2;
-    }
-
-    100%{
-        opacity:1;
-    }
-
-}
-
-
-/* CORAZÓN PERDIDO */
-
-.heartLost,
-.heartLost::before,
-.heartLost::after{
-
-    background:
-        #38242b !important;
-
-}
-
-
-/* CHECKPOINT */
-
-#checkpointNotice{
-
-    position:absolute;
-
-    left:50%;
-    top:110px;
-
-    transform:
-        translateX(-50%)
-        translateY(-15px);
-
-    z-index:350;
-
-    padding:
-        10px 25px;
-
-    background:
-        rgba(10,6,9,.9);
-
-    color:#d9b4bb;
-
-    border:
-        3px solid
-        #805262;
-
-    border-radius:50%;
-
-    font-size:14px;
-
-    letter-spacing:4px;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.4s;
-
-}
-
-
-#checkpointNotice.show{
-
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-
-}
-
-
-/* INDICACIÓN DE ATAQUE */
-
-#attackHint{
-
-    position:absolute;
-
-    left:50%;
-    bottom:20px;
-
-    transform:
-        translateX(-50%);
-
-    z-index:400;
-
-    padding:
-        10px 22px;
-
-    background:
-        rgba(5,3,4,.8);
-
-    color:#c9a3ad;
-
-    border:
-        2px solid
-        #57323f;
-
-    border-radius:30px;
-
-    font-size:13px;
-
-    letter-spacing:3px;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.4s;
-
-}
-
-
-#attackHint.show{
-
-    opacity:1;
-
-}
-
-           <div id="checkpointNotice">
-    CHECKPOINT
-</div>
-
-<div id="attackHint">
-    F — ATAQUE
-</div>
-          
-
-  /* =========================================================
-   NAHARA & ???
-   ACTO III — THE CURSED CINEMA
-   ========================================================= */
-
-const ACT3 = {
-
-    active:false,
-    completed:false,
-
-    startX:0,
-
-    fragments:0,
-    totalFragments:3,
-
-    blackoutTriggered:false,
-    shadowTriggered:false,
-    screenTriggered:false,
-
-    exitUnlocked:false
-};
-
-
-/* =========================================================
-   INICIAR ACTO III
-   ========================================================= */
-
-function startAct3(){
-
-    ACT3.active = true;
-    ACT3.completed = false;
-
-    ACT3.fragments = 0;
-
-    ACT3.blackoutTriggered = false;
-    ACT3.shadowTriggered = false;
-    ACT3.screenTriggered = false;
-
-    ACT3.exitUnlocked = false;
-
-
-    document
-        .getElementById("act3Scene")
-        .classList.add("active");
-
-
-    playerX = 180;
-
-    playerBottom =
-        GROUND_Y;
-
-    velocityY = 0;
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Un cine?"
-        );
-
-    },800);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Perfecto. Porque nada malo pasa jamás en cines abandonados."
-        );
-
-    },3400);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Necesitamos encontrar tres fragmentos de película."
-        );
-
-    },6500);
-
-}
-
-
-/* =========================================================
-   FRAGMENTOS DE PELÍCULA
-   ========================================================= */
-
-const act3Fragments = [
-
-    {
-        id:"filmFragment1",
-        collected:false
-    },
-
-    {
-        id:"filmFragment2",
-        collected:false
-    },
-
-    {
-        id:"filmFragment3",
-        collected:false
-    }
-
-];
-
-
-function collectAct3Fragment(
-    fragment
-){
-
-    if(fragment.collected)
-        return;
-
-
-    fragment.collected = true;
-
-
-    const element =
-        document.getElementById(
-            fragment.id
-        );
-
-
-    if(element){
-
-        element.classList.add(
-            "collected"
-        );
-
-    }
-
-
-    ACT3.fragments++;
-
-
-    updateAct3FragmentCounter();
-
-
-    if(ACT3.fragments === 1){
-
-        showDialogue(
-            "Uno. Definitivamente huele a película vieja."
-        );
-
-    }
-
-
-    if(ACT3.fragments === 2){
-
-        showDialogue(
-            "Dos. Me preocupa mucho que esto esté funcionando."
-        );
-
-    }
-
-
-    if(ACT3.fragments === 3){
-
-        showDialogue(
-            "Tres... Nahara, la pantalla acaba de encenderse sola."
-        );
-
-
-        ACT3.exitUnlocked =
-            true;
-
-
-        triggerAct3MovieScreen();
-
-    }
-
-}
-
-
-/* =========================================================
-   CONTADOR
-   ========================================================= */
-
-function updateAct3FragmentCounter(){
-
-    const counter =
-        document.getElementById(
-            "filmFragmentCount"
-        );
-
-
-    if(counter){
-
-        counter.textContent =
-            ACT3.fragments;
-
-    }
-
-}
-
-
-/* =========================================================
-   DETECTAR FRAGMENTOS
-   ========================================================= */
-
-function checkAct3Fragments(){
-
-    const positions = [
-
-        {
-            fragment:
-                act3Fragments[0],
-
-            x:900,
-
-            bottom:330
-        },
-
-        {
-            fragment:
-                act3Fragments[1],
-
-            x:2050,
-
-            bottom:430
-        },
-
-        {
-            fragment:
-                act3Fragments[2],
-
-            x:3450,
-
-            bottom:300
-        }
-
-    ];
-
-
-    positions.forEach(
-        item => {
-
-            if(
-                item.fragment.collected
-            ){
-                return;
-            }
-
-
-            const dx =
-                Math.abs(
-                    playerX -
-                    item.x
-                );
-
-
-            const dy =
-                Math.abs(
-                    playerBottom -
-                    item.bottom
-                );
-
-
-            if(
-                dx < 70 &&
-                dy < 100
-            ){
-
-                collectAct3Fragment(
-                    item.fragment
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PRIMER EVENTO:
-   APAGÓN
-   ========================================================= */
-
-function triggerAct3Blackout(){
-
-    if(
-        ACT3.blackoutTriggered
-    ){
-        return;
-    }
-
-
-    ACT3.blackoutTriggered =
-        true;
-
-
-    const darkness =
-        document.getElementById(
-            "cinemaBlackout"
-        );
-
-
-    darkness.classList.add(
-        "active"
-    );
-
-
-    showDialogue(
-        "...Eso no fui yo."
-    );
-
-
-    setTimeout(() => {
-
-        darkness.classList.remove(
-            "active"
-        );
-
-    },1800);
-
-}
-
-
-/* =========================================================
-   SEGUNDO EVENTO:
-   SOMBRA
-   ========================================================= */
-
-function triggerAct3Shadow(){
-
-    if(
-        ACT3.shadowTriggered
-    ){
-        return;
-    }
-
-
-    ACT3.shadowTriggered =
-        true;
-
-
-    const shadow =
-        document.getElementById(
-            "cinemaShadow"
-        );
-
-
-    shadow.classList.add(
-        "appear"
-    );
-
-
-    setTimeout(() => {
-
-        shadow.classList.remove(
-            "appear"
-        );
-
-    },1100);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No."
-        );
-
-    },1400);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No vamos a hablar de lo que acabamos de ver."
-        );
-
-    },3900);
-
-}
-
-
-/* =========================================================
-   PANTALLA DEL CINE
-   ========================================================= */
-
-function triggerAct3MovieScreen(){
-
-    if(ACT3.screenTriggered)
-        return;
-
-
-    ACT3.screenTriggered =
-        true;
-
-
-    const screen =
-        document.getElementById(
-            "cursedScreen"
-        );
-
-
-    screen.classList.add(
-        "awake"
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Nahara..."
-        );
-
-    },1000);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "La película tiene tu nombre."
-        );
-
-    },3200);
-
-}
-
-
-/* =========================================================
-   EVENTOS POR POSICIÓN
-   ========================================================= */
-
-function updateAct3Events(){
-
-    if(
-        playerX > 1350 &&
-        !ACT3.blackoutTriggered
-    ){
-
-        triggerAct3Blackout();
-
-    }
-
-
-    if(
-        playerX > 2700 &&
-        !ACT3.shadowTriggered
-    ){
-
-        triggerAct3Shadow();
-
-    }
-
-}
-
-
-/* =========================================================
-   PUERTA DE SALIDA
-   ========================================================= */
-
-function checkAct3Exit(){
-
-    if(
-        playerX < 4050
-    ){
-        return;
-    }
-
-
-    if(
-        !ACT3.exitUnlocked
-    ){
-
-        playerX =
-            4020;
-
-
-        showDialogue(
-            "Está cerrada. Nos falta algo."
-        );
-
-
-        return;
-
-    }
-
-
-    finishAct3();
-
-}
-
-
-/* =========================================================
-   TERMINAR ACTO III
-   ========================================================= */
-
-function finishAct3(){
-
-    if(ACT3.completed)
-        return;
-
-
-    ACT3.completed =
-        true;
-
-
-    ACT3.active =
-        false;
-
-
-    showDialogue(
-        "La puerta se abrió."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Por qué siento que lo siguiente va a ser peor?"
-        );
-
-    },2600);
-
-
-    setTimeout(() => {
-
-        /*
-           MÁS ADELANTE:
-
-           transitionToAct4();
-
-           ACTO IV —
-           THE VAMPIRE'S CASTLE
-        */
-
-    },5500);
-
-}
-
-
-/* =========================================================
-   LOOP DEL ACTO III
-   ========================================================= */
-
-function updateAct3(){
-
-    if(
-        !ACT3.active ||
-        ACT3.completed
-    ){
-        return;
-    }
-
-
-    checkAct3Fragments();
-
-    updateAct3Events();
-
-    checkAct3Exit();
-
-}
-
-          /* =========================================================
-   ACTO III — THE CURSED CINEMA
-   ========================================================= */
-
-
-#act3Scene{
-
-    position:absolute;
-
-    width:4300px;
-    height:100%;
-
-    display:none;
-
-    overflow:hidden;
-
-    background:
-
-        radial-gradient(
-            ellipse at 80% 40%,
-            rgba(116,72,82,.13),
-            transparent 35%
-        ),
-
-        linear-gradient(
-            to bottom,
-            #21151b,
-            #100a0e 70%,
-            #050304
-        );
-
-}
-
-
-#act3Scene.active{
-
-    display:block;
-
-}
-
-
-/* =========================================================
-   PAREDES DEL CINE
-   ========================================================= */
-
-.cinemaWall{
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-        repeating-linear-gradient(
-            90deg,
-
-            rgba(82,45,58,.15)
-            0 80px,
-
-            rgba(15,8,12,.15)
-            80px 160px
-        );
-
-}
-
-
-/* =========================================================
-   PANTALLA
-   ========================================================= */
-
-#cursedScreen{
-
-    position:absolute;
-
-    width:680px;
-    height:390px;
-
-    left:3500px;
-    bottom:260px;
-
-    background:#c7b9a6;
-
-    border:
-        20px solid
-        #140b10;
-
-    box-shadow:
-
-        0 0 0 8px
-        #4b2c36,
-
-        inset 0 0 80px
-        rgba(0,0,0,.65);
-
-    overflow:hidden;
-
-}
-
-
-#cursedScreen::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-        repeating-linear-gradient(
-            0deg,
-
-            transparent
-            0 5px,
-
-            rgba(0,0,0,.15)
-            6px
-        );
-
-}
-
-
-#cursedScreen::after{
-
-    content:"NAHARA";
-
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    transform:
-        translate(-50%,-50%);
-
-    font-size:70px;
-
-    letter-spacing:12px;
-
-    color:#21151b;
-
-    opacity:0;
-
-}
-
-
-#cursedScreen.awake::after{
-
-    animation:
-        cursedName
-        2s steps(2)
-        infinite;
-
-}
-
-
-@keyframes cursedName{
-
-    0%{
-        opacity:.05;
-    }
-
-    50%{
-        opacity:.85;
-    }
-
-    100%{
-        opacity:.15;
-    }
-
-}
-
-
-/* =========================================================
-   CORTINAS
-   ========================================================= */
-
-.cinemaCurtain{
-
-    position:absolute;
-
-    width:210px;
-    height:520px;
-
-    bottom:220px;
-
-    background:
-
-        repeating-linear-gradient(
-            90deg,
-
-            #241019
-            0 25px,
-
-            #5c2938
-            26px 45px
-        );
-
-    border:
-        7px solid
-        #0c0709;
-
-}
-
-
-.cinemaCurtain.left{
-
-    left:3410px;
-
-}
-
-
-.cinemaCurtain.right{
-
-    left:4120px;
-
-}
-
-
-/* =========================================================
-   BUTACAS
-   ========================================================= */
-
-.cinemaSeat{
-
-    position:absolute;
-
-    width:100px;
-    height:90px;
-
-    bottom:190px;
-
-    background:#4a202c;
-
-    border:
-        6px solid
-        #10090d;
-
-    border-radius:
-        45% 45% 10% 10%;
-
-}
-
-
-.cinemaSeat::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:115px;
-    height:30px;
-
-    left:-13px;
-    bottom:-15px;
-
-    background:#28131b;
-
-    border:
-        5px solid
-        #0c0709;
-
-}
-
-
-.seat1{left:400px;}
-.seat2{left:530px;}
-.seat3{left:660px;}
-
-.seat4{left:1500px;}
-.seat5{left:1630px;}
-.seat6{left:1760px;}
-
-.seat7{left:2750px;}
-.seat8{left:2880px;}
-.seat9{left:3010px;}
-
-
-/* =========================================================
-   PLATAFORMAS
-   ========================================================= */
-
-.cinemaPlatform{
-
-    position:absolute;
-
-    height:35px;
-
-    background:
-
-        linear-gradient(
-            #7b4b58,
-            #341923
-        );
-
-    border:
-        5px solid
-        #0d070a;
-
-    box-shadow:
-        0 12px 0
-        #090507;
-
-}
-
-
-.cinemaPlatform.p1{
-
-    width:400px;
-
-    left:650px;
-    bottom:280px;
-
-}
-
-
-.cinemaPlatform.p2{
-
-    width:300px;
-
-    left:1300px;
-    bottom:390px;
-
-}
-
-
-.cinemaPlatform.p3{
-
-    width:400px;
-
-    left:1900px;
-    bottom:270px;
-
-}
-
-
-.cinemaPlatform.p4{
-
-    width:330px;
-
-    left:2500px;
-    bottom:390px;
-
-}
-
-
-.cinemaPlatform.p5{
-
-    width:400px;
-
-    left:3150px;
-    bottom:280px;
-
-}
-
-
-/* =========================================================
-   FRAGMENTOS
-   ========================================================= */
-
-.filmFragment{
-
-    position:absolute;
-
-    width:48px;
-    height:65px;
-
-    background:#b7a38b;
-
-    border:
-        5px solid
-        #171014;
-
-    box-shadow:
-        0 0 15px
-        rgba(201,170,148,.25);
-
-    animation:
-        filmFloat
-        1.5s ease-in-out
-        infinite alternate;
-
-}
-
-
-.filmFragment::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:5px;
-
-    background:
-
-        repeating-linear-gradient(
-            0deg,
-
-            #1a1015
-            0 7px,
-
-            transparent
-            7px 14px
-        );
-
-}
-
-
-@keyframes filmFloat{
-
-    from{
-        transform:
-            translateY(-5px)
-            rotate(-5deg);
-    }
-
-    to{
-        transform:
-            translateY(8px)
-            rotate(5deg);
-    }
-
-}
-
-
-.filmFragment.collected{
-
-    animation:
-        filmCollected
-        .5s forwards;
-
-}
-
-
-@keyframes filmCollected{
-
-    to{
-
-        opacity:0;
-
-        transform:
-            translateY(-80px)
-            scale(1.8);
-
-    }
-
-}
-
-
-#filmFragment1{
-
-    left:900px;
-    bottom:330px;
-
-}
-
-
-#filmFragment2{
-
-    left:2050px;
-    bottom:430px;
-
-}
-
-
-#filmFragment3{
-
-    left:3450px;
-    bottom:300px;
-
-}
-
-
-/* =========================================================
-   APAGÓN
-   ========================================================= */
-
-#cinemaBlackout{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:850;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:
-        opacity .08s;
-
-}
-
-
-#cinemaBlackout.active{
-
-    opacity:.94;
-
-}
-
-
-/* =========================================================
-   SOMBRA DETRÁS DE LA PANTALLA
-   ========================================================= */
-
-#cinemaShadow{
-
-    position:absolute;
-
-    width:90px;
-    height:240px;
-
-    left:3300px;
-    bottom:190px;
-
-    background:#050304;
-
-    border-radius:
-        50% 50% 10% 10%;
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-
-#cinemaShadow::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:100px;
-    height:100px;
-
-    left:-5px;
-    top:-65px;
-
-    border-radius:50%;
-
-    background:#050304;
-
-}
-
-
-#cinemaShadow.appear{
-
-    animation:
-        shadowAppear
-        1.1s forwards;
-
-}
-
-
-@keyframes shadowAppear{
-
-    0%{
-
-        opacity:0;
-
-        transform:
-            translateX(100px);
-
-    }
-
-    20%{
-
-        opacity:.9;
-
-    }
-
-    75%{
-
-        opacity:.9;
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translateX(-100px);
-
-    }
-
-}
-
-
-/* =========================================================
-   CONTADOR DE FRAGMENTOS
-   ========================================================= */
-
-#filmCounter{
-
-    position:fixed;
-
-    right:45px;
-    top:105px;
-
-    z-index:250;
-
-    padding:
-        10px 18px;
-
-    background:
-        rgba(8,5,7,.8);
-
-    border:
-        3px solid
-        #68404c;
-
-    border-radius:40%;
-
-    color:#d2b5ae;
-
-    letter-spacing:2px;
-
-}
-
-          <!-- =======================================================
-     ACTO III — THE CURSED CINEMA
-     ======================================================= -->
-
-<div id="act3Scene">
-
-    <div class="cinemaWall"></div>
-
-
-    <!-- BUTACAS -->
-
-    <div class="cinemaSeat seat1"></div>
-    <div class="cinemaSeat seat2"></div>
-    <div class="cinemaSeat seat3"></div>
-
-    <div class="cinemaSeat seat4"></div>
-    <div class="cinemaSeat seat5"></div>
-    <div class="cinemaSeat seat6"></div>
-
-    <div class="cinemaSeat seat7"></div>
-    <div class="cinemaSeat seat8"></div>
-    <div class="cinemaSeat seat9"></div>
-
-
-    <!-- PLATAFORMAS -->
-
-    <div class="cinemaPlatform p1"></div>
-    <div class="cinemaPlatform p2"></div>
-    <div class="cinemaPlatform p3"></div>
-    <div class="cinemaPlatform p4"></div>
-    <div class="cinemaPlatform p5"></div>
-
-
-    <!-- FRAGMENTOS -->
-
-    <div
-        class="filmFragment"
-        id="filmFragment1">
-    </div>
-
-    <div
-        class="filmFragment"
-        id="filmFragment2">
-    </div>
-
-    <div
-        class="filmFragment"
-        id="filmFragment3">
-    </div>
-
-
-    <!-- SOMBRA -->
-
-    <div id="cinemaShadow"></div>
-
-
-    <!-- PANTALLA FINAL -->
-
-    <div class="cinemaCurtain left"></div>
-
-    <div id="cursedScreen"></div>
-
-    <div class="cinemaCurtain right"></div>
-
-</div>
-
-
-<!-- EFECTOS SOBRE LA PANTALLA -->
-
-<div id="cinemaBlackout"></div>
-
-
-<!-- HUD DEL ACTO -->
-
-<div id="filmCounter">
-
-    FILM&nbsp;
-
-    <span id="filmFragmentCount">
-        0
-    </span>
-
-    /3
-
-</div>
-
-          /* =========================================================
-   NAHARA & ???
-   ACTO IV — THE VAMPIRE'S CASTLE
-   ========================================================= */
-
-const ACT4 = {
-
-    active:false,
-    completed:false,
-
-    batsDefeated:0,
-
-    bossStarted:false,
-    bossDefeated:false,
-
-    gateUnlocked:false,
-
-    introShown:false
-};
-
-
-/* =========================================================
-   MURCIÉLAGOS
-   ========================================================= */
-
-ACT4.bats = [
-
-    {
-        id:"bat1",
-        x:850,
-        baseX:850,
-        bottom:430,
-        speed:1.7,
-        range:180,
-        direction:1,
-        hp:1,
-        alive:true
-    },
-
-    {
-        id:"bat2",
-        x:1650,
-        baseX:1650,
-        bottom:500,
-        speed:2,
-        range:220,
-        direction:-1,
-        hp:1,
-        alive:true
-    },
-
-    {
-        id:"bat3",
-        x:2550,
-        baseX:2550,
-        bottom:410,
-        speed:2.2,
-        range:190,
-        direction:1,
-        hp:1,
-        alive:true
-    }
-
-];
-
-
-/* =========================================================
-   MINI BOSS
-   ========================================================= */
-
-ACT4.boss = {
-
-    element:null,
-
-    x:3900,
-
-    bottom:190,
-
-    hp:5,
-    maxHp:5,
-
-    alive:true,
-
-    direction:-1,
-
-    attackTimer:0,
-
-    projectiles:[]
-
-};
-
-
-/* =========================================================
-   INICIAR ACTO IV
-   ========================================================= */
-
-function startAct4(){
-
-    ACT4.active = true;
-    ACT4.completed = false;
-
-    ACT4.batsDefeated = 0;
-
-    ACT4.bossStarted = false;
-    ACT4.bossDefeated = false;
-
-    ACT4.gateUnlocked = false;
-
-
-    document
-        .getElementById("act4Scene")
-        .classList.add("active");
-
-
-    ACT4.bats.forEach(bat => {
-
-        bat.element =
-            document.getElementById(
-                bat.id
-            );
-
-    });
-
-
-    ACT4.boss.element =
-        document.getElementById(
-            "vampireBoss"
-        );
-
-
-    playerX = 180;
-
-    playerBottom =
-        GROUND_Y;
-
-    velocityY = 0;
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Oh."
-        );
-
-    },700);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Ataúdes."
-        );
-
-    },2200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Muchísimos ataúdes."
-        );
-
-    },3900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Nahara, tengo una teoría y no me gusta."
-        );
-
-    },6200);
-
-}
-
-
-/* =========================================================
-   MURCIÉLAGOS
-   ========================================================= */
-
-function updateAct4Bats(){
-
-    for(
-        const bat
-        of ACT4.bats
-    ){
-
-        if(
-            !bat.alive ||
-            !bat.element
-        ){
-            continue;
-        }
-
-
-        bat.x +=
-            bat.speed *
-            bat.direction;
-
-
-        if(
-            bat.x >
-            bat.baseX + bat.range
-        ){
-
-            bat.direction = -1;
-
-        }
-
-
-        if(
-            bat.x <
-            bat.baseX - bat.range
-        ){
-
-            bat.direction = 1;
-
-        }
-
-
-        bat.element.style.left =
-            bat.x + "px";
-
-
-        /* SEGUIR UN POCO A NAHARA */
-
-        const distance =
-            playerX - bat.x;
-
-
-        if(
-            Math.abs(distance) < 350
-        ){
-
-            bat.x +=
-                Math.sign(distance)
-                * .7;
-
-        }
-
-
-        checkAct4BatCollision(
-            bat
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   COLISIÓN MURCIÉLAGO
-   ========================================================= */
-
-function checkAct4BatCollision(
-    bat
-){
-
-    if(ACT2.invulnerable)
-        return;
-
-
-    const hit =
-
-        playerX +
-        PLAYER_WIDTH - 15
-            > bat.x
-
-        &&
-
-        playerX + 15
-            < bat.x + 65
-
-        &&
-
-        playerBottom +
-        PLAYER_HEIGHT
-            > bat.bottom
-
-        &&
-
-        playerBottom
-            < bat.bottom + 60;
-
-
-    if(hit){
-
-        damageNaharaAct2();
-
-    }
-
-}
-
-
-/* =========================================================
-   DAÑO DE DISPARO A MURCIÉLAGO
-   ========================================================= */
-
-function checkAct4ProjectileHits(){
-
-    for(
-        let i =
-            ACT2.projectiles.length - 1;
-
-        i >= 0;
-
-        i--
-    ){
-
-        const projectile =
-            ACT2.projectiles[i];
-
-
-        let projectileUsed =
-            false;
-
-
-        /* MURCIÉLAGOS */
-
-        for(
-            const bat
-            of ACT4.bats
-        ){
-
-            if(!bat.alive)
-                continue;
-
-
-            const hit =
-
-                projectile.x + 30
-                    > bat.x
-
-                &&
-
-                projectile.x
-                    < bat.x + 65
-
-                &&
-
-                projectile.bottom + 30
-                    > bat.bottom
-
-                &&
-
-                projectile.bottom
-                    < bat.bottom + 60;
-
-
-            if(hit){
-
-                defeatAct4Bat(
-                    bat
-                );
-
-
-                projectileUsed =
-                    true;
-
-
-                break;
-
-            }
-
-        }
-
-
-        /* BOSS */
-
-        if(
-            !projectileUsed &&
-            ACT4.bossStarted &&
-            ACT4.boss.alive
-        ){
-
-            const boss =
-                ACT4.boss;
-
-
-            const bossHit =
-
-                projectile.x + 30
-                    > boss.x
-
-                &&
-
-                projectile.x
-                    < boss.x + 130
-
-                &&
-
-                projectile.bottom + 30
-                    > boss.bottom
-
-                &&
-
-                projectile.bottom
-                    < boss.bottom + 190;
-
-
-            if(bossHit){
-
-                damageAct4Boss();
-
-                projectileUsed =
-                    true;
-
-            }
-
-        }
-
-
-        if(projectileUsed){
-
-            projectile.element.remove();
-
-
-            ACT2.projectiles.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   DERROTAR MURCIÉLAGO
-   ========================================================= */
-
-function defeatAct4Bat(
-    bat
-){
-
-    if(!bat.alive)
-        return;
-
-
-    bat.alive =
-        false;
-
-
-    ACT4.batsDefeated++;
-
-
-    bat.element.classList.add(
-        "batDefeated"
-    );
-
-
-    setTimeout(() => {
-
-        bat.element.style.display =
-            "none";
-
-    },400);
-
-}
-
-
-/* =========================================================
-   PLATAFORMAS MÓVILES
-   ========================================================= */
-
-function updateAct4Platforms(){
-
-    const platforms =
-        document.querySelectorAll(
-            ".vampireMovingPlatform"
-        );
-
-
-    const time =
-        performance.now() / 1000;
-
-
-    platforms.forEach(
-        (platform,index) => {
-
-            const movement =
-                Math.sin(
-                    time +
-                    index * 1.7
-                )
-                * 75;
-
-
-            platform.style.transform =
-                `translateY(${movement}px)`;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   DESPERTAR AL VAMPIRO
-   ========================================================= */
-
-function checkAct4BossTrigger(){
-
-    if(
-        ACT4.bossStarted ||
-        playerX < 3500
-    ){
-        return;
-    }
-
-
-    ACT4.bossStarted =
-        true;
-
-
-    const arena =
-        document.getElementById(
-            "vampireArena"
-        );
-
-
-    arena.classList.add(
-        "locked"
-    );
-
-
-    showDialogue(
-        "..."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Nahara."
-        );
-
-    },1800);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "El ataúd se está abriendo."
-        );
-
-    },3500);
-
-
-    setTimeout(() => {
-
-        ACT4.boss.element
-            .classList.add(
-                "awake"
-            );
-
-
-        document
-            .getElementById(
-                "bossHealth"
-            )
-            .classList.add(
-                "show"
-            );
-
-    },5000);
-
-}
-
-
-/* =========================================================
-   MOVIMIENTO DEL BOSS
-   ========================================================= */
-
-function updateAct4Boss(){
-
-    if(
-        !ACT4.bossStarted ||
-        !ACT4.boss.alive
-    ){
-        return;
-    }
-
-
-    const boss =
-        ACT4.boss;
-
-
-    const distance =
-        playerX - boss.x;
-
-
-    /* MOVIMIENTO LENTO */
-
-    if(
-        Math.abs(distance) > 250
-    ){
-
-        boss.x +=
-            Math.sign(distance)
-            * .8;
-
-    }
-
-
-    boss.element.style.left =
-        boss.x + "px";
-
-
-    boss.attackTimer++;
-
-
-    /* ATAQUE CADA CIERTO TIEMPO */
-
-    if(
-        boss.attackTimer > 150
-    ){
-
-        boss.attackTimer = 0;
-
-        act4BossAttack();
-
-    }
-
-
-    /* CONTACTO */
-
-    const touching =
-
-        playerX +
-        PLAYER_WIDTH
-            > boss.x
-
-        &&
-
-        playerX
-            < boss.x + 130
-
-        &&
-
-        playerBottom +
-        PLAYER_HEIGHT
-            > boss.bottom
-
-        &&
-
-        playerBottom
-            < boss.bottom + 190;
-
-
-    if(
-        touching &&
-        !ACT2.invulnerable
-    ){
-
-        damageNaharaAct2();
-
-    }
-
-}
-
-
-/* =========================================================
-   ATAQUE DEL VAMPIRO
-   ========================================================= */
-
-function act4BossAttack(){
-
-    const boss =
-        ACT4.boss;
-
-
-    const orb =
-        document.createElement(
-            "div"
-        );
-
-
-    orb.className =
-        "vampireOrb";
-
-
-    const direction =
-        playerX < boss.x
-        ? -1
-        : 1;
-
-
-    const orbX =
-        boss.x + 55;
-
-
-    const orbBottom =
-        boss.bottom + 120;
-
-
-    orb.style.left =
-        orbX + "px";
-
-
-    orb.style.bottom =
-        orbBottom + "px";
-
-
-    document
-        .getElementById(
-            "act4Scene"
-        )
-        .appendChild(
-            orb
-        );
-
-
-    boss.projectiles.push({
-
-        element:orb,
-
-        x:orbX,
-
-        bottom:orbBottom,
-
-        velocityX:
-            direction * 5.5
-
-    });
-
-}
-
-
-/* =========================================================
-   ACTUALIZAR ATAQUES DEL BOSS
-   ========================================================= */
-
-function updateAct4BossProjectiles(){
-
-    const shots =
-        ACT4.boss.projectiles;
-
-
-    for(
-        let i =
-            shots.length - 1;
-
-        i >= 0;
-
-        i--
-    ){
-
-        const shot =
-            shots[i];
-
-
-        shot.x +=
-            shot.velocityX;
-
-
-        shot.element.style.left =
-            shot.x + "px";
-
-
-        const touching =
-
-            playerX +
-            PLAYER_WIDTH
-                > shot.x
-
-            &&
-
-            playerX
-                < shot.x + 35
-
-            &&
-
-            playerBottom +
-            PLAYER_HEIGHT
-                > shot.bottom
-
-            &&
-
-            playerBottom
-                < shot.bottom + 35;
-
-
-        if(touching){
-
-            damageNaharaAct2();
-
-
-            shot.element.remove();
-
-
-            shots.splice(
-                i,
-                1
-            );
-
-
-            continue;
-
-        }
-
-
-        if(
-            shot.x < 3300 ||
-            shot.x > 4400
-        ){
-
-            shot.element.remove();
-
-
-            shots.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   DAÑO AL BOSS
-   ========================================================= */
-
-function damageAct4Boss(){
-
-    const boss =
-        ACT4.boss;
-
-
-    if(!boss.alive)
-        return;
-
-
-    boss.hp--;
-
-
-    boss.element.classList.add(
-        "bossHit"
-    );
-
-
-    setTimeout(() => {
-
-        boss.element.classList.remove(
-            "bossHit"
-        );
-
-    },150);
-
-
-    updateAct4BossHealth();
-
-
-    if(boss.hp <= 0){
-
-        defeatAct4Boss();
-
-    }
-
-}
-
-
-/* =========================================================
-   BARRA DE VIDA
-   ========================================================= */
-
-function updateAct4BossHealth(){
-
-    const bar =
-        document.getElementById(
-            "bossHealthFill"
-        );
-
-
-    const percentage =
-
-        (
-            ACT4.boss.hp /
-            ACT4.boss.maxHp
-        )
-        * 100;
-
-
-    bar.style.width =
-        percentage + "%";
-
-}
-
-
-/* =========================================================
-   DERROTAR BOSS
-   ========================================================= */
-
-function defeatAct4Boss(){
-
-    const boss =
-        ACT4.boss;
-
-
-    boss.alive =
-        false;
-
-
-    ACT4.bossDefeated =
-        true;
-
-
-    boss.element.classList.add(
-        "bossDefeated"
-    );
-
-
-    document
-        .getElementById(
-            "bossHealth"
-        )
-        .classList.remove(
-            "show"
-        );
-
-
-    document
-        .getElementById(
-            "vampireArena"
-        )
-        .classList.remove(
-            "locked"
-        );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },500);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Eso fue un vampiro?"
-        );
-
-    },2200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No importa. Ganamos."
-        );
-
-    },4400);
-
-
-    ACT4.gateUnlocked =
-        true;
-
-}
-
-
-/* =========================================================
-   SALIDA
-   ========================================================= */
-
-function checkAct4Exit(){
-
-    if(playerX < 4550)
-        return;
-
-
-    if(!ACT4.gateUnlocked){
-
-        playerX = 4520;
-
-        return;
-
-    }
-
-
-    finishAct4();
-
-}
-
-
-/* =========================================================
-   FINAL DEL ACTO IV
-   ========================================================= */
-
-function finishAct4(){
-
-    if(ACT4.completed)
-        return;
-
-
-    ACT4.completed = true;
-
-    ACT4.active = false;
-
-
-    showDialogue(
-        "Hay otra habitación."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Y escucho una caja musical."
-        );
-
-    },2700);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Eso nunca es buena señal."
-        );
-
-    },5000);
-
-
-    /*
-       DESPUÉS:
-
-       transitionToAct5();
-
-       ACTO V —
-       THE TOY ROOM
-    */
-
-}
-
-
-/* =========================================================
-   LOOP ACTO IV
-   ========================================================= */
-
-function updateAct4(){
-
-    if(
-        !ACT4.active ||
-        ACT4.completed
-    ){
-        return;
-    }
-
-
-    updateAct4Bats();
-
-    updateAct4Platforms();
-
-    checkAct4BossTrigger();
-
-    updateAct4Boss();
-
-    updateAct4BossProjectiles();
-
-    checkAct4ProjectileHits();
-
-    checkAct4Exit();
-
-}
-
-      /* =========================================================
-   ACTO IV — THE VAMPIRE'S CASTLE
-   ========================================================= */
-
-#act4Scene{
-
-    position:absolute;
-
-    width:4800px;
-    height:100%;
-
-    display:none;
-
-    overflow:hidden;
-
-    background:
-
-        radial-gradient(
-            circle at 75% 15%,
-            rgba(170,180,190,.15),
-            transparent 22%
-        ),
-
-        linear-gradient(
-            to bottom,
-            #17131b,
-            #180a12 65%,
-            #050304
-        );
-}
-
-
-#act4Scene.active{
-    display:block;
-}
-
-
-/* =========================================================
-   VENTANAS GÓTICAS
-   ========================================================= */
-
-.vampireWindow{
-
-    position:absolute;
-
-    width:180px;
-    height:360px;
-
-    bottom:300px;
-
-    background:
-
-        radial-gradient(
-            circle at center,
-            #c1b7b0,
-            #554452 55%,
-            #15101a
-        );
-
-    border:14px solid #0b080d;
-
-    border-radius:
-        100px 100px 5px 5px;
-
-    box-shadow:
-        0 0 0 6px #352431;
-}
-
-
-.vampireWindow::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:7px;
-    height:100%;
-
-    left:50%;
-
-    background:#151019;
-}
-
-
-.vw1{left:450px;}
-.vw2{left:1900px;}
-.vw3{left:3150px;}
-
-
-/* =========================================================
-   ATAÚDES
-   ========================================================= */
-
-.coffin{
-
-    position:absolute;
-
-    width:110px;
-    height:240px;
-
-    bottom:190px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #170b10,
-            #542431,
-            #170b10
-        );
-
-    clip-path:
-        polygon(
-            25% 0,
-            75% 0,
-            100% 18%,
-            88% 100%,
-            12% 100%,
-            0 18%
-        );
-
-    border:7px solid #080507;
-}
-
-
-.coffin::after{
-
-    content:"†";
-
-    position:absolute;
-
-    width:100%;
-
-    top:70px;
-
-    text-align:center;
-
-    font-size:55px;
-
-    color:#8e5b68;
-}
-
-
-.coffin1{
-    left:700px;
-}
-
-.coffin2{
-    left:1450px;
-}
-
-.coffin3{
-    left:2700px;
-}
-
-
-/* =========================================================
-   PLATAFORMAS
-   ========================================================= */
-
-.vampirePlatform,
-.vampireMovingPlatform{
-
-    position:absolute;
-
-    height:35px;
-
-    background:
-        linear-gradient(
-            #70414f,
-            #28131d
-        );
-
-    border:
-        5px solid #0a0609;
-
-    box-shadow:
-        0 12px 0 #050304;
-}
-
-
-.vp1{
-
-    width:380px;
-
-    left:600px;
-    bottom:300px;
-}
-
-
-.vp2{
-
-    width:300px;
-
-    left:1250px;
-    bottom:420px;
-}
-
-
-.vp3{
-
-    width:380px;
-
-    left:2100px;
-    bottom:290px;
-}
-
-
-.vp4{
-
-    width:320px;
-
-    left:2850px;
-    bottom:400px;
-}
-
-
-/* =========================================================
-   MURCIÉLAGOS
-   ========================================================= */
-
-.vampireBat{
-
-    position:absolute;
-
-    width:65px;
-    height:35px;
-
-    z-index:45;
-
-    background:#0b080c;
-
-    border-radius:50%;
-
-    animation:
-        batFloat
-        .7s ease-in-out
-        infinite alternate;
-}
-
-
-.vampireBat::before,
-.vampireBat::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:45px;
-    height:35px;
-
-    top:3px;
-
-    background:#181019;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 30%,
-            70% 100%,
-            45% 60%,
-            20% 100%
-        );
-}
-
-
-.vampireBat::before{
-
-    left:-35px;
-
-    transform:scaleX(-1);
-}
-
-
-.vampireBat::after{
-
-    right:-35px;
-}
-
-
-.vampireBat .batEyes{
-
-    position:absolute;
-
-    width:7px;
-    height:7px;
-
-    left:20px;
-    top:10px;
-
-    border-radius:50%;
-
-    background:#d0919d;
-
-    box-shadow:
-        19px 0 #d0919d;
-
-    z-index:5;
-}
-
-
-@keyframes batFloat{
-
-    from{
-        transform:translateY(-7px);
-    }
-
-    to{
-        transform:translateY(8px);
-    }
-}
-
-
-.batDefeated{
-
-    animation:
-        batDeath
-        .4s forwards !important;
-}
-
-
-@keyframes batDeath{
-
-    to{
-
-        opacity:0;
-
-        transform:
-            translateY(100px)
-            rotate(180deg);
-
-    }
-}
-
-
-/* =========================================================
-   ARENA
-   ========================================================= */
-
-#vampireArena{
-
-    position:absolute;
-
-    left:3400px;
-    bottom:190px;
-
-    width:1150px;
-    height:500px;
-
-    border-left:
-        0 solid transparent;
-
-    border-right:
-        0 solid transparent;
-}
-
-
-#vampireArena.locked{
-
-    border-left:
-        12px solid #130a10;
-
-    border-right:
-        12px solid #130a10;
-}
-
-
-/* =========================================================
-   VAMPIRO
-   ========================================================= */
-
-#vampireBoss{
-
-    position:absolute;
-
-    left:3900px;
-    bottom:190px;
-
-    width:130px;
-    height:190px;
-
-    z-index:55;
-
-    opacity:0;
-
-    transform:
-        translateY(80px);
-
-    transition:
-        1.2s;
-}
-
-
-#vampireBoss.awake{
-
-    opacity:1;
-
-    transform:
-        translateY(0);
-}
-
-
-.vampireCape{
-
-    position:absolute;
-
-    width:130px;
-    height:135px;
-
-    bottom:0;
-
-    background:
-        linear-gradient(
-            90deg,
-            #160a10,
-            #5c1e31,
-            #160a10
-        );
-
-    clip-path:
-        polygon(
-            50% 0,
-            100% 20%,
-            85% 100%,
-            65% 80%,
-            50% 100%,
-            35% 80%,
-            15% 100%,
-            0 20%
-        );
-}
-
-
-.vampireHead{
-
-    position:absolute;
-
-    width:75px;
-    height:85px;
-
-    left:27px;
-    top:0;
-
-    background:#c2aaa2;
-
-    border:6px solid #080507;
-
-    border-radius:
-        48% 52% 45% 45%;
-
-    z-index:5;
-}
-
-
-.vampireHair{
-
-    position:absolute;
-
-    width:75px;
-    height:38px;
-
-    top:-4px;
-    left:-6px;
-
-    background:#110a0e;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            90% 75%,
-            65% 40%,
-            50% 100%,
-            35% 40%,
-            10% 75%
-        );
-}
-
-
-.vampireEyes{
-
-    position:absolute;
-
-    width:8px;
-    height:12px;
-
-    left:15px;
-    top:38px;
-
-    border-radius:50%;
-
-    background:#8f3448;
-
-    box-shadow:
-        32px 0 #8f3448;
-}
-
-
-.vampireFangs{
-
-    position:absolute;
-
-    left:25px;
-    top:57px;
-
-    color:#eee1d5;
-
-    font-size:15px;
-}
-
-
-.bossHit{
-
-    filter:
-        brightness(2.5)
-        drop-shadow(
-            0 0 18px #a75068
-        );
-}
-
-
-.bossDefeated{
-
-    animation:
-        vampireDeath
-        1.5s forwards;
-}
-
-
-@keyframes vampireDeath{
-
-    0%{
-        opacity:1;
-    }
-
-    40%{
-
-        transform:
-            translateY(-40px)
-            scale(1.2);
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translateY(-150px)
-            scale(.2);
-
-    }
-}
-
-
-/* =========================================================
-   ATAQUE DEL VAMPIRO
-   ========================================================= */
-
-.vampireOrb{
-
-    position:absolute;
-
-    width:35px;
-    height:35px;
-
-    z-index:65;
-
-    border-radius:50%;
-
-    background:#762d48;
-
-    box-shadow:
-
-        0 0 10px #9c4862,
-
-        0 0 25px
-        rgba(156,72,98,.6);
-}
-
-
-/* =========================================================
-   BARRA DEL BOSS
-   ========================================================= */
-
-#bossHealth{
-
-    position:fixed;
-
-    left:50%;
-    bottom:45px;
-
-    transform:
-        translateX(-50%);
-
-    width:420px;
-
-    z-index:350;
-
-    opacity:0;
-
-    transition:.5s;
-}
-
-
-#bossHealth.show{
-    opacity:1;
-}
-
-
-#bossHealthName{
-
-    text-align:center;
-
-    margin-bottom:8px;
-
-    color:#d2aab0;
-
-    letter-spacing:5px;
-
-    font-size:15px;
-}
-
-
-#bossHealthBar{
-
-    width:100%;
-    height:22px;
-
-    padding:4px;
-
-    background:#090507;
-
-    border:
-        3px solid #70404e;
-}
-
-
-#bossHealthFill{
-
-    width:100%;
-    height:100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #6e243a,
-            #ae5268
-        );
-
-    transition:
-        width .3s;
-}
-
-      <!-- =======================================================
-     ACTO IV — THE VAMPIRE'S CASTLE
-     ======================================================= -->
-
-<div id="act4Scene">
-
-
-    <!-- VENTANAS -->
-
-    <div class="vampireWindow vw1"></div>
-
-    <div class="vampireWindow vw2"></div>
-
-    <div class="vampireWindow vw3"></div>
-
-
-    <!-- ATAÚDES -->
-
-    <div class="coffin coffin1"></div>
-
-    <div class="coffin coffin2"></div>
-
-    <div class="coffin coffin3"></div>
-
-
-    <!-- PLATAFORMAS -->
-
-    <div class="vampirePlatform vp1"></div>
-
-    <div class="
-        vampireMovingPlatform
-        vp2">
-    </div>
-
-    <div class="vampirePlatform vp3"></div>
-
-    <div class="
-        vampireMovingPlatform
-        vp4">
-    </div>
-
-
-    <!-- MURCIÉLAGOS -->
-
-    <div
-        class="vampireBat"
-        id="bat1"
-        style="
-            left:850px;
-            bottom:430px;
-        ">
-
-        <div class="batEyes"></div>
-
-    </div>
-
-
-    <div
-        class="vampireBat"
-        id="bat2"
-        style="
-            left:1650px;
-            bottom:500px;
-        ">
-
-        <div class="batEyes"></div>
-
-    </div>
-
-
-    <div
-        class="vampireBat"
-        id="bat3"
-        style="
-            left:2550px;
-            bottom:410px;
-        ">
-
-        <div class="batEyes"></div>
-
-    </div>
-
-
-    <!-- ARENA -->
-
-    <div id="vampireArena"></div>
-
-
-    <!-- MINI BOSS -->
-
-    <div id="vampireBoss">
-
-        <div class="vampireCape"></div>
-
-        <div class="vampireHead">
-
-            <div class="vampireHair"></div>
-
-            <div class="vampireEyes"></div>
-
-            <div class="vampireFangs">
-                ˅ ˅
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     VIDA DEL MINI BOSS
-     ======================================================= -->
-
-<div id="bossHealth">
-
-    <div id="bossHealthName">
-        THE COUNT
-    </div>
-
-    <div id="bossHealthBar">
-
-        <div id="bossHealthFill"></div>
-
-    </div>
-
-</div>
-
-      /* =========================================================
-   NAHARA & ???
-   ACTO V — THE TOY ROOM
-   ========================================================= */
-
-const ACT5 = {
-
-    active:false,
-    completed:false,
-
-    musicStarted:false,
-    firstDollEvent:false,
-    secondDollEvent:false,
-
-    loopTriggered:false,
-    womanTriggered:false,
-
-    finalDoorUnlocked:false,
-
-    dollStage:0
-};
-
-
-/* =========================================================
-   INICIAR ACTO V
-   ========================================================= */
-
-function startAct5(){
-
-    ACT5.active = true;
-    ACT5.completed = false;
-
-    ACT5.musicStarted = false;
-    ACT5.firstDollEvent = false;
-    ACT5.secondDollEvent = false;
-
-    ACT5.loopTriggered = false;
-    ACT5.womanTriggered = false;
-
-    ACT5.finalDoorUnlocked = false;
-
-    ACT5.dollStage = 0;
-
-
-    document
-        .getElementById("act5Scene")
-        .classList.add("active");
-
-
-    playerX = 180;
-    playerBottom = GROUND_Y;
-    velocityY = 0;
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No me gustan las muñecas."
-        );
-
-    },2400);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Especialmente cuando parecen estar mirándonos."
-        );
-
-    },5000);
-
-}
-
-
-/* =========================================================
-   CAJA MUSICAL
-   ========================================================= */
-
-function triggerAct5MusicBox(){
-
-    if(ACT5.musicStarted)
-        return;
-
-
-    ACT5.musicStarted = true;
-
-
-    const box =
-        document.getElementById(
-            "toyMusicBox"
-        );
-
-
-    box.classList.add(
-        "playing"
-    );
-
-
-    /*
-       Cuando añadamos AUDIO:
-
-       musicBoxAudio.play();
-    */
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Nahara..."
-        );
-
-    },1000);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Dime que tú encendiste eso."
-        );
-
-    },3000);
-
-}
-
-
-/* =========================================================
-   MUÑECAS
-   ========================================================= */
-
-function moveAct5Dolls(){
-
-    const doll1 =
-        document.getElementById(
-            "creepyDoll1"
-        );
-
-
-    const doll2 =
-        document.getElementById(
-            "creepyDoll2"
-        );
-
-
-    const doll3 =
-        document.getElementById(
-            "creepyDoll3"
-        );
-
-
-    ACT5.dollStage++;
-
-
-    if(ACT5.dollStage === 1){
-
-        doll1.classList.add(
-            "closer1"
-        );
-
-    }
-
-
-    if(ACT5.dollStage === 2){
-
-        doll1.classList.add(
-            "closer2"
-        );
-
-
-        doll2.classList.add(
-            "closer1"
-        );
-
-    }
-
-
-    if(ACT5.dollStage === 3){
-
-        doll1.classList.add(
-            "closer3"
-        );
-
-
-        doll2.classList.add(
-            "closer2"
-        );
-
-
-        doll3.classList.add(
-            "closer1"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PRIMER EVENTO DE MUÑECA
-   ========================================================= */
-
-function triggerAct5FirstDoll(){
-
-    if(ACT5.firstDollEvent)
-        return;
-
-
-    ACT5.firstDollEvent = true;
-
-
-    const blink =
-        document.getElementById(
-            "toyBlink"
-        );
-
-
-    blink.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        moveAct5Dolls();
-
-    },200);
-
-
-    setTimeout(() => {
-
-        blink.classList.remove(
-            "active"
-        );
-
-    },450);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Esa muñeca estaba más lejos."
-        );
-
-    },2400);
-
-}
-
-
-/* =========================================================
-   SEGUNDO EVENTO
-   ========================================================= */
-
-function triggerAct5SecondDoll(){
-
-    if(ACT5.secondDollEvent)
-        return;
-
-
-    ACT5.secondDollEvent = true;
-
-
-    const blink =
-        document.getElementById(
-            "toyBlink"
-        );
-
-
-    blink.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        moveAct5Dolls();
-
-    },180);
-
-
-    setTimeout(() => {
-
-        blink.classList.remove(
-            "active"
-        );
-
-    },420);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No voltees."
-        );
-
-    },800);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "En realidad... sí. Voltea."
-        );
-
-    },3000);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No. Mala idea. Sigue caminando."
-        );
-
-    },5200);
-
-}
-
-
-/* =========================================================
-   PASILLO IMPOSIBLE
-   ========================================================= */
-
-function triggerAct5Loop(){
-
-    if(ACT5.loopTriggered)
-        return;
-
-
-    ACT5.loopTriggered = true;
-
-
-    const transition =
-        document.getElementById(
-            "toyLoopTransition"
-        );
-
-
-    transition.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        /*
-           Nahara parece regresar
-           al mismo pasillo.
-        */
-
-        playerX = 2050;
-
-
-        transition.classList.remove(
-            "active"
-        );
-
-    },850);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },1300);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿No acabamos de pasar por aquí?"
-        );
-
-    },2800);
-
-
-    setTimeout(() => {
-
-        moveAct5Dolls();
-
-    },4700);
-
-}
-
-
-/* =========================================================
-   MUJER ESPECTRAL
-   ========================================================= */
-
-function triggerAct5Woman(){
-
-    if(ACT5.womanTriggered)
-        return;
-
-
-    ACT5.womanTriggered = true;
-
-
-    const woman =
-        document.getElementById(
-            "spectralWoman"
-        );
-
-
-    const darkness =
-        document.getElementById(
-            "womanDarkness"
-        );
-
-
-    /* OSCURECER */
-
-    darkness.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        woman.classList.add(
-            "appear"
-        );
-
-    },500);
-
-
-    /*
-       Aparece muy poco tiempo.
-       NO repetir.
-    */
-
-
-    setTimeout(() => {
-
-        woman.classList.remove(
-            "appear"
-        );
-
-
-        darkness.classList.remove(
-            "active"
-        );
-
-    },1450);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },1900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Corre."
-        );
-
-    },3200);
-
-
-    ACT5.finalDoorUnlocked =
-        true;
-
-}
-
-
-/* =========================================================
-   EVENTOS SEGÚN POSICIÓN
-   ========================================================= */
-
-function updateAct5Events(){
-
-    if(
-        playerX > 650 &&
-        !ACT5.musicStarted
-    ){
-
-        triggerAct5MusicBox();
-
-    }
-
-
-    if(
-        playerX > 1200 &&
-        !ACT5.firstDollEvent
-    ){
-
-        triggerAct5FirstDoll();
-
-    }
-
-
-    if(
-        playerX > 2100 &&
-        !ACT5.secondDollEvent
-    ){
-
-        triggerAct5SecondDoll();
-
-    }
-
-
-    if(
-        playerX > 2950 &&
-        !ACT5.loopTriggered
-    ){
-
-        triggerAct5Loop();
-
-    }
-
-
-    /*
-       Después del loop,
-       debe volver a avanzar
-       hasta esta posición.
-    */
-
-    if(
-        ACT5.loopTriggered &&
-        playerX > 3450 &&
-        !ACT5.womanTriggered
-    ){
-
-        triggerAct5Woman();
-
-    }
-
-}
-
-
-/* =========================================================
-   OJOS DE LAS MUÑECAS
-   ========================================================= */
-
-function updateAct5DollEyes(){
-
-    const dolls =
-        document.querySelectorAll(
-            ".creepyDoll"
-        );
-
-
-    dolls.forEach(doll => {
-
-        const eyes =
-            doll.querySelector(
-                ".dollEyes"
-            );
-
-
-        if(!eyes)
-            return;
-
-
-        const dollX =
-            parseFloat(
-                getComputedStyle(doll).left
-            );
-
-
-        if(playerX < dollX){
-
-            eyes.style.transform =
-                "translateX(-2px)";
-
-        }else{
-
-            eyes.style.transform =
-                "translateX(2px)";
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   PUERTA FINAL
-   ========================================================= */
-
-function checkAct5Exit(){
-
-    if(playerX < 4100)
-        return;
-
-
-    if(!ACT5.finalDoorUnlocked){
-
-        playerX = 4070;
-
-
-        showDialogue(
-            "No abre."
-        );
-
-
-        return;
-
-    }
-
-
-    finishAct5();
-
-}
-
-
-/* =========================================================
-   TERMINAR ACTO V
-   ========================================================= */
-
-function finishAct5(){
-
-    if(ACT5.completed)
-        return;
-
-
-    ACT5.completed = true;
-
-    ACT5.active = false;
-
-
-    const clock =
-        document.getElementById(
-            "toyFinalClock"
-        );
-
-
-    clock.classList.add(
-        "awake"
-    );
-
-
-    showDialogue(
-        "Espera."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Ese reloj estaba ahí antes?"
-        );
-
-    },2600);
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "act5Fade"
-            )
-            .classList.add(
-                "active"
-            );
-
-    },5200);
-
-
-    /*
-       DESPUÉS:
-
-       transitionToAct6();
-
-       ACTO VI —
-       MIDNIGHT
-    */
-
-}
-
-
-/* =========================================================
-   LOOP DEL ACTO V
-   ========================================================= */
-
-function updateAct5(){
-
-    if(
-        !ACT5.active ||
-        ACT5.completed
-    ){
-        return;
-    }
-
-
-    updateAct5Events();
-
-    updateAct5DollEyes();
-
-    checkAct5Exit();
-
-}
-
-      /* =========================================================
-   ACTO V — THE TOY ROOM
-   ========================================================= */
-
-#act5Scene{
-
-    position:absolute;
-
-    width:4400px;
-    height:100%;
-
-    display:none;
-
-    overflow:hidden;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(112,69,82,.12),
-            transparent 35%
-        ),
-
-        linear-gradient(
-            to bottom,
-            #1c1118,
-            #10090e 65%,
-            #050304
-        );
-}
-
-
-#act5Scene.active{
-    display:block;
-}
-
-
-/* =========================================================
-   PAPEL TAPIZ
-   ========================================================= */
-
-.toyWallpaper{
-
-    position:absolute;
-
-    inset:0;
-
-    opacity:.35;
-
-    background:
-
-        repeating-linear-gradient(
-            90deg,
-
-            transparent
-            0 90px,
-
-            rgba(103,53,70,.25)
-            91px 95px
-        );
-}
-
-
-/* =========================================================
-   CABALLO DE MADERA
-   ========================================================= */
-
-.rockingHorse{
-
-    position:absolute;
-
-    left:650px;
-    bottom:190px;
-
-    width:190px;
-    height:140px;
-
-    opacity:.65;
-}
-
-
-.horseBody{
-
-    position:absolute;
-
-    width:120px;
-    height:65px;
-
-    left:30px;
-    top:25px;
-
-    border-radius:50%;
-
-    background:#4a2930;
-
-    border:6px solid #11090d;
-}
-
-
-.horseHead{
-
-    position:absolute;
-
-    width:55px;
-    height:85px;
-
-    right:10px;
-    top:0;
-
-    background:#4a2930;
-
-    border:6px solid #11090d;
-
-    border-radius:50% 50% 30% 30%;
-
-    transform:rotate(20deg);
-}
-
-
-.rockingHorse::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:190px;
-    height:45px;
-
-    bottom:0;
-
-    border-bottom:
-        12px solid #3b2028;
-
-    border-radius:50%;
-}
-
-
-/* =========================================================
-   CAJA MUSICAL
-   ========================================================= */
-
-#toyMusicBox{
-
-    position:absolute;
-
-    left:950px;
-    bottom:205px;
-
-    width:130px;
-    height:95px;
-
-    background:#49252f;
-
-    border:7px solid #10080d;
-
-    box-shadow:
-        7px 10px 0
-        rgba(0,0,0,.45);
-}
-
-
-#toyMusicBox::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:80px;
-    height:45px;
-
-    left:18px;
-    top:-48px;
-
-    border:
-        6px solid #10080d;
-
-    border-bottom:0;
-
-    background:#6d3b49;
-
-    transform-origin:bottom;
-
-    transform:rotate(-8deg);
-}
-
-
-.musicDancer{
-
-    position:absolute;
-
-    width:25px;
-    height:60px;
-
-    left:50px;
-    top:-60px;
-
-    opacity:0;
-}
-
-
-#toyMusicBox.playing
-.musicDancer{
-
-    opacity:1;
-
-    animation:
-        dancerSpin
-        1.5s linear infinite;
-}
-
-
-.musicDancer::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:22px;
-    height:22px;
-
-    left:1px;
-
-    border-radius:50%;
-
-    background:#c5a49a;
-
-    border:4px solid #11090d;
-}
-
-
-.musicDancer::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:35px;
-    height:38px;
-
-    left:-6px;
-    top:24px;
-
-    background:#805064;
-
-    clip-path:
-        polygon(
-            50% 0,
-            100% 100%,
-            0 100%
-        );
-}
-
-
-@keyframes dancerSpin{
-
-    to{
-        transform:rotateY(360deg);
-    }
-
-}
-
-
-/* =========================================================
-   MUÑECAS
-   ========================================================= */
-
-.creepyDoll{
-
-    position:absolute;
-
-    width:75px;
-    height:130px;
-
-    bottom:190px;
-
-    z-index:30;
-
-    transition:
-        left .01s,
-        bottom .01s;
-}
-
-
-#creepyDoll1{
-    left:1500px;
-}
-
-
-#creepyDoll2{
-    left:2450px;
-}
-
-
-#creepyDoll3{
-    left:3300px;
-}
-
-
-/* CABEZA */
-
-.dollHead{
-
-    position:absolute;
-
-    width:60px;
-    height:65px;
-
-    left:7px;
-
-    background:#c7a79e;
-
-    border:5px solid #0b0709;
-
-    border-radius:48%;
-
-    z-index:5;
-}
-
-
-/* CABELLO */
-
-.dollHair{
-
-    position:absolute;
-
-    width:65px;
-    height:40px;
-
-    left:-7px;
-    top:-5px;
-
-    background:#29151d;
-
-    border-radius:
-        60% 60% 25% 25%;
-}
-
-
-/* OJOS */
-
-.dollEyes{
-
-    position:absolute;
-
-    width:8px;
-    height:12px;
-
-    left:13px;
-    top:30px;
-
-    border-radius:50%;
-
-    background:#090608;
-
-    box-shadow:
-        27px 0 #090608;
-
-    transition:.15s;
-}
-
-
-/* VESTIDO */
-
-.dollDress{
-
-    position:absolute;
-
-    width:70px;
-    height:75px;
-
-    left:2px;
-    top:58px;
-
-    background:#5b2c3b;
-
-    border:5px solid #0b0709;
-
-    clip-path:
-        polygon(
-            30% 0,
-            70% 0,
-            100% 100%,
-            0 100%
-        );
-}
-
-
-/* MOVIMIENTOS IMPOSIBLES */
-
-#creepyDoll1.closer1{
-    left:1380px;
-}
-
-#creepyDoll1.closer2{
-    left:1250px;
-}
-
-#creepyDoll1.closer3{
-    left:1120px;
-}
-
-
-#creepyDoll2.closer1{
-    left:2250px;
-}
-
-#creepyDoll2.closer2{
-    left:2100px;
-}
-
-
-#creepyDoll3.closer1{
-    left:3100px;
-}
-
-
-/* =========================================================
-   JUGUETES EN ESTANTES
-   ========================================================= */
-
-.toyShelf{
-
-    position:absolute;
-
-    width:300px;
-    height:250px;
-
-    bottom:190px;
-
-    border:
-        12px solid #28151c;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-
-            transparent
-            0 70px,
-
-            #28151c
-            71px 82px
-        );
-}
-
-
-.shelf1{
-    left:1800px;
-}
-
-.shelf2{
-    left:3550px;
-}
-
-
-/* =========================================================
-   PARPADEO
-   ========================================================= */
-
-#toyBlink{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:870;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-#toyBlink.active{
-
-    animation:
-        eyeBlink
-        .45s forwards;
-}
-
-
-@keyframes eyeBlink{
-
-    0%{opacity:0;}
-
-    30%{opacity:1;}
-
-    70%{opacity:1;}
-
-    100%{opacity:0;}
-
-}
-
-
-/* =========================================================
-   PASILLO IMPOSIBLE
-   ========================================================= */
-
-#toyLoopTransition{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:875;
-
-    background:#070405;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.3s;
-}
-
-
-#toyLoopTransition.active{
-
-    opacity:1;
-
-}
-
-
-/* =========================================================
-   OSCURIDAD MUJER
-   ========================================================= */
-
-#womanDarkness{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:880;
-
-    background:
-        rgba(0,0,0,.82);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.25s;
-}
-
-
-#womanDarkness.active{
-    opacity:1;
-}
-
-
-/* =========================================================
-   MUJER ESPECTRAL
-   ========================================================= */
-
-#spectralWoman{
-
-    position:fixed;
-
-    left:50%;
-    bottom:0;
-
-    width:190px;
-    height:520px;
-
-    transform:
-        translateX(-50%)
-        scale(.75);
-
-    z-index:885;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-/* VESTIDO */
-
-.womanDress{
-
-    position:absolute;
-
-    width:190px;
-    height:390px;
-
-    bottom:0;
-
-    background:
-
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(200,195,185,.75),
-            rgba(235,225,210,.85),
-            rgba(200,195,185,.7),
-            transparent
-        );
-
-    clip-path:
-        polygon(
-            38% 0,
-            62% 0,
-            100% 100%,
-            0 100%
-        );
-}
-
-
-/* CABEZA */
-
-.womanHead{
-
-    position:absolute;
-
-    width:95px;
-    height:115px;
-
-    left:47px;
-    top:30px;
-
-    background:#c6beb4;
-
-    border-radius:48%;
-}
-
-
-/* PELO */
-
-.womanHair{
-
-    position:absolute;
-
-    width:135px;
-    height:200px;
-
-    left:-20px;
-    top:-20px;
-
-    background:#161113;
-
-    border-radius:
-        50% 50% 35% 35%;
-}
-
-
-/* CARA */
-
-.womanFace{
-
-    position:absolute;
-
-    width:65px;
-    height:80px;
-
-    left:15px;
-    top:30px;
-
-    background:#c6beb4;
-
-    border-radius:45%;
-
-    z-index:2;
-}
-
-
-/* OJOS */
-
-.womanFace::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:13px;
-    height:23px;
-
-    left:10px;
-    top:27px;
-
-    border-radius:50%;
-
-    background:#080607;
-
-    box-shadow:
-        31px 0 #080607;
-}
-
-
-/* BOCA */
-
-.womanFace::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:20px;
-    height:7px;
-
-    left:22px;
-    top:61px;
-
-    background:#4d2831;
-
-    border-radius:50%;
-}
-
-
-#spectralWoman.appear{
-
-    animation:
-        spectralAppear
-        .95s forwards;
-}
-
-
-@keyframes spectralAppear{
-
-    0%{
-
-        opacity:0;
-
-        transform:
-            translateX(-50%)
-            scale(.65);
-
-    }
-
-    20%{
-
-        opacity:.25;
-
-    }
-
-    50%{
-
-        opacity:1;
-
-        transform:
-            translateX(-50%)
-            scale(1);
-
-    }
-
-    82%{
-
-        opacity:1;
-
-        transform:
-            translateX(-50%)
-            scale(1.08);
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translateX(-50%)
-            scale(1.3);
-
-    }
-
-}
-
-
-/* =========================================================
-   RELOJ FINAL
-   ========================================================= */
-
-#toyFinalClock{
-
-    position:absolute;
-
-    left:4120px;
-    bottom:330px;
-
-    width:150px;
-    height:150px;
-
-    border-radius:50%;
-
-    background:#d1c1aa;
-
-    border:
-        12px solid #1a0e14;
-
-    box-shadow:
-        0 0 0 6px #5c3744;
-
-    opacity:.25;
-}
-
-
-#toyFinalClock::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:6px;
-    height:48px;
-
-    left:60px;
-    top:25px;
-
-    background:#160c10;
-
-    transform-origin:
-        bottom center;
-
-    transform:
-        rotate(0deg);
-}
-
-
-#toyFinalClock::after{
-
-    content:"11:57";
-
-    position:absolute;
-
-    width:100%;
-
-    bottom:-45px;
-
-    text-align:center;
-
-    color:#c9a6aa;
-
-    letter-spacing:5px;
-
-    font-size:18px;
-}
-
-
-#toyFinalClock.awake{
-
-    opacity:1;
-
-    animation:
-        clockAwake
-        .8s alternate infinite;
-}
-
-
-@keyframes clockAwake{
-
-    from{
-
-        filter:
-            drop-shadow(
-                0 0 0
-                transparent
-            );
-
-    }
-
-    to{
-
-        filter:
-            drop-shadow(
-                0 0 15px
-                rgba(173,94,113,.6)
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   FADE FINAL
-   ========================================================= */
-
-#act5Fade{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:950;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:
-        opacity 2s;
-}
-
-
-#act5Fade.active{
-    opacity:1;
-}
-
-      <!-- =======================================================
-     ACTO V — THE TOY ROOM
-     ======================================================= -->
-
-<div id="act5Scene">
-
-    <div class="toyWallpaper"></div>
-
-
-    <!-- CABALLO -->
-
-    <div class="rockingHorse">
-
-        <div class="horseBody"></div>
-
-        <div class="horseHead"></div>
-
-    </div>
-
-
-    <!-- CAJA MUSICAL -->
-
-    <div id="toyMusicBox">
-
-        <div class="musicDancer"></div>
-
-    </div>
-
-
-    <!-- MUÑECA 1 -->
-
-    <div
-        class="creepyDoll"
-        id="creepyDoll1">
-
-        <div class="dollHead">
-
-            <div class="dollHair"></div>
-
-            <div class="dollEyes"></div>
-
-        </div>
-
-        <div class="dollDress"></div>
-
-    </div>
-
-
-    <!-- ESTANTE -->
-
-    <div class="toyShelf shelf1"></div>
-
-
-    <!-- MUÑECA 2 -->
-
-    <div
-        class="creepyDoll"
-        id="creepyDoll2">
-
-        <div class="dollHead">
-
-            <div class="dollHair"></div>
-
-            <div class="dollEyes"></div>
-
-        </div>
-
-        <div class="dollDress"></div>
-
-    </div>
-
-
-    <!-- MUÑECA 3 -->
-
-    <div
-        class="creepyDoll"
-        id="creepyDoll3">
-
-        <div class="dollHead">
-
-            <div class="dollHair"></div>
-
-            <div class="dollEyes"></div>
-
-        </div>
-
-        <div class="dollDress"></div>
-
-    </div>
-
-
-    <!-- ESTANTE -->
-
-    <div class="toyShelf shelf2"></div>
-
-
-    <!-- RELOJ -->
-
-    <div id="toyFinalClock"></div>
-
-</div>
-
-
-<!-- =======================================================
-     EFECTOS DEL ACTO
-     ======================================================= -->
-
-<div id="toyBlink"></div>
-
-<div id="toyLoopTransition"></div>
-
-<div id="womanDarkness"></div>
-
-
-<!-- =======================================================
-     MUJER ESPECTRAL
-     ======================================================= -->
-
-<div id="spectralWoman">
-
-    <div class="womanDress"></div>
-
-    <div class="womanHead">
-
-        <div class="womanHair"></div>
-
-        <div class="womanFace"></div>
-
-    </div>
-
-</div>
-
-
-<div id="act5Fade"></div>
-
-      /* =========================================================
-   NAHARA & ???
-   ACTO VI — MIDNIGHT
-   ========================================================= */
-
-const ACT6 = {
-
-    active:false,
-    completed:false,
-
-    minute:57,
-
-    stage57:false,
-    stage58:false,
-    stage59:false,
-    midnight:false,
-
-    ghostMissing:false,
-    ghostReturned:false,
-
-    memory1:false,
-    memory2:false,
-    memory3:false,
-
-    finalDoorUnlocked:false
-};
-
-
-/* =========================================================
-   INICIAR ACTO VI
-   ========================================================= */
-
-function startAct6(){
-
-    ACT6.active = true;
-    ACT6.completed = false;
-
-    ACT6.minute = 57;
-
-    document
-        .getElementById("act6Scene")
-        .classList.add("active");
-
-
-    document
-        .getElementById("act6Fade")
-        .classList.remove("active");
-
-
-    playerX = 180;
-    playerBottom = GROUND_Y;
-    velocityY = 0;
-
-
-    updateAct6Clock();
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "11:57."
-        );
-
-    },900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Tenemos tres minutos."
-        );
-
-    },2800);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "No preguntes para qué."
-        );
-
-    },5000);
-
-}
-
-
-/* =========================================================
-   RELOJ
-   ========================================================= */
-
-function updateAct6Clock(){
-
-    const clock =
-        document.getElementById(
-            "midnightClockText"
-        );
-
-
-    if(clock){
-
-        clock.textContent =
-            "11:" +
-            String(ACT6.minute)
-                .padStart(2,"0");
-
-    }
-
-}
-
-
-/* =========================================================
-   11:58
-   ========================================================= */
-
-function triggerAct6_1158(){
-
-    if(ACT6.stage58)
-        return;
-
-
-    ACT6.stage58 = true;
-
-    ACT6.minute = 58;
-
-    updateAct6Clock();
-
-
-    document
-        .getElementById(
-            "act6Scene"
-        )
-        .classList.add(
-            "minute58"
-        );
-
-
-    triggerAct6ClockPulse();
-
-
-    showDialogue(
-        "11:58."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "La casa está más silenciosa."
-        );
-
-    },2300);
-
-}
-
-
-/* =========================================================
-   11:59
-   ========================================================= */
-
-function triggerAct6_1159(){
-
-    if(ACT6.stage59)
-        return;
-
-
-    ACT6.stage59 = true;
-
-    ACT6.minute = 59;
-
-    updateAct6Clock();
-
-
-    document
-        .getElementById(
-            "act6Scene"
-        )
-        .classList.add(
-            "minute59"
-        );
-
-
-    triggerAct6ClockPulse();
-
-
-    showDialogue(
-        "11:59."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Nahara..."
-        );
-
-    },2100);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Pase lo que pase cuando sean las doce..."
-        );
-
-    },3900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "quédate conmigo."
-        );
-
-    },6100);
-
-}
-
-
-/* =========================================================
-   PULSO DEL RELOJ
-   ========================================================= */
-
-function triggerAct6ClockPulse(){
-
-    const pulse =
-        document.getElementById(
-            "clockPulse"
-        );
-
-
-    pulse.classList.remove(
-        "active"
-    );
-
-
-    void pulse.offsetWidth;
-
-
-    pulse.classList.add(
-        "active"
-    );
-
-}
-
-
-/* =========================================================
-   MEMORIAS
-   ========================================================= */
-
-function triggerAct6Memory1(){
-
-    if(ACT6.memory1)
-        return;
-
-
-    ACT6.memory1 = true;
-
-
-    const memory =
-        document.getElementById(
-            "memoryFrame1"
-        );
-
-
-    memory.classList.add(
-        "visible"
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Eso es... una fotografía?"
-        );
-
-    },900);
-
-}
-
-
-/* ========================================================= */
-
-function triggerAct6Memory2(){
-
-    if(ACT6.memory2)
-        return;
-
-
-    ACT6.memory2 = true;
-
-
-    const memory =
-        document.getElementById(
-            "memoryFrame2"
-        );
-
-
-    memory.classList.add(
-        "visible"
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Esta casa sabe cosas sobre ti."
-        );
-
-    },800);
-
-}
-
-
-/* ========================================================= */
-
-function triggerAct6Memory3(){
-
-    if(ACT6.memory3)
-        return;
-
-
-    ACT6.memory3 = true;
-
-
-    const memory =
-        document.getElementById(
-            "memoryFrame3"
-        );
-
-
-    memory.classList.add(
-        "visible"
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },600);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "O quizá no es la casa."
-        );
-
-    },2400);
-
-}
-
-
-/* =========================================================
-   MEDIANOCHE
-   ========================================================= */
-
-function triggerAct6Midnight(){
-
-    if(ACT6.midnight)
-        return;
-
-
-    ACT6.midnight = true;
-
-
-    const clock =
-        document.getElementById(
-            "midnightClockText"
-        );
-
-
-    clock.textContent =
-        "12:00";
-
-
-    document
-        .getElementById(
-            "act6Scene"
-        )
-        .classList.add(
-            "midnight"
-        );
-
-
-    const darkness =
-        document.getElementById(
-            "midnightDarkness"
-        );
-
-
-    darkness.classList.add(
-        "active"
-    );
-
-
-    /*
-       CAMPANADA 1
-    */
-
-    setTimeout(() => {
-
-        flashAct6Bell();
-
-    },500);
-
-
-    /*
-       CAMPANADA 2
-    */
-
-    setTimeout(() => {
-
-        flashAct6Bell();
-
-    },1400);
-
-
-    /*
-       CAMPANADA 3
-    */
-
-    setTimeout(() => {
-
-        flashAct6Bell();
-
-    },2300);
-
-
-    /*
-       TODO NEGRO
-    */
-
-    setTimeout(() => {
-
-        hideAct6Ghost();
-
-    },3100);
-
-
-    /*
-       QUITAMOS OSCURIDAD
-    */
-
-    setTimeout(() => {
-
-        darkness.classList.remove(
-            "active"
-        );
-
-    },4600);
-
-
-    /*
-       NAHARA NOTA QUE ??? NO ESTÁ
-    */
-
-    setTimeout(() => {
-
-        showDialogue(
-            "???"
-        );
-
-    },5200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "¿Dónde estás?"
-        );
-
-    },7000);
-
-
-    /*
-       MOMENTO VECNA JAJAJA
-    */
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Si aparece Vecna, yo me voy."
-        );
-
-    },9300);
-
-
-    /*
-       REGRESA ???
-    */
-
-    setTimeout(() => {
-
-        returnAct6Ghost();
-
-    },11800);
-
-}
-
-
-/* =========================================================
-   FLASH CAMPANADA
-   ========================================================= */
-
-function flashAct6Bell(){
-
-    const flash =
-        document.getElementById(
-            "bellFlash"
-        );
-
-
-    flash.classList.remove(
-        "active"
-    );
-
-
-    void flash.offsetWidth;
-
-
-    flash.classList.add(
-        "active"
-    );
-
-}
-
-
-/* =========================================================
-   ??? DESAPARECE
-   ========================================================= */
-
-function hideAct6Ghost(){
-
-    if(ACT6.ghostMissing)
-        return;
-
-
-    ACT6.ghostMissing = true;
-
-
-    const ghost =
-        document.getElementById(
-            "ghost"
-        );
-
-
-    if(ghost){
-
-        ghost.classList.add(
-            "ghostMissing"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   ??? REGRESA
-   ========================================================= */
-
-function returnAct6Ghost(){
-
-    if(ACT6.ghostReturned)
-        return;
-
-
-    ACT6.ghostReturned = true;
-
-
-    const ghost =
-        document.getElementById(
-            "ghost"
-        );
-
-
-    if(ghost){
-
-        ghost.classList.remove(
-            "ghostMissing"
-        );
-
-
-        ghost.classList.add(
-            "ghostReturn"
-        );
-
-    }
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Estoy aquí."
-        );
-
-    },600);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Solo necesitaba asegurarme de algo."
-        );
-
-    },2800);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Ya podemos irnos."
-        );
-
-    },5100);
-
-
-    ACT6.finalDoorUnlocked = true;
-
-}
-
-
-/* =========================================================
-   EVENTOS SEGÚN POSICIÓN
-   ========================================================= */
-
-function updateAct6Events(){
-
-    /*
-       11:57
-    */
-
-    if(
-        playerX > 600 &&
-        !ACT6.stage57
-    ){
-
-        ACT6.stage57 = true;
-
-        triggerAct6Memory1();
-
-    }
-
-
-    /*
-       11:58
-    */
-
-    if(
-        playerX > 1250 &&
-        !ACT6.stage58
-    ){
-
-        triggerAct6_1158();
-
-    }
-
-
-    if(
-        playerX > 1750 &&
-        !ACT6.memory2
-    ){
-
-        triggerAct6Memory2();
-
-    }
-
-
-    /*
-       11:59
-    */
-
-    if(
-        playerX > 2350 &&
-        !ACT6.stage59
-    ){
-
-        triggerAct6_1159();
-
-    }
-
-
-    if(
-        playerX > 2850 &&
-        !ACT6.memory3
-    ){
-
-        triggerAct6Memory3();
-
-    }
-
-
-    /*
-       12:00
-    */
-
-    if(
-        playerX > 3450 &&
-        !ACT6.midnight
-    ){
-
-        triggerAct6Midnight();
-
-    }
-
-}
-
-
-/* =========================================================
-   PUERTA FINAL
-   ========================================================= */
-
-function checkAct6FinalDoor(){
-
-    if(playerX < 4100)
-        return;
-
-
-    if(!ACT6.finalDoorUnlocked){
-
-        playerX = 4060;
-
-        return;
-
-    }
-
-
-    finishAct6();
-
-}
-
-
-/* =========================================================
-   FINAL ACTO VI
-   ========================================================= */
-
-function finishAct6(){
-
-    if(ACT6.completed)
-        return;
-
-
-    ACT6.completed = true;
-
-    ACT6.active = false;
-
-
-    showDialogue(
-        "Nahara."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Antes de abrir esa puerta..."
-        );
-
-    },2300);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "hay algo que tengo que enseñarte."
-        );
-
-    },4700);
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "act6FinalFade"
-            )
-            .classList.add(
-                "active"
-            );
-
-    },7000);
-
-
-    /*
-       SIGUIENTE:
-
-       startFinalAct();
-
-       FINAL —
-       NAHARA'S BIRTHDAY
-    */
-
-}
-
-
-/* =========================================================
-   LOOP ACTO VI
-   ========================================================= */
-
-function updateAct6(){
-
-    if(
-        !ACT6.active ||
-        ACT6.completed
-    ){
-        return;
-    }
-
-
-    updateAct6Events();
-
-    checkAct6FinalDoor();
-
-}
-
-      /* =========================================================
-   ACTO VI — MIDNIGHT
-   ========================================================= */
-
-#act6Scene{
-
-    position:absolute;
-
-    width:4400px;
-    height:100%;
-
-    display:none;
-
-    overflow:hidden;
-
-    background:
-
-        radial-gradient(
-            circle at 70% 25%,
-            rgba(117,70,86,.15),
-            transparent 30%
-        ),
-
-        linear-gradient(
-            to bottom,
-            #171019,
-            #0b070d 70%,
-            #030203
-        );
-
-    transition:
-        filter 2s;
-}
-
-
-#act6Scene.active{
-    display:block;
-}
-
-
-/* =========================================================
-   CAMBIOS DE MINUTO
-   ========================================================= */
-
-#act6Scene.minute58{
-
-    filter:
-        saturate(.8)
-        brightness(.88);
-}
-
-
-#act6Scene.minute59{
-
-    filter:
-        saturate(.55)
-        brightness(.72);
-}
-
-
-#act6Scene.midnight{
-
-    filter:
-        saturate(.35)
-        brightness(.6);
-}
-
-
-/* =========================================================
-   PASILLO
-   ========================================================= */
-
-.midnightWall{
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-        repeating-linear-gradient(
-            90deg,
-
-            transparent
-            0 115px,
-
-            rgba(85,48,65,.14)
-            116px 121px
-        );
-}
-
-
-/* =========================================================
-   VENTANAS
-   ========================================================= */
-
-.midnightWindow{
-
-    position:absolute;
-
-    width:160px;
-    height:330px;
-
-    bottom:310px;
-
-    border:
-        12px solid #100a10;
-
-    border-radius:
-        90px 90px 5px 5px;
-
-    background:
-
-        radial-gradient(
-            circle at 55% 30%,
-            #b5acaa 0 15%,
-            #554856 16% 30%,
-            #17131c 65%
-        );
-
-    box-shadow:
-        0 0 0 5px
-        #392432;
-}
-
-
-.mw1{left:400px;}
-.mw2{left:1450px;}
-.mw3{left:2550px;}
-.mw4{left:3650px;}
-
-
-/* =========================================================
-   VELAS
-   ========================================================= */
-
-.midnightCandle{
-
-    position:absolute;
-
-    width:14px;
-    height:75px;
-
-    bottom:205px;
-
-    background:#bca99b;
-
-    border:
-        4px solid #10090c;
-}
-
-
-.midnightCandle::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:14px;
-    height:24px;
-
-    left:-4px;
-    top:-28px;
-
-    background:#bd796b;
-
-    border-radius:
-        50% 50% 45% 45%;
-
-    filter:
-        drop-shadow(
-            0 0 10px
-            rgba(189,121,107,.8)
-        );
-
-    animation:
-        candleFlicker
-        .2s alternate infinite;
-}
-
-
-@keyframes candleFlicker{
-
-    from{
-        transform:
-            scale(.9)
-            rotate(-3deg);
-    }
-
-    to{
-        transform:
-            scale(1.1)
-            rotate(4deg);
-    }
-
-}
-
-
-.mc1{left:850px;}
-.mc2{left:1900px;}
-.mc3{left:3050px;}
-.mc4{left:3900px;}
-
-
-/* =========================================================
-   RELOJ PRINCIPAL
-   ========================================================= */
-
-#midnightClock{
-
-    position:fixed;
-
-    left:50%;
-    top:105px;
-
-    transform:
-        translateX(-50%);
-
-    z-index:350;
-
-    width:145px;
-    height:145px;
-
-    border-radius:50%;
-
-    background:#c7b8a7;
-
-    border:
-        10px solid #160d13;
-
-    box-shadow:
-
-        0 0 0 5px #593845,
-
-        0 10px 30px
-        rgba(0,0,0,.7);
-}
-
-
-#midnightClockText{
-
-    position:absolute;
-
-    width:100%;
-
-    top:52px;
-
-    text-align:center;
-
-    color:#211219;
-
-    font-size:25px;
-
-    font-weight:bold;
-
-    letter-spacing:3px;
-}
-
-
-/* =========================================================
-   PULSO
-   ========================================================= */
-
-#clockPulse{
-
-    position:fixed;
-
-    left:50%;
-    top:177px;
-
-    width:150px;
-    height:150px;
-
-    transform:
-        translate(-50%,-50%);
-
-    border:
-        5px solid
-        rgba(164,82,103,.8);
-
-    border-radius:50%;
-
-    z-index:349;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-#clockPulse.active{
-
-    animation:
-        clockPulseAnim
-        1.2s forwards;
-}
-
-
-@keyframes clockPulseAnim{
-
-    0%{
-
-        opacity:.8;
-
-        transform:
-            translate(-50%,-50%)
-            scale(.8);
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translate(-50%,-50%)
-            scale(2.5);
-
-    }
-
-}
-
-
-/* =========================================================
-   RETRATOS / MEMORIAS
-   ========================================================= */
-
-.memoryFrame{
-
-    position:absolute;
-
-    width:170px;
-    height:210px;
-
-    bottom:330px;
-
-    background:#0b080b;
-
-    border:
-        12px solid #3b2630;
-
-    box-shadow:
-        0 0 0 4px #10090d;
-
-    opacity:.18;
-
-    transition:
-        opacity 1s,
-        filter 1s;
-}
-
-
-.memoryFrame::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:15px;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 32%,
-            #bda6a1 0 13%,
-            transparent 14%
-        ),
-
-        linear-gradient(
-            135deg,
-            #452732,
-            #171016
-        );
-}
-
-
-.memoryFrame.visible{
-
-    opacity:1;
-
-    filter:
-        drop-shadow(
-            0 0 12px
-            rgba(142,78,96,.4)
-        );
-}
-
-
-#memoryFrame1{
-    left:750px;
-}
-
-
-#memoryFrame2{
-    left:1900px;
-}
-
-
-#memoryFrame3{
-    left:3000px;
-}
-
-
-/* =========================================================
-   PUERTA FINAL
-   ========================================================= */
-
-#midnightFinalDoor{
-
-    position:absolute;
-
-    left:4170px;
-    bottom:190px;
-
-    width:180px;
-    height:390px;
-
-    background:
-
-        linear-gradient(
-            90deg,
-            #180d13,
-            #542d3c,
-            #180d13
-        );
-
-    border:
-        12px solid #080507;
-
-    border-radius:
-        90px 90px 5px 5px;
-
-    box-shadow:
-        0 0 0 5px #3e2530;
-}
-
-
-#midnightFinalDoor::before{
-
-    content:"N";
-
-    position:absolute;
-
-    width:60px;
-    height:60px;
-
-    left:48px;
-    top:145px;
-
-    border-radius:50%;
-
-    background:#b08b79;
-
-    border:
-        5px solid #170d12;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    color:#24151b;
-
-    font-size:32px;
-
-    font-family:serif;
-}
-
-
-/* =========================================================
-   OSCURIDAD DE MEDIANOCHE
-   ========================================================= */
-
-#midnightDarkness{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:880;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:
-        opacity .8s;
-}
-
-
-#midnightDarkness.active{
-
-    opacity:1;
-}
-
-
-/* =========================================================
-   CAMPANADAS
-   ========================================================= */
-
-#bellFlash{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:890;
-
-    background:
-        rgba(190,166,160,.22);
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-#bellFlash.active{
-
-    animation:
-        bellFlashAnim
-        .55s forwards;
-}
-
-
-@keyframes bellFlashAnim{
-
-    0%{
-        opacity:0;
-    }
-
-    20%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:0;
-    }
-
-}
-
-
-/* =========================================================
-   ??? DESAPARECE
-   ========================================================= */
-
-#ghost.ghostMissing{
-
-    opacity:0 !important;
-
-    transform:
-        scale(.2)
-        translateY(-70px);
-
-    transition:
-        opacity .7s,
-        transform .7s;
-}
-
-
-#ghost.ghostReturn{
-
-    animation:
-        ghostReturns
-        1.2s forwards;
-}
-
-
-@keyframes ghostReturns{
-
-    0%{
-
-        opacity:0;
-
-        filter:
-            blur(10px);
-
-    }
-
-    100%{
-
-        opacity:1;
-
-        filter:
-            blur(0);
-
-    }
-
-}
-
-
-/* =========================================================
-   FADE DE ENTRADA
-   ========================================================= */
-
-#act6Fade{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:940;
-
-    background:#000;
-
-    opacity:1;
-
-    pointer-events:none;
-
-    transition:
-        opacity 2s;
-}
-
-
-#act6Fade:not(.active){
-
-    opacity:0;
-}
-
-
-/* =========================================================
-   FADE FINAL
-   ========================================================= */
-
-#act6FinalFade{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:960;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:
-        opacity 2.5s;
-}
-
-
-#act6FinalFade.active{
-
-    opacity:1;
-}
-
-      <!-- =======================================================
-     ACTO VI — MIDNIGHT
-     ======================================================= -->
-
-<div id="act6Scene">
-
-    <div class="midnightWall"></div>
-
-
-    <!-- VENTANAS -->
-
-    <div class="midnightWindow mw1"></div>
-
-    <div class="midnightWindow mw2"></div>
-
-    <div class="midnightWindow mw3"></div>
-
-    <div class="midnightWindow mw4"></div>
-
-
-    <!-- VELAS -->
-
-    <div class="midnightCandle mc1"></div>
-
-    <div class="midnightCandle mc2"></div>
-
-    <div class="midnightCandle mc3"></div>
-
-    <div class="midnightCandle mc4"></div>
-
-
-    <!-- MEMORIAS -->
-
-    <div
-        class="memoryFrame"
-        id="memoryFrame1">
-    </div>
-
-
-    <div
-        class="memoryFrame"
-        id="memoryFrame2">
-    </div>
-
-
-    <div
-        class="memoryFrame"
-        id="memoryFrame3">
-    </div>
-
-
-    <!-- PUERTA FINAL -->
-
-    <div id="midnightFinalDoor"></div>
-
-</div>
-
-
-<!-- =======================================================
-     RELOJ
-     ======================================================= -->
-
-<div id="midnightClock">
-
-    <div id="midnightClockText">
-        11:57
-    </div>
-
-</div>
-
-
-<div id="clockPulse"></div>
-
-
-<!-- =======================================================
-     EFECTOS
-     ======================================================= -->
-
-<div id="midnightDarkness"></div>
-
-<div id="bellFlash"></div>
-
-<div id="act6Fade"></div>
-
-<div id="act6FinalFade"></div>
-
-      /* =========================================================
-   NAHARA & ???
-   FINAL — NAHARA'S BIRTHDAY
-   ========================================================= */
-
-const FINAL_ACT = {
-
-    active:false,
-    completed:false,
-
-    doorOpened:false,
-    lightsOn:false,
-    catsEntered:false,
-
-    revealStarted:false,
-    ghostRevealed:false,
-
-    endingStarted:false
-};
-
-
-/* =========================================================
-   INICIAR FINAL
-   ========================================================= */
-
-function startFinalAct(){
-
-    FINAL_ACT.active = true;
-
-
-    document
-        .getElementById("finalScene")
-        .classList.add("active");
-
-
-    /*
-       Quitamos HUD de combate.
-    */
-
-    const hud =
-        document.getElementById("hud");
-
-    if(hud){
-
-        hud.classList.add(
-            "finalHidden"
-        );
-
-    }
-
-
-    const objective =
-        document.getElementById(
-            "objective"
-        );
-
-    if(objective){
-
-        objective.style.opacity =
-            "0";
-
-    }
-
-
-    /*
-       Ocultar reloj del acto VI.
-    */
-
-    const midnightClock =
-        document.getElementById(
-            "midnightClock"
-        );
-
-    if(midnightClock){
-
-        midnightClock.style.display =
-            "none";
-
-    }
-
-
-    playerX = 250;
-
-    playerBottom =
-        GROUND_Y;
-
-    velocityY = 0;
-
-
-    /*
-       Empezamos completamente
-       a oscuras.
-    */
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "finalFade"
-            )
-            .classList.remove(
-                "active"
-            );
-
-    },700);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "..."
-        );
-
-    },1700);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Adelante."
-        );
-
-    },3400);
-
-}
-
-
-/* =========================================================
-   ABRIR PUERTA
-   ========================================================= */
-
-function triggerFinalDoor(){
-
-    if(FINAL_ACT.doorOpened)
-        return;
-
-
-    FINAL_ACT.doorOpened =
-        true;
-
-
-    const door =
-        document.getElementById(
-            "birthdayDoor"
-        );
-
-
-    door.classList.add(
-        "open"
-    );
-
-
-    setTimeout(() => {
-
-        turnFinalLightsOn();
-
-    },900);
-
-}
-
-
-/* =========================================================
-   ENCENDER HABITACIÓN
-   ========================================================= */
-
-function turnFinalLightsOn(){
-
-    if(FINAL_ACT.lightsOn)
-        return;
-
-
-    FINAL_ACT.lightsOn =
-        true;
-
-
-    document
-        .getElementById(
-            "finalScene"
-        )
-        .classList.add(
-            "lightsOn"
-        );
-
-
-    const lightFlash =
-        document.getElementById(
-            "birthdayLightFlash"
-        );
-
-
-    lightFlash.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        lightFlash.classList.remove(
-            "active"
-        );
-
-    },1000);
-
-
-    /*
-       Aparecen las decoraciones.
-    */
-
-    document
-        .querySelectorAll(
-            ".birthdayDecoration"
-        )
-        .forEach(
-            decoration => {
-
-                decoration.classList.add(
-                    "visible"
-                );
-
-            }
-        );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Sorpresa."
-        );
-
-    },1000);
-
-
-    setTimeout(() => {
-
-        bringFinalCats();
-
-    },2700);
-
-}
-
-
-/* =========================================================
-   REGRESAN LOS GATOS
-   ========================================================= */
-
-function bringFinalCats(){
-
-    if(FINAL_ACT.catsEntered)
-        return;
-
-
-    FINAL_ACT.catsEntered =
-        true;
-
-
-    const cats =
-        document.querySelectorAll(
-            ".finalCat"
-        );
-
-
-    cats.forEach(
-        (cat,index) => {
-
-            setTimeout(() => {
-
-                cat.classList.add(
-                    "enter"
-                );
-
-            },index * 320);
-
-        }
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Mira quiénes llegaron."
-        );
-
-    },1900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Sabía que encontrarlos serviría para algo."
-        );
-
-    },4200);
-
-}
-
-
-/* =========================================================
-   ACTIVAR REVELACIÓN
-   ========================================================= */
-
-function triggerFinalReveal(){
-
-    if(FINAL_ACT.revealStarted)
-        return;
-
-
-    FINAL_ACT.revealStarted =
-        true;
-
-
-    /*
-       Nahara deja de poder avanzar.
-    */
-
-    keys.left = false;
-    keys.right = false;
-
-
-    const ghost =
-        document.getElementById(
-            "ghost"
-        );
-
-
-    if(ghost){
-
-        ghost.classList.add(
-            "finalGhostPosition"
-        );
-
-    }
-
-
-    showDialogue(
-        "Nahara."
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Hay una última cosa."
-        );
-
-    },2300);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Todo este tiempo me llamaste ???."
-        );
-
-    },4700);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Supongo que ya no necesito esconderme."
-        );
-
-    },7200);
-
-
-    setTimeout(() => {
-
-        revealFinalGhost();
-
-    },9400);
-
-}
-
-
-/* =========================================================
-   REVELACIÓN DE ???
-   ========================================================= */
-
-function revealFinalGhost(){
-
-    if(FINAL_ACT.ghostRevealed)
-        return;
-
-
-    FINAL_ACT.ghostRevealed =
-        true;
-
-
-    const darkness =
-        document.getElementById(
-            "ghostRevealDarkness"
-        );
-
-
-    darkness.classList.add(
-        "active"
-    );
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "finalGhostReveal"
-            )
-            .classList.add(
-                "visible"
-            );
-
-    },1000);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Soy yo."
-        );
-
-    },2500);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "El mismo que estuvo contigo desde el bosque."
-        );
-
-    },4900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Solo que..."
-        );
-
-    },7200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "no pertenezco únicamente a este lugar."
-        );
-
-    },8900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "También existo fuera de aquí."
-        );
-
-    },11100);
-
-
-    /*
-       Aquí empezamos la transición
-       juego -> regalo real.
-    */
-
-    setTimeout(() => {
-
-        triggerRealWorldReveal();
-
-    },13700);
-
-}
-
-
-/* =========================================================
-   TRANSICIÓN AL FANTASMITA REAL
-   ========================================================= */
-
-function triggerRealWorldReveal(){
-
-    const ghostReveal =
-        document.getElementById(
-            "finalGhostReveal"
-        );
-
-
-    ghostReveal.classList.add(
-        "realWorld"
-    );
-
-
-    const crochetHint =
-        document.getElementById(
-            "crochetHint"
-        );
-
-
-    crochetHint.classList.add(
-        "visible"
-    );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Creo que ahora deberías buscarme."
-        );
-
-    },1200);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Fuera de la pantalla."
-        );
-
-    },3900);
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Estoy más cerca de lo que crees."
-        );
-
-    },6500);
-
-
-    setTimeout(() => {
-
-        startFinalBirthdayMoment();
-
-    },9400);
-
-}
-
-
-/* =========================================================
-   MOMENTO DE CUMPLEAÑOS
-   ========================================================= */
-
-function startFinalBirthdayMoment(){
-
-    const darkness =
-        document.getElementById(
-            "ghostRevealDarkness"
-        );
-
-
-    darkness.classList.remove(
-        "active"
-    );
-
-
-    document
-        .getElementById(
-            "birthdayTitle"
-        )
-        .classList.add(
-            "visible"
-        );
-
-
-    document
-        .getElementById(
-            "birthdayCake"
-        )
-        .classList.add(
-            "visible"
-        );
-
-
-    document
-        .querySelectorAll(
-            ".birthdayStar"
-        )
-        .forEach(
-            (star,index) => {
-
-                setTimeout(() => {
-
-                    star.classList.add(
-                        "visible"
-                    );
-
-                },index * 130);
-
-            }
-        );
-
-
-    setTimeout(() => {
-
-        showDialogue(
-            "Feliz cumpleaños, Nahara."
-        );
-
-    },1500);
-
-
-    setTimeout(() => {
-
-        finishFinalAct();
-
-    },6000);
-
-}
-
-
-/* =========================================================
-   CIERRE
-   ========================================================= */
-
-function finishFinalAct(){
-
-    if(FINAL_ACT.endingStarted)
-        return;
-
-
-    FINAL_ACT.endingStarted =
-        true;
-
-
-    const ending =
-        document.getElementById(
-            "finalEnding"
-        );
-
-
-    ending.classList.add(
-        "visible"
-    );
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "finalEndingTitle"
-            )
-            .classList.add(
-                "visible"
-            );
-
-    },1800);
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById(
-                "finalEndingGhost"
-            )
-            .classList.add(
-                "visible"
-            );
-
-    },3500);
-
-
-    FINAL_ACT.completed =
-        true;
-
-}
-
-
-/* =========================================================
-   EVENTOS POR POSICIÓN
-   ========================================================= */
-
-function updateFinalEvents(){
-
-    /*
-       Entrada.
-    */
-
-    if(
-        playerX > 550 &&
-        !FINAL_ACT.doorOpened
-    ){
-
-        triggerFinalDoor();
-
-    }
-
-
-    /*
-       Revelación.
-    */
-
-    if(
-        playerX > 1700 &&
-        FINAL_ACT.lightsOn &&
-        !FINAL_ACT.revealStarted
-    ){
-
-        triggerFinalReveal();
-
-    }
-
-}
-
-
-/* =========================================================
-   LOOP FINAL
-   ========================================================= */
-
-function updateFinalAct(){
-
-    if(
-        !FINAL_ACT.active ||
-        FINAL_ACT.completed
-    ){
-        return;
-    }
-
-
-    updateFinalEvents();
-
-}
-
-      /* =========================================================
-   FINAL — NAHARA'S BIRTHDAY
-   ========================================================= */
-
-#finalScene{
-
-    position:absolute;
-
-    width:2500px;
-    height:100%;
-
-    display:none;
-
-    overflow:hidden;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(99,51,68,.15),
-            transparent 40%
-        ),
-
-        linear-gradient(
-            #10090e,
-            #050304
-        );
-
-    transition:
-        background 2s;
-}
-
-
-#finalScene.active{
-    display:block;
-}
-
-
-/* =========================================================
-   CAMBIO DE ATMÓSFERA
-   ========================================================= */
-
-#finalScene.lightsOn{
-
-    background:
-
-        radial-gradient(
-            circle at 50% 30%,
-            rgba(222,174,184,.22),
-            transparent 35%
-        ),
-
-        linear-gradient(
-            #3d2230,
-            #201018 70%,
-            #0b0609
-        );
-}
-
-
-/* =========================================================
-   PARED
-   ========================================================= */
-
-.finalWallpaper{
-
-    position:absolute;
-
-    inset:0;
-
-    opacity:.35;
-
-    background:
-
-        repeating-linear-gradient(
-            90deg,
-
-            transparent
-            0 90px,
-
-            rgba(214,154,175,.15)
-            91px 96px
-        );
-}
-
-
-/* =========================================================
-   PUERTA CON LA N
-   ========================================================= */
-
-#birthdayDoor{
-
-    position:absolute;
-
-    left:600px;
-    bottom:190px;
-
-    width:190px;
-    height:410px;
-
-    background:
-
-        linear-gradient(
-            90deg,
-            #180d13,
-            #6a3549,
-            #180d13
-        );
-
-    border:
-        13px solid #080507;
-
-    border-radius:
-        100px 100px 5px 5px;
-
-    transform-origin:left;
-
-    transition:
-        transform 1.4s;
-}
-
-
-#birthdayDoor::before{
-
-    content:"N";
-
-    position:absolute;
-
-    width:70px;
-    height:70px;
-
-    left:47px;
-    top:160px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#b5907e;
-
-    border:
-        6px solid #160c11;
-
-    color:#28151d;
-
-    font-family:serif;
-
-    font-size:37px;
-}
-
-
-#birthdayDoor.open{
-
-    transform:
-        perspective(700px)
-        rotateY(-75deg);
-}
-
-
-/* =========================================================
-   DECORACIÓN
-   ========================================================= */
-
-.birthdayDecoration{
-
-    opacity:0;
-
-    transition:
-        opacity 1.5s,
-        transform 1.5s;
-}
-
-
-.birthdayDecoration.visible{
-
-    opacity:1;
-
-    transform:
-        translateY(0);
-}
-
-
-/* BANDERINES */
-
-#birthdayBanner{
-
-    position:absolute;
-
-    left:950px;
-    bottom:600px;
-
-    width:900px;
-    height:100px;
-
-    transform:
-        translateY(-30px);
-}
-
-
-.bannerString{
-
-    position:absolute;
-
-    width:100%;
-    height:4px;
-
-    top:15px;
-
-    background:#ba8d98;
-
-    transform:
-        rotate(-2deg);
-}
-
-
-.bannerFlag{
-
-    position:absolute;
-
-    top:15px;
-
-    width:45px;
-    height:65px;
-
-    background:#74384e;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            50% 100%
-        );
-}
-
-
-.bf1{left:80px;}
-.bf2{left:180px;}
-.bf3{left:280px;}
-.bf4{left:380px;}
-.bf5{left:480px;}
-.bf6{left:580px;}
-.bf7{left:680px;}
-.bf8{left:780px;}
-
-
-/* =========================================================
-   GATOS
-   ========================================================= */
-
-.finalCat{
-
-    position:absolute;
-
-    width:70px;
-    height:65px;
-
-    bottom:195px;
-
-    opacity:0;
-
-    transform:
-        translateY(70px);
-
-    transition:
-        opacity .6s,
-        transform .7s;
-}
-
-
-.finalCat.enter{
-
-    opacity:1;
-
-    transform:
-        translateY(0);
-}
-
-
-.finalCatBody{
-
-    position:absolute;
-
-    width:58px;
-    height:45px;
-
-    left:6px;
-    bottom:0;
-
-    background:#181116;
-
-    border-radius:
-        50% 50% 35% 35%;
-}
-
-
-.finalCatHead{
-
-    position:absolute;
-
-    width:45px;
-    height:42px;
-
-    left:13px;
-    top:0;
-
-    background:#181116;
-
-    border-radius:50%;
-}
-
-
-.finalCatHead::before,
-.finalCatHead::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:18px;
-    height:20px;
-
-    top:-8px;
-
-    background:#181116;
-
-    clip-path:
-        polygon(
-            50% 0,
-            100% 100%,
-            0 100%
-        );
-}
-
-
-.finalCatHead::before{
-    left:2px;
-}
-
-
-.finalCatHead::after{
-    right:2px;
-}
-
-
-.catEye{
-
-    position:absolute;
-
-    width:6px;
-    height:8px;
-
-    left:10px;
-    top:18px;
-
-    border-radius:50%;
-
-    background:#d4b2aa;
-
-    box-shadow:
-        20px 0 #d4b2aa;
-}
-
-
-.fc1{left:980px;}
-.fc2{left:1100px;}
-.fc3{left:1220px;}
-.fc4{left:1340px;}
-.fc5{left:1460px;}
-.fc6{left:1580px;}
-.fc7{left:1700px;}
-.fc8{left:1820px;}
-.fc9{left:1940px;}
-
-
-/* =========================================================
-   TORTA
-   ========================================================= */
-
-#birthdayCake{
-
-    position:absolute;
-
-    left:1450px;
-    bottom:260px;
-
-    width:220px;
-    height:170px;
-
-    opacity:0;
-
-    transform:
-        translateY(30px);
-
-    transition:1.5s;
-}
-
-
-#birthdayCake.visible{
-
-    opacity:1;
-
-    transform:
-        translateY(0);
-}
-
-
-.cakeBottom{
-
-    position:absolute;
-
-    width:220px;
-    height:80px;
-
-    bottom:0;
-
-    border:
-        7px solid #10080d;
-
-    border-radius:
-        15px 15px 25px 25px;
-
-    background:#8a4c60;
-}
-
-
-.cakeTop{
-
-    position:absolute;
-
-    width:170px;
-    height:65px;
-
-    left:25px;
-    bottom:75px;
-
-    border:
-        7px solid #10080d;
-
-    border-radius:
-        15px;
-
-    background:#b57b8e;
-}
-
-
-/* VELA */
-
-.cakeCandle{
-
-    position:absolute;
-
-    width:12px;
-    height:45px;
-
-    left:104px;
-    bottom:140px;
-
-    background:#d0b0b5;
-}
-
-
-.cakeCandle::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:13px;
-    height:22px;
-
-    left:0;
-    top:-25px;
-
-    border-radius:
-        50% 50% 45% 45%;
-
-    background:#e2b281;
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(226,178,129,.8)
-        );
-
-    animation:
-        birthdayFlame
-        .25s alternate infinite;
-}
-
-
-@keyframes birthdayFlame{
-
-    to{
-
-        transform:
-            scale(1.15)
-            rotate(4deg);
-
-    }
-
-}
-
-
-/* =========================================================
-   TÍTULO
-   ========================================================= */
-
-#birthdayTitle{
-
-    position:fixed;
-
-    left:50%;
-    top:100px;
-
-    transform:
-        translateX(-50%)
-        translateY(-20px);
-
-    z-index:450;
-
-    color:#e0b6c0;
-
-    font-size:
-        clamp(
-            28px,
-            5vw,
-            65px
-        );
-
-    letter-spacing:8px;
-
-    text-align:center;
-
-    opacity:0;
-
-    transition:2s;
-
-    text-shadow:
-        0 5px 0 #311722;
-}
-
-
-#birthdayTitle.visible{
-
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-
-/* =========================================================
-   FLASH DE LUZ
-   ========================================================= */
-
-#birthdayLightFlash{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:800;
-
-    background:#e6c7c2;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-#birthdayLightFlash.active{
-
-    animation:
-        birthdayFlash
-        1s forwards;
-}
-
-
-@keyframes birthdayFlash{
-
-    0%{opacity:0;}
-
-    20%{opacity:.8;}
-
-    100%{opacity:0;}
-
-}
-
-
-/* =========================================================
-   REVELACIÓN DE ???
-   ========================================================= */
-
-#ghostRevealDarkness{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:700;
-
-    background:
-        rgba(4,2,3,.94);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:1.5s;
-}
-
-
-#ghostRevealDarkness.active{
-
-    opacity:1;
-}
-
-
-#finalGhostReveal{
-
-    position:fixed;
-
-    left:50%;
-    top:50%;
-
-    width:230px;
-    height:280px;
-
-    transform:
-        translate(-50%,-45%)
-        scale(.6);
-
-    z-index:750;
-
-    opacity:0;
-
-    transition:
-        opacity 2s,
-        transform 2s,
-        filter 2s;
-}
-
-
-#finalGhostReveal.visible{
-
-    opacity:1;
-
-    transform:
-        translate(-50%,-50%)
-        scale(1);
-}
-
-
-/* CUERPO */
-
-.revealGhostBody{
-
-    position:absolute;
-
-    width:210px;
-    height:240px;
-
-    left:10px;
-
-    background:
-
-        linear-gradient(
-            90deg,
-            #bcb5aa,
-            #eee6d8,
-            #c7beb1
-        );
-
-    border:
-        8px solid #100b0e;
-
-    border-radius:
-        48% 48% 20% 20%;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            100% 85%,
-            85% 100%,
-            70% 87%,
-            55% 100%,
-            40% 87%,
-            25% 100%,
-            0 87%
-        );
-}
-
-
-/* OJOS */
-
-.revealGhostEyes{
-
-    position:absolute;
-
-    width:25px;
-    height:40px;
-
-    left:52px;
-    top:75px;
-
-    border-radius:50%;
-
-    background:#090709;
-
-    box-shadow:
-        78px 0 #090709;
-}
-
-
-/* MOÑO */
-
-.revealGhostBow{
-
-    position:absolute;
-
-    width:85px;
-    height:50px;
-
-    left:115px;
-    top:15px;
-
-    z-index:5;
-}
-
-
-.revealGhostBow::before,
-.revealGhostBow::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:42px;
-    height:42px;
-
-    background:#b36f85;
-
-    border:
-        5px solid #10090d;
-}
-
-
-.revealGhostBow::before{
-
-    left:0;
-
-    border-radius:
-        60% 30% 60% 30%;
-
-    transform:rotate(25deg);
-}
-
-
-.revealGhostBow::after{
-
-    right:0;
-
-    border-radius:
-        30% 60% 30% 60%;
-
-    transform:rotate(-25deg);
-}
-
-
-/* MEDALLÓN N */
-
-.revealMedallion{
-
-    position:absolute;
-
-    width:55px;
-    height:55px;
-
-    left:88px;
-    top:160px;
-
-    z-index:5;
-
-    border-radius:50%;
-
-    background:#a8866e;
-
-    border:
-        6px solid #24151b;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    color:#24151b;
-
-    font-family:serif;
-
-    font-size:29px;
-}
-
-
-#finalGhostReveal.realWorld{
-
-    filter:
-        drop-shadow(
-            0 0 30px
-            rgba(218,170,185,.8)
-        );
-
-    transform:
-        translate(-50%,-50%)
-        scale(1.12);
-}
-
-
-/* =========================================================
-   PISTA DEL REGALO REAL
-   ========================================================= */
-
-#crochetHint{
-
-    position:fixed;
-
-    left:50%;
-    bottom:80px;
-
-    transform:
-        translateX(-50%)
-        translateY(30px);
-
-    z-index:760;
-
-    color:#d8bcc1;
-
-    font-size:17px;
-
-    letter-spacing:5px;
-
-    opacity:0;
-
-    transition:2s;
-}
-
-
-#crochetHint.visible{
-
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-
-/* =========================================================
-   ESTRELLITAS
-   ========================================================= */
-
-.birthdayStar{
-
-    position:fixed;
-
-    width:16px;
-    height:16px;
-
-    z-index:440;
-
-    background:#d6abb6;
-
-    clip-path:
-        polygon(
-            50% 0,
-            62% 36%,
-            100% 50%,
-            62% 64%,
-            50% 100%,
-            38% 64%,
-            0 50%,
-            38% 36%
-        );
-
-    opacity:0;
-}
-
-
-.birthdayStar.visible{
-
-    animation:
-        finalStar
-        2s infinite alternate;
-
-    opacity:1;
-}
-
-
-@keyframes finalStar{
-
-    from{
-
-        transform:
-            scale(.6)
-            rotate(0);
-
-        opacity:.3;
-    }
-
-    to{
-
-        transform:
-            scale(1.3)
-            rotate(45deg);
-
-        opacity:1;
-    }
-}
-
-
-.bs1{left:12%;top:25%;}
-.bs2{left:22%;top:60%;}
-.bs3{left:32%;top:18%;}
-.bs4{left:68%;top:22%;}
-.bs5{left:78%;top:58%;}
-.bs6{left:88%;top:30%;}
-
-
-/* =========================================================
-   PANTALLA FINAL
-   ========================================================= */
-
-#finalEnding{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:1000;
-
-    background:
-
-        radial-gradient(
-            circle at center,
-            #311924,
-            #080407 70%
-        );
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:2.5s;
-}
-
-
-#finalEnding.visible{
-
-    opacity:1;
-}
-
-
-#finalEndingTitle{
-
-    position:absolute;
-
-    width:100%;
-
-    top:35%;
-
-    text-align:center;
-
-    color:#dfb4c0;
-
-    font-size:
-        clamp(
-            32px,
-            6vw,
-            80px
-        );
-
-    letter-spacing:9px;
-
-    opacity:0;
-
-    transform:
-        translateY(20px);
-
-    transition:2s;
-}
-
-
-#finalEndingTitle.visible{
-
-    opacity:1;
-
-    transform:
-        translateY(0);
-}
-
-
-#finalEndingGhost{
-
-    position:absolute;
-
-    width:70px;
-    height:70px;
-
-    left:50%;
-    top:57%;
-
-    transform:
-        translateX(-50%)
-        scale(.5);
-
-    opacity:0;
-
-    transition:2s;
-}
-
-
-#finalEndingGhost.visible{
-
-    opacity:.8;
-
-    transform:
-        translateX(-50%)
-        scale(1);
-}
-
-
-/* =========================================================
-   FADE
-   ========================================================= */
-
-#finalFade{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:970;
-
-    background:#000;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:2s;
-}
-
-
-#finalFade.active{
-
-    opacity:1;
-}
-
-
-/* HUD */
-
-#hud.finalHidden{
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-      <!-- =======================================================
-     FINAL — NAHARA'S BIRTHDAY
-     ======================================================= -->
-
-<div id="finalScene">
-
-    <div class="finalWallpaper"></div>
-
-
-    <!-- PUERTA CON LA N -->
-
-    <div id="birthdayDoor"></div>
-
-
-    <!-- DECORACIÓN -->
-
-    <div
-        id="birthdayBanner"
-        class="birthdayDecoration">
-
-        <div class="bannerString"></div>
-
-        <div class="bannerFlag bf1"></div>
-        <div class="bannerFlag bf2"></div>
-        <div class="bannerFlag bf3"></div>
-        <div class="bannerFlag bf4"></div>
-        <div class="bannerFlag bf5"></div>
-        <div class="bannerFlag bf6"></div>
-        <div class="bannerFlag bf7"></div>
-        <div class="bannerFlag bf8"></div>
-
-    </div>
-
-
-    <!-- 9 GATOS -->
-
-    <div class="finalCat fc1">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc2">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc3">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc4">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc5">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc6">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc7">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc8">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-    <div class="finalCat fc9">
-        <div class="finalCatBody"></div>
-        <div class="finalCatHead">
-            <div class="catEye"></div>
-        </div>
-    </div>
-
-
-    <!-- TORTA -->
-
-    <div id="birthdayCake">
-
-        <div class="cakeBottom"></div>
-
-        <div class="cakeTop"></div>
-
-        <div class="cakeCandle"></div>
-
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     FELIZ CUMPLEAÑOS
-     ======================================================= -->
-
-<div id="birthdayTitle">
-
-    HAPPY BIRTHDAY<br>
-    NAHARA
-
-</div>
-
-
-<!-- ESTRELLAS -->
-
-<div class="birthdayStar bs1"></div>
-<div class="birthdayStar bs2"></div>
-<div class="birthdayStar bs3"></div>
-<div class="birthdayStar bs4"></div>
-<div class="birthdayStar bs5"></div>
-<div class="birthdayStar bs6"></div>
-
-
-<!-- =======================================================
-     REVELACIÓN DE ???
-     ======================================================= -->
-
-<div id="ghostRevealDarkness"></div>
-
-
-<div id="finalGhostReveal">
-
-    <div class="revealGhostBody"></div>
-
-    <div class="revealGhostEyes"></div>
-
-    <div class="revealGhostBow"></div>
-
-    <div class="revealMedallion">
-        N
-    </div>
-
-</div>
-
-
-<div id="crochetHint">
-
-    LOOK OUTSIDE THE SCREEN
-
-</div>
-
-
-<!-- =======================================================
-     EFECTOS
-     ======================================================= -->
-
-<div id="birthdayLightFlash"></div>
-
-<div id="finalFade" class="active"></div>
-
-
-<!-- =======================================================
-     PANTALLA FINAL
-     ======================================================= -->
-
-<div id="finalEnding">
-
-    <div id="finalEndingTitle">
-
-        HAPPY BIRTHDAY,
-        NAHARA
-
-    </div>
-
-
-    <div id="finalEndingGhost">
-
-        <div class="revealGhostBody"></div>
-
-        <div class="revealGhostEyes"></div>
-
-    </div>
-
-</div>
-
-    </body>
+addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+
+  if(
+    [
+      "arrowleft",
+      "arrowright",
+      "arrowup",
+      " ",
+      "a",
+      "d",
+      "w",
+      "f"
+    ].includes(k)
+  ){
+    e.preventDefault();
+  }
+
+  if(k==="a"||k==="arrowleft"){
+    keys.left=true;
+  }
+
+  if(k==="d"||k==="arrowright"){
+    keys.right=true;
+  }
+
+  if(
+    k==="w" ||
+    k==="arrowup" ||
+    k===" "
+  ){
+    jump();
+  }
+
+  if(k==="f"){
+    attack();
+  }
+});
+
+addEventListener("keyup",e=>{
+  const k=e.key.toLowerCase();
+
+  if(k==="a"||k==="arrowleft"){
+    keys.left=false;
+  }
+
+  if(k==="d"||k==="arrowright"){
+    keys.right=false;
+  }
+});
+
+loop();
+
+</script>
+</body>
 </html>
